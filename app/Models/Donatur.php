@@ -15,7 +15,6 @@ class Donatur extends Model
         'donatur_photo',
         'donatur_kerja',
         'donatur_alamat',
-        'donatur_status', 
         'donatur_status', //0=tidak aktif 1=aktif 2=sudah dapat produk 3=dalam bimbingan
     ];
     public function santri(){

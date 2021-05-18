@@ -17,7 +17,7 @@ class Beli extends Model
         'beli_status',
     ];
     public function donatur(){
-        return $this->hasOne('App\Models\AgeGroups','id','age_group_id');
+        return $this->hasOne('App\Models\Donatur','id','donatur_id');
     }  
     public function produk(){
         return $this->belongsToMany('App\Models\Produk','beli_produk','beli_id','produk_id','id','id')

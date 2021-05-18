@@ -16,3 +16,14 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::get('donatur/list','APIDonatur@getDonaturList');
+Route::get('donatur/byid/{id}','Donatur@getDonaturById');
+Route::post('donatur/save/','Donatur@saveDonatur');
+
+Route::get('santri/list','SantriAPI@getSantriList');
+Route::get('santri/byid/{id}','SantriAPI@getSantriById');
+Route::post('santri/save','SantriAPI@saveSantri');
+
+Route::get('produk/list','Produk@getProdukList');
+Route::get('produk/byid/{id}','Produk@getProdukById');
+Route::put('produk/save/','Produk@saveProduk');
