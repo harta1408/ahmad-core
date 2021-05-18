@@ -14,6 +14,10 @@ class SantriAPI extends Controller
         $santri=Santri::where('id',$id)->first();
         return response()->json($santri,200);
     }
+    public function registerSantri(Request $request){
+        $santri->santri_email=$request->get('santri_email'); 
+        return response()->json($santri,200);
+    }
     public function saveSantri(Request $request){
         $santri=new Santri;
         $santri->santri_kode=$request->get('santri_kode');  

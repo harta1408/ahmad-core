@@ -15,13 +15,12 @@ class CreateLembagaTable extends Migration
     {
         Schema::create('lembaga', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('lembaga_kode',50)->primary();
+            $table->string('lembaga_kode',50)->nullable();
             $table->string('lembaga_email', 100);
             $table->string('lembaga_phone',100)->nullable();
             $table->string('lembaga_nama',255);
             $table->longText('lembaga_alamat');
             $table->longText('lembaga_deskripsi');            
-            $table->index('lembaga_kode');
             $table->timestamp('created_at');   
         });
     }

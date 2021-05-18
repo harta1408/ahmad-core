@@ -25,6 +25,7 @@ class CreatePendampingTable extends Migration
             $table->string('pendamping_status', 3, ['1', '0'])->default('1');
             $table->decimal('pendamping_honor', 18, 2)->default(0);
             $table->decimal('pendamping_komisi', 18, 2)->default(0);
+            $table->char('pendamping_rangkap',1)->default('0');
             $table->timestamp('created_at');                    
         });
     }
