@@ -20,6 +20,8 @@ Route::get('donatur/list','APIDonatur@getDonaturList');
 Route::get('donatur/byid/{id}','Donatur@getDonaturById');
 Route::post('donatur/save/','Donatur@saveDonatur');
 
+Route::post('santri/register','SantriAPI@registerSantri');
+Route::get('santri/byemail/{email}','SantriAPI@getSantriByEmail');
 Route::get('santri/list','SantriAPI@getSantriList');
 Route::get('santri/byid/{id}','SantriAPI@getSantriById');
 Route::post('santri/save','SantriAPI@saveSantri');
