@@ -21,7 +21,7 @@ class User extends Authenticatable
         'user_password',
         'user_hash', //untuk link verifikasi email
         'email_verified_at',
-        'user_tipe', //1=manager, 2=helpdesk 3=donatur 4=santri, 5=pendamping 9=superadmin
+        'user_tipe', //1=manager, 2=finance, 3=helpdesk, 4=donatur 5=santri, 6=pendamping 9=superadmin
         'referensi_id'
     ];
 
@@ -44,4 +44,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function santri(){
+        return $this->hasOne('App\Models\Santri','santri_email','user_email');
+    }
 }

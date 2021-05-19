@@ -20,12 +20,12 @@ Route::get('donatur/list','APIDonatur@getDonaturList');
 Route::get('donatur/byid/{id}','Donatur@getDonaturById');
 Route::post('donatur/save/','Donatur@saveDonatur');
 
-Route::post('santri/register','SantriAPI@registerSantri');
-Route::post('santri/register/sosmed','SantriAPI@registerSantriSosmed');
+Route::post('santri/register','SantriAPI@santriRegister');
+Route::post('santri/register/sosmed','SantriAPI@santriRegisterSosmed');
 Route::get('santri/byemail/{email}','SantriAPI@getSantriByEmail');
 Route::get('santri/list','SantriAPI@getSantriList');
 Route::get('santri/byid/{id}','SantriAPI@getSantriById');
-Route::post('santri/save','SantriAPI@saveSantri');
+Route::post('santri/update/profile','SantriAPI@updateSantri');
 
 Route::get('produk/list','Produk@getProdukList');
 Route::get('produk/byid/{id}','Produk@getProdukById');
