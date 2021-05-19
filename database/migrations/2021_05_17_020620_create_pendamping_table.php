@@ -19,8 +19,9 @@ class CreatePendampingTable extends Migration
             $table->string('pendamping_kode',50)->nullable();
             $table->string('pendamping_phone',100)->nullable();
             $table->string('pendamping_nama',255)->nullable();
+            $table->string('pendamping_gender',10)->default('PRIA');
             $table->longText('pendamping_alamat')->nullable();
-            $table->string('pendamping_status_pegawai', 3, ['P', 'K'])->default('P');
+            $table->string('pendamping_status_pegawai', 10, ['PERMANEN', 'KONTRAK'])->default('PERMANEN');
             $table->string('pendamping_is_active',3, ['1', '0'])->default('1');
             $table->string('pendamping_status', 3, ['1', '0'])->default('1');
             $table->decimal('pendamping_honor', 18, 2)->default(0);

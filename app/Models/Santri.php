@@ -12,6 +12,7 @@ class Santri extends Model
         'santri_nama',
         'santri_tmp_lahir', 
         'santri_tgl_lahir',  
+        'santri_gender',
         'santri_mobile_no',
         'santri_email',
         'santri_alamat',

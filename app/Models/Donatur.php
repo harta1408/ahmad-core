@@ -11,6 +11,8 @@ class Donatur extends Model
         'donatur_ktp',
         'donatur_nama',
         'donatur_mobile_no',
+        'donatur_gender',
+        'donatur_agama',
         'donatur_email',
         'donatur_photo',
         'donatur_kerja',

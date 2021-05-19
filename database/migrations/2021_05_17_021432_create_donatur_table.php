@@ -18,6 +18,8 @@ class CreateDonaturTable extends Migration
             $table->string('donatur_kode',8)->nullable();
             $table->string('donatur_ktp',20)->nullable();
             $table->string('donatur_nama',50)->nullable();
+            $table->string('donatur_gender',10)->default('PRIA');
+            $table->string('donatur_agama',10)->default('ISLAM');
             $table->string('donatur_mobile_no',20)->nullable();
             $table->string('donatur_email',100)->unique();
             $table->string('donatur_photo',100)->nullable();

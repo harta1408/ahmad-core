@@ -48,4 +48,7 @@ class User extends Authenticatable
     public function santri(){
         return $this->hasOne('App\Models\Santri','santri_email','user_email');
     }
+    public function donatur(){
+        return $this->hasOne('App\Models\Donatur','donatur_email','user_email');
+    }
 }

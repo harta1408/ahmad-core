@@ -16,16 +16,25 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::get('donatur/list','APIDonatur@getDonaturList');
-Route::get('donatur/byid/{id}','Donatur@getDonaturById');
-Route::post('donatur/save/','Donatur@saveDonatur');
+Route::post('user/login','userAPI@userLogin');
+Route::put('user/change/password','userAPI@userChangePassword');
+
+Route::post('donatur/register','DonaturAPI@donaturRegister');
+Route::post('donatur/register/sosmed','DonaturAPI@donaturRegisterSosmed');
+Route::put('donatur/update/profile/{id}','DonaturAPI@donaturUpdateProfile');
+Route::get('donatur/byemail/{email}','DonaturAPI@donaturByEmail');
+Route::get('donatur/list','DonaturAPI@donaturList');
+Route::get('donatur/byid/{id}','DonaturAPI@donaturById');
 
 Route::post('santri/register','SantriAPI@santriRegister');
 Route::post('santri/register/sosmed','SantriAPI@santriRegisterSosmed');
-Route::get('santri/byemail/{email}','SantriAPI@getSantriByEmail');
-Route::get('santri/list','SantriAPI@getSantriList');
-Route::get('santri/byid/{id}','SantriAPI@getSantriById');
-Route::post('santri/update/profile','SantriAPI@updateSantri');
+Route::put('santri/update/profile/{id}','SantriAPI@santriUpdateProfile');
+Route::get('santri/byemail/{email}','SantriAPI@santriByEmail');
+Route::get('santri/list','SantriAPI@santriList');
+Route::get('santri/byid/{id}','SantriAPI@santriById');
+
+Route::post('kuesioner/simpan','KuesionerAPI@kuesionerSimpan');
+Route::get('kuesioner/list','KuesionerAPI@kuesionerList');
 
 Route::get('produk/list','Produk@getProdukList');
 Route::get('produk/byid/{id}','Produk@getProdukById');

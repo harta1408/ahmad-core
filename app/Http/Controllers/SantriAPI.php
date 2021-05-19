@@ -28,7 +28,7 @@ class SantriAPI extends Controller
          $useremail=$request->get('user_email'); 
          $hashcode=Hash::make(rand(0,1000)); 
  
-         $usertipe="2"; //tipe user santri
+         $usertipe="5"; //tipe user santri
 
 
         #buat user baru dengan alamat email yang dimasukan
@@ -69,9 +69,9 @@ class SantriAPI extends Controller
          #link verifikasi di panggil berdasarkan user dan password
          $useremail=$request->get('user_email'); 
          $username=$request->get('user_name');
-         $password=Hash::make(rand(0,1000)); 
+         $password=Hash::make($request->get('user_password')); 
  
-         $usertipe="2"; //tipe user santri
+         $usertipe="5"; //tipe user santri
 
         #buat user baru dengan alamat email yang dimasukan
         $user=new User;
@@ -96,29 +96,15 @@ class SantriAPI extends Controller
         $user=User::with('santri')->where('user_email',$useremail)->first();
         return response()->json($user,200);
     }
-
-    #mengambil data santri berdasarkan alamat email
-    public function getSantriByEmail($email){
-        $santri=Santri::where('santri_email',$email)->first();
-        return response()->json($santri,200);
-    }
-
-    public function getSantriList(){
-        $santri=Santri::where('santri_status','1')->get();
-        return response()->json($santri,200);
-    }
-    public function getSantriById($id){
-        $santri=Santri::where('id',$id)->first();
-        return response()->json($santri,200);
-    }
   
-    public function updateSantri($id,Request $request){
+    public function santriUpdateProfile($id,Request $request){
         $exec=Santri::where('id','=' ,$id)
         ->update(['santri_nama'=>$request->get('santri_nama'),
                   'santri_tmp_lahir'=>$request->get('santri_tmp_lahir'),
                   'santri_tgl_lahir'=>$request->get('santri_tgl_lahir'),
                   'santri_mobile_no'=>$request->get('santri_mobile_no'),
                   'santri_alamat'=>$request->get('santri_alamat'),
+                  'santri_gender'=>$request->get('santri_gender'),
                   'santri_kode_pos'=>$request->get('santri_kode_pos'),
                   'santri_kelurahan'=>$request->get('santri_kelurahan'),
                   'santri_kota'=>$request->get('santri_kota'),
@@ -128,6 +114,22 @@ class SantriAPI extends Controller
         $santri=Santri::where('id',$id)->first();
         return response()->json($santri,200);
     }
+
+    #mengambil data santri berdasarkan alamat email
+    public function santriByEmail($email){
+        $santri=Santri::where('santri_email',$email)->first();
+        return response()->json($santri,200);
+    }
+
+    public function santriList(){
+        $santri=Santri::where('santri_status','1')->get();
+        return response()->json($santri,200);
+    }
+    public function santriById($id){
+        $santri=Santri::where('id',$id)->first();
+        return response()->json($santri,200);
+    }
+  
 
     public function santriKode()
     {

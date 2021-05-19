@@ -19,6 +19,7 @@ class CreateSantriTable extends Migration
             $table->string('santri_nama',50)->nullable();
             $table->string('santri_tmp_lahir',50)->nullable();
             $table->date('santri_tgl_lahir')->nullable();
+            $table->string('santri_gender',10)->default('PRIA');
             $table->string('santri_mobile_no',20)->nullable();
             $table->string('santri_email',100)->unique();
             $table->longText('santri_alamat',100)->nullable();
