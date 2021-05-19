@@ -11,16 +11,46 @@ class SantriAPI extends Controller
 {
     //modul pendaftaran santri, menanyakan informasi spesifik saja
     //untuk mempermudah ketika pendaftaran
+    //pendaftaran pertama hanya memasukan alamat email, password sementara akan
+    //dibuat secara otomatis oleh sistem
     public function registerSantri(Request $request){
+        $validator = Validator::make($request->all(), [
+            'user_email' => 'required|email|unique:users|max:100',
+        ]);
 
-        //parameter yang dikirim
-        $useremail=$request->get('user_email');
-        $username=$request->get('user_name');
-        $password=Hash::make($request->get('user_password'));
+        if ($validator->fails()) {
+            return response()->json(['status' => 'error', 'message' => $validator->messages()->first(), 'code' => 404]);
+        }
+
+         //buat password acak untuk default yang harus langsung diganti
+         //ketika email tervirifikasi
+         //link verifikasi di panggil berdasarkan user dan password
+         $useremail=$request->get('user_email'); 
+         $hashcode=Hash::make(rand(0,1000)); 
+ 
+         $usertipe="4"; //tipe user santri
 
 
-        $usertipe="4"; //santri
+        //buat user baru dengan alamat email yang dimasukan
+        $user=new User;
+        $user->user_email=$useremail;
+        $user->user_hash=$hashcode; 
+        $exec=$user->save();
 
+        if(!$exec){
+            return response()->json(['status' => 'error', 'message' => "Data Cannot be Save", 'code' => 404]);
+        }
+
+        //simpan data registrasi santri
+        $santri=new Santri;
+        $santri->santri_email=$useremail; 
+        $santri->santri_status='1'; //aktif belum terpilih 
+        $santri->save();
+        return response()->json($user,200);
+    }
+    //modul pendaftaran santri melalui account media sosial
+    //sepeti gmail, facebook dsb
+    public function registerSantriSosmed(Request $request){
         $validator = Validator::make($request->all(), [
             'user_email' => 'required|email|unique:users|max:100',
             'user_name' => 'required|string',
@@ -30,6 +60,15 @@ class SantriAPI extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 'error', 'message' => $validator->messages()->first(), 'code' => 404]);
         }
+
+         //buat password acak untuk default yang harus langsung diganti
+         //ketika email tervirifikasi
+         //link verifikasi di panggil berdasarkan user dan password
+         $useremail=$request->get('user_email'); 
+         $password=Hash::make(rand(0,1000)); 
+ 
+         $usertipe="4"; //tipe user santri
+
 
         //buat user baru dengan alamat email yang dimasukan
         $user=new User;
@@ -49,7 +88,7 @@ class SantriAPI extends Controller
         $santri->santri_nama=$username;
         $santri->santri_status='1'; //aktif belum terpilih 
         $santri->save();
-        return response()->json($santri,200);
+        return response()->json($user,200);
     }
 
     public function getSantriByEmail($email){
