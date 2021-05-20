@@ -96,7 +96,7 @@ class PendampingAPI extends Controller
       //tahun[2]+bulan[2]+nomor urut[4]
       $bulan=date("m");
       $tahun=date("y");
-      $usertipe="2"; //tipe user pendamping
+      $usertipe="3"; //tipe user pendamping
       $strNewId = $usertipe.$tahun.$bulan."0001";
 
       while ($this->findpendampingKode($strNewId)) { 

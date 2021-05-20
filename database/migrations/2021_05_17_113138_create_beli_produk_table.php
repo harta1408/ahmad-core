@@ -16,11 +16,11 @@ class CreateBeliProdukTable extends Migration
         Schema::create('beli_produk', function (Blueprint $table) {
             $table->bigInteger('beli_id')->unsigned();
             $table->foreign('beli_id')->references('id')->on('beli'); 
-            $table->bigInteger('produk_id')->unsigned();
+            $table->integer('produk_id')->unsigned();
             $table->foreign('produk_id')->references('id')->on('produk'); 
             $table->integer('beli_produk_jml')->default(0);
-            $table->double('beli_produk_harga')->default(0);
-            $table->double('beli_produk_total')->default(0);
+            $table->double('beli_produk_harga',12,2)->default(0);
+            $table->double('beli_produk_total',12,2)->default(0);
             $table->timestamps();
         });
     }

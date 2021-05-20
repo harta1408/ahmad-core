@@ -19,6 +19,7 @@ class CreateBeliTable extends Migration
             $table->foreign('donatur_id')->references('id')->on('donatur');
             $table->dateTime('beli_tanggal')->nullable();
             $table->string('beli_catatan',50)->nullable();
+            $table->string('beli_kode_voucer',30)->nullable();
             $table->double('beli_total_harga',12,2)->default(0);
             $table->double('beli_total_disc',12,2)->default(0);
             $table->double('beli_total_pajak',12,2)->default(0);

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDonaturSantriTable extends Migration
+class CreatePendampingDonaturTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,14 @@ class CreateDonaturSantriTable extends Migration
      */
     public function up()
     {
-        Schema::create('donatur_santri', function (Blueprint $table) {
+        Schema::create('pendamping_donatur', function (Blueprint $table) {
+            $table->bigInteger('pendamping_id')->unsigned();
+            $table->foreign('pendamping_id')->references('id')->on('pendamping');
             $table->bigInteger('donatur_id')->unsigned();
             $table->foreign('donatur_id')->references('id')->on('donatur');
-            $table->bigInteger('santri_id')->unsigned();
-            $table->foreign('santri_id')->references('id')->on('santri');
-            $table->integer('produk_id')->unsigned();
-            $table->foreign('produk_id')->references('id')->on('produk');
-            $table->char('donatur_santri_status',1)->default(0);
+            $table->integer('hadiah_id')->unsigned();
+            $table->foreign('hadiah_id')->references('id')->on('hadiah');
+            $table->longText('link_referral')->nullable();
             $table->timestamps();
         });
     }
@@ -32,6 +32,6 @@ class CreateDonaturSantriTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('donatur_santri');
+        Schema::dropIfExists('pendamping_donatur');
     }
 }
