@@ -15,7 +15,7 @@ class CreateDonaturTable extends Migration
     {
         Schema::create('donatur', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('donatur_kode',8)->nullable();
+            $table->string('donatur_kode',9)->nullable();
             $table->string('donatur_ktp',20)->nullable();
             $table->string('donatur_nama',50)->nullable();
             $table->string('donatur_gender',10)->default('PRIA');

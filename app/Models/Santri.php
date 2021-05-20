@@ -27,10 +27,15 @@ class Santri extends Model
 
 
     public function donatur(){
-        return $this->belongsToMany('App\Models\Donatur','donatur_santri','donatur_id','santri_id','id','id')
+        return $this->belongsToMany('App\Models\Donatur','donatur_santri','santri_id','donatur_id','id','id')
                     ->as('santridonatur')
                     ->withPivot('donatur_santri_status')
                     ->withTimestamps();
     }
- 
+    public function kuesioner(){
+        return $this->belongsToMany('App\Models\Kuesioner','kuesioner_santri','santri_id','kuesioner_id','id','id')
+                    ->as('santrikuesioner')
+                    ->withPivot('kuesioner_jawab','kuesioner_nilai')
+                    ->withTimestamps();
+    }
 }

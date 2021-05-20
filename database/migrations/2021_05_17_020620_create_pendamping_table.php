@@ -16,7 +16,7 @@ class CreatePendampingTable extends Migration
         Schema::create('pendamping', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('pendamping_email',100)->unique();   
-            $table->string('pendamping_kode',50)->nullable();
+            $table->string('pendamping_kode',9)->nullable();
             $table->string('pendamping_phone',100)->nullable();
             $table->string('pendamping_nama',255)->nullable();
             $table->string('pendamping_gender',10)->default('PRIA');
@@ -27,7 +27,7 @@ class CreatePendampingTable extends Migration
             $table->decimal('pendamping_honor', 18, 2)->default(0);
             $table->decimal('pendamping_komisi', 18, 2)->default(0);
             $table->char('pendamping_rangkap',1)->default('0');
-            $table->timestamp('created_at');                    
+            $table->timestamp();                    
         });
     }
 

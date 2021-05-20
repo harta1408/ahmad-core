@@ -35,6 +35,7 @@ Route::get('santri/byid/{id}','SantriAPI@santriById');
 
 Route::post('kuesioner/simpan','KuesionerAPI@kuesionerSimpan');
 Route::get('kuesioner/list','KuesionerAPI@kuesionerList');
+Route::post('kuesioner/santri/simpan','KuesionerAPI@kuesionerSantriSimpan');
 
 Route::get('produk/list','Produk@getProdukList');
 Route::get('produk/byid/{id}','Produk@getProdukById');

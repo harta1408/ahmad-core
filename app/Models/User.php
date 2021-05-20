@@ -21,7 +21,7 @@ class User extends Authenticatable
         'user_password',
         'user_hash', //untuk link verifikasi email
         'email_verified_at',
-        'user_tipe', //1=manager, 2=finance, 3=helpdesk, 4=donatur 5=santri, 6=pendamping 9=superadmin
+        'user_tipe', // 1=donatur 2=santri, 3=pendamping 4=manager, 5=finance, 6=helpdesk, 7=superadmin
         'referensi_id'
     ];
 

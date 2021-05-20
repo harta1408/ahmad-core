@@ -17,10 +17,11 @@ class Donatur extends Model
         'donatur_photo',
         'donatur_kerja',
         'donatur_alamat',
+        'donatur_rangkap',
         'donatur_status', //0=tidak aktif 1=aktif 2=sudah dapat produk 3=dalam bimbingan
     ];
     public function santri(){
-        return $this->belongsToMany('App\Models\Donatur','donatur_santri','santri_id','donatur_id','id','id')
+        return $this->belongsToMany('App\Models\Donatur','donatur_santri','donatur_id','santri_id','id','id')
                     ->as('donatursantri')
                     ->withPivot('donatur_santri_status')
                     ->withTimestamps();
