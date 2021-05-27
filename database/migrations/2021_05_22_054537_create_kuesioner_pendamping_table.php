@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePendampingDonaturTable extends Migration
+class CreateKuesionerPendampingTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,13 @@ class CreatePendampingDonaturTable extends Migration
      */
     public function up()
     {
-        Schema::create('pendamping_donatur', function (Blueprint $table) {
+        Schema::create('kuesioner_pendamping', function (Blueprint $table) {
             $table->bigInteger('pendamping_id')->unsigned();
             $table->foreign('pendamping_id')->references('id')->on('pendamping');
-            $table->bigInteger('donatur_id')->unsigned();
-            $table->foreign('donatur_id')->references('id')->on('donatur');
+            $table->integer('kuesioner_id')->unsigned();
+            $table->foreign('kuesioner_id')->references('id')->on('kuesioner');
+            $table->string('kuesioner_jawab',5)->default('TIDAK');
+            $table->integer('kuesioner_nilai')->default(0);
             $table->timestamps();
         });
     }
@@ -29,6 +31,6 @@ class CreatePendampingDonaturTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pendamping_donatur');
+        Schema::dropIfExists('kuesioner_pendamping');
     }
 }

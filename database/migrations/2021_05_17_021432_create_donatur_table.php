@@ -16,15 +16,22 @@ class CreateDonaturTable extends Migration
         Schema::create('donatur', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('donatur_kode',9)->nullable();
-            $table->string('donatur_ktp',20)->nullable();
+            $table->string('donatur_id',20)->nullable(); 
+            $table->string('donatur_email',100)->unique();
             $table->string('donatur_nama',50)->nullable();
+            $table->string('donatur_tmp_lahir',50)->nullable();
+            $table->date('donatur_tgl_lahir')->nullable();
             $table->string('donatur_gender',10)->default('PRIA');
             $table->string('donatur_agama',10)->default('ISLAM');
-            $table->string('donatur_mobile_no',20)->nullable();
-            $table->string('donatur_email',100)->unique();
-            $table->string('donatur_photo',100)->nullable();
+            $table->string('donatur_telepon',20)->nullable();
             $table->string('donatur_kerja',100)->nullable();
-            $table->string('donatur_alamat',100)->nullable();
+            $table->text('donatur_lokasi_photo')->nullable();
+            $table->text('donatur_alamat')->nullable();
+            $table->string('donatur_kode_pos',10)->nullable();
+            $table->string('donatur_kelurahan',50)->nullable();
+            $table->string('donatur_kota',50)->nullable();
+            $table->string('donatur_kecamatan',50)->nullable();
+            $table->string('donatur_provinsi',50)->nullable();
             $table->char('donatur_rangkap',1)->default('0');
             $table->char('donatur_status',1)->default('0');
             $table->timestamps();

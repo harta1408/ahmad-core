@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCicilanTable extends Migration
+class CreateDonasiDonaturTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class CreateCicilanTable extends Migration
      */
     public function up()
     {
-        Schema::create('cicilan', function (Blueprint $table) {
-            $table->bigIncrements('id');
+        Schema::create('donasi_donatur', function (Blueprint $table) {
             $table->bigInteger('donatur_id')->unsigned();
             $table->foreign('donatur_id')->references('id')->on('donatur');
-            $table->bigInteger('bayar_id')->unsigned();
-            $table->foreign('bayar_id')->references('id')->on('bayar');
+            $table->bigInteger('donasi_id')->unsigned();
+            $table->foreign('donasi_id')->references('id')->on('donasi');
             $table->string('cicilan_ke',2)->nullable();
             $table->double('cicilan_jumlah',12,2)->default(0);
             $table->char('cicilan_status',1)->default(0);
@@ -33,6 +32,6 @@ class CreateCicilanTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cicilan');
+        Schema::dropIfExists('donasi_donatur');
     }
 }

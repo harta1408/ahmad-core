@@ -15,7 +15,8 @@ class CreateKuesionerTable extends Migration
     {
         Schema::create('kuesioner', function (Blueprint $table) {
             $table->increments('id');
-            $table->longText('kuesioner_tanya')->nullable();
+            $table->char('kuesioner_tujuan',1)->default(0);
+            $table->text('kuesioner_tanya')->nullable();
             $table->integer('kuesioner_bobot_yes')->default(0);
             $table->integer('kuesioner_bobot_no')->default(0);
             $table->char('kuesioner_status',1)->default(0);

@@ -19,8 +19,8 @@ class CreateProdukDetailTable extends Migration
             $table->foreign('produk_id')->references('id')->on('produk');
             $table->string('produk_detail_nama')->nullable();
             $table->integer('produk_detail_jml')->default(0);
-            $table->double('produk_detail_harga')->default(0);
-            $table->char('produk_detail_status')->default(0);
+            $table->double('produk_detail_harga',12,2)->default(0);
+            $table->char('produk_detail_status',1)->default(0);
             $table->timestamps();
         });
     }

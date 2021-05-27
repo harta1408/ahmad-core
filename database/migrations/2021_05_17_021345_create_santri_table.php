@@ -16,13 +16,17 @@ class CreateSantriTable extends Migration
         Schema::create('santri', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('santri_kode',9)->nullable();
+            $table->string('santri_id',20)->nullable(); 
+            $table->string('santri_email',100)->unique();
             $table->string('santri_nama',50)->nullable();
             $table->string('santri_tmp_lahir',50)->nullable();
             $table->date('santri_tgl_lahir')->nullable();
             $table->string('santri_gender',10)->default('PRIA');
-            $table->string('santri_mobile_no',20)->nullable();
-            $table->string('santri_email',100)->unique();
-            $table->longText('santri_alamat',100)->nullable();
+            $table->string('santri_agama',10)->default('ISLAM');
+            $table->string('santri_telepon',20)->nullable();
+            $table->string('santri_kerja',100)->nullable();
+            $table->text('santri_lokasi_photo')->nullable();
+            $table->text('santri_alamat')->nullable();
             $table->string('santri_kode_pos',10)->nullable();
             $table->string('santri_kelurahan',50)->nullable();
             $table->string('santri_kota',50)->nullable();

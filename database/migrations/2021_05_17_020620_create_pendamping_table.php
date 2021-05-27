@@ -16,17 +16,22 @@ class CreatePendampingTable extends Migration
         Schema::create('pendamping', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('pendamping_email',100)->unique();   
+            $table->string('pendamping_nama',100)->nullable();
             $table->string('pendamping_kode',9)->nullable();
-            $table->string('pendamping_phone',100)->nullable();
-            $table->string('pendamping_nama',255)->nullable();
+            $table->string('pendamping_id',20)->nullable();
+            $table->string('pendamping_telepon',100)->nullable();
             $table->string('pendamping_gender',10)->default('PRIA');
-            $table->longText('pendamping_alamat')->nullable();
+            $table->text('pendamping_alamat')->nullable();
+            $table->string('pendamping_kode_pos',10)->nullable();
+            $table->string('pendamping_kelurahan',50)->nullable();
+            $table->string('pendamping_kota',50)->nullable();
+            $table->string('pendamping_kecamatan',50)->nullable();
+            $table->string('pendamping_provinsi',50)->nullable();
             $table->string('pendamping_status_pegawai', 10, ['PERMANEN', 'KONTRAK'])->default('PERMANEN');
-            $table->string('pendamping_is_active',3, ['1', '0'])->default('1');
-            $table->string('pendamping_status', 3, ['1', '0'])->default('1');
             $table->decimal('pendamping_honor', 18, 2)->default(0);
             $table->decimal('pendamping_komisi', 18, 2)->default(0);
             $table->char('pendamping_rangkap',1)->default('0');
+            $table->char('pendamping_status', 1, ['1', '0'])->default('1');
             $table->timestamps();
         });
     }

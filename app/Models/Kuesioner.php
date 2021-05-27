@@ -6,11 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Kuesioner extends Model
 {
+    #tabel berisi kuesioner/ pertanyaan yang diberikan kepada calon santri atau
+    #calon pendamping dan sebagai bahan pada proses otorisasi
     protected $table='kuesioner';
     protected $fillable=[
-        'kuesioner_tanya',
-        'kuesioner_bobot_yes',
-        'kuesioner_bobot_no',
+        'kuesioner_tujuan', //2=santri 3=pendamping (supaya konsisten)
+        'kuesioner_tanya', //pertanyaan
+        'kuesioner_bobot_yes', //bobot jawaban YA
+        'kuesioner_bobot_no', //bobot jawaban TIDAK
         'kuesioner_status', //0=tidak aktif 1=aktif 2=sudah dapat produk 3=dalam bimbingan
     ];
     public function santri(){
@@ -19,5 +22,4 @@ class Kuesioner extends Model
                     ->withPivot('kuesioner_jawab','kuesioner_nilai')
                     ->withTimestamps();
     }
-}
-
+} 

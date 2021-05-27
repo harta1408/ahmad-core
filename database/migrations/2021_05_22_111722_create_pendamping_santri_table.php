@@ -22,7 +22,7 @@ class CreatePendampingSantriTable extends Migration
             $table->foreign('materi_id')->references('id')->on('materi');
             $table->integer('materi_nilai_angka')->default(0);
             $table->string('materi_nilai_huruf',3)->nullable();
-            $table->longText('materi_catatan_nilai')->nullable();
+            $table->text('materi_catatan_nilai')->nullable();
             $table->timestamps();
         });
     }

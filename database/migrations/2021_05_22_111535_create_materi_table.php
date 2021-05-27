@@ -16,8 +16,11 @@ class CreateMateriTable extends Migration
         Schema::create('materi', function (Blueprint $table) {
             $table->increments('id');
             $table->string('materi_nama',50)->nullable();
-            $table->string('materi_deskripsi',100)->nullable();
+            $table->text('materi_deskripsi')->nullable();
+            $table->text('materi_lokasi_gambar')->nullable();
+            $table->text('materi_lokasi_video')->nullable();
             $table->string('materi_level',20)->nullable();
+            $table->integer('materi_bobot')->default(0);
             $table->char('materi_status',1)->default(0);
             $table->timestamps();
         });

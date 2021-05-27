@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateBeliProdukTable extends Migration
+class CreateDonasiProdukTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,14 @@ class CreateBeliProdukTable extends Migration
      */
     public function up()
     {
-        Schema::create('beli_produk', function (Blueprint $table) {
-            $table->bigInteger('beli_id')->unsigned();
-            $table->foreign('beli_id')->references('id')->on('beli'); 
+        Schema::create('donasi_produk', function (Blueprint $table) {
+            $table->bigInteger('donasi_id')->unsigned();
+            $table->foreign('donasi_id')->references('id')->on('donasi'); 
             $table->integer('produk_id')->unsigned();
             $table->foreign('produk_id')->references('id')->on('produk'); 
-            $table->integer('beli_produk_jml')->default(0);
-            $table->double('beli_produk_harga',12,2)->default(0);
-            $table->double('beli_produk_total',12,2)->default(0);
+            $table->integer('donasi_produk_jml')->default(0);
+            $table->double('donasi_produk_harga',12,2)->default(0);
+            $table->double('donasi_produk_total',16,2)->default(0);
             $table->timestamps();
         });
     }
@@ -32,6 +32,6 @@ class CreateBeliProdukTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('beli_produk');
+        Schema::dropIfExists('donasi_produk');
     }
 }
