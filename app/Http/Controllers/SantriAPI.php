@@ -16,17 +16,19 @@ class SantriAPI extends Controller
     public function santriRegister(Request $request){
         $validator = Validator::make($request->all(), [
             'user_email' => 'required|email|unique:users|max:100',
+            'user_name' => ['required','string','max:30'],
         ]);
 
         if ($validator->fails()) {
             return response()->json(['status' => 'error', 'message' => $validator->messages()->first(), 'code' => 404]);
         }
 
-        #buat password acak untuk default yang harus langsung diganti
+        #buat hash code acak untuk default yang harus langsung diganti
         #ketika email tervirifikasi
-        #link verifikasi di panggil berdasarkan user dan password
+        #link verifikasi di panggil berdasarkan user dan hash code
         $useremail=$request->get('user_email'); 
-        $hashcode=Hash::make(rand(0,1000)); 
+        $username=$request->get('user_name');
+        $hashcode=Hash::make(md5(rand(0,1000))); 
 
         $usertipe="2"; //tipe user santri
 
@@ -34,7 +36,9 @@ class SantriAPI extends Controller
         #buat user baru dengan alamat email yang dimasukan
         $user=new User;
         $user->user_email=$useremail;
+        $user->user_name=$username;
         $user->user_hash_code=$hashcode; 
+        $user->user_tipe=$usertipe;
         $exec=$user->save();
 
         if(!$exec){
@@ -45,6 +49,7 @@ class SantriAPI extends Controller
         $santri=new Santri;
         $santri->santri_kode=$this->santriKode();
         $santri->santri_email=$useremail; 
+        $santri->santri_nama=$username;
         $santri->santri_status='1'; //aktif belum terpilih 
         $santri->save();
 
@@ -77,7 +82,7 @@ class SantriAPI extends Controller
         $user=new User;
         $user->user_email=$useremail;
         $user->user_password=$password;
-        $user->user_name=$username;
+        $user->user_nama=$username;
         $user->user_tipe=$usertipe;
         $exec=$user->save();
 
@@ -90,7 +95,7 @@ class SantriAPI extends Controller
         $santri->santri_kode=$this->santriKode();
         $santri->santri_email=$useremail; 
         $santri->santri_nama=$username;
-        $santri->santri_status='1'; //aktif belum terpilih 
+        $santri->santri_status='1'; //aktif belum data belum lengkap 
         $santri->save();
 
         $user=User::with('santri')->where('user_email',$useremail)->first();
@@ -99,16 +104,20 @@ class SantriAPI extends Controller
   
     public function santriUpdateProfile($id,Request $request){
         $exec=Santri::where('id','=' ,$id)
-        ->update(['santri_nama'=>$request->get('santri_nama'),
+        ->update(['santri_id'=>$request->get('santri_id'),
+                  'santri_nama'=>$request->get('santri_nama'),
                   'santri_tmp_lahir'=>$request->get('santri_tmp_lahir'),
                   'santri_tgl_lahir'=>$request->get('santri_tgl_lahir'),
                   'santri_mobile_no'=>$request->get('santri_mobile_no'),
-                  'santri_alamat'=>$request->get('santri_alamat'),
                   'santri_gender'=>$request->get('santri_gender'),
+                  'santri_telepon'=>$request->get('santri_telepon'),
+                  'santri_kerja'=>$request->get('santri_kerja'),
+                  'santri_lokasi_photo'=>$request->get('santri_lokasi_photo'),
+                  'santri_alamat'=>$request->get('santri_alamat'),
                   'santri_kode_pos'=>$request->get('santri_kode_pos'),
                   'santri_kelurahan'=>$request->get('santri_kelurahan'),
-                  'santri_kota'=>$request->get('santri_kota'),
                   'santri_kecamatan'=>$request->get('santri_kecamatan'),
+                  'santri_kota'=>$request->get('santri_kota'),
                   'santri_provinsi'=>$request->get('santri_provinsi'),
                   ]);
         $santri=Santri::where('id',$id)->first();

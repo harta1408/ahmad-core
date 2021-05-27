@@ -22,15 +22,13 @@ class DonaturAPI extends Controller
             return response()->json(['status' => 'error', 'message' => $validator->messages()->first(), 'code' => 404]);
         }
 
-        #buat password acak untuk default yang harus langsung diganti
+        #buat hash code acak untuk default yang harus langsung diganti
         #ketika email tervirifikasi
-        #link verifikasi di panggil berdasarkan user, nama dan password
+        #link verifikasi di panggil berdasarkan user, nama dan hash code
         $useremail=$request->get('user_email'); 
         $username=$request->get('user_name');
         // $hashcode=Hash::make(rand(0,1000)); 
         $hashcode=Hash::make(md5(rand(0,1000))); 
-
-
         $usertipe="1"; //tipe user donatur
 
 
@@ -39,6 +37,7 @@ class DonaturAPI extends Controller
         $user->user_email=$useremail;
         $user->user_name=$username;
         $user->user_hash_code=$hashcode; 
+        $user->user_tipe=$usertipe;
         $exec=$user->save();
 
         if(!$exec){
@@ -50,7 +49,7 @@ class DonaturAPI extends Controller
         $donatur->donatur_kode=$this->donaturKode();
         $donatur->donatur_email=$useremail; 
         $donatur->donatur_nama=$username;
-        $donatur->donatur_status='1'; //aktif belum terpilih 
+        $donatur->donatur_status='1'; //aktif belum melengkapi data
         $donatur->save();
 
         $user=User::with('donatur')->where('user_email',$useremail)->first();
@@ -95,7 +94,7 @@ class DonaturAPI extends Controller
         $donatur->donatur_kode=$this->donaturKode();
         $donatur->donatur_nama=$username;
         $donatur->donatur_email=$useremail; 
-        $donatur->donatur_status='1'; //aktif belum terpilih 
+        $donatur->donatur_status='1'; //aktif belum melengkapi data
         $donatur->save();
 
         $user=User::with('donatur')->where('user_email',$useremail)->first();

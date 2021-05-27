@@ -26,7 +26,7 @@ class Santri extends Model
         'santri_kota', //kota
         'santri_provinsi',// propinsi
         'santri_rangkap', // untuk memeriksa apakah santri merangkap entitas lain (donatur/pendamping)
-        'santri_status', //0=tidak aktif 1=aktif 2=sudah dapat produk 3=dalam bimbingan
+        'santri_status', //0=tidak aktif 1=aktif data belum lengkap 2=aktif data sudah lengkap 3=sudah dapat produk 4=dalam bimbingan 5=sudah selesai
     ];
 
     public function donatur(){
