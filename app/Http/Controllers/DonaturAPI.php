@@ -15,6 +15,7 @@ class DonaturAPI extends Controller
     public function donaturRegister(Request $request){
         $validator = Validator::make($request->all(), [
             'user_email' => 'required|email|unique:users|max:100',
+            'user_name' => ['required','string','max:30'],
         ]);
 
         if ($validator->fails()) {
@@ -23,9 +24,12 @@ class DonaturAPI extends Controller
 
         #buat password acak untuk default yang harus langsung diganti
         #ketika email tervirifikasi
-        #link verifikasi di panggil berdasarkan user dan password
+        #link verifikasi di panggil berdasarkan user, nama dan password
         $useremail=$request->get('user_email'); 
-        $hashcode=Hash::make(rand(0,1000)); 
+        $username=$request->get('user_name');
+        // $hashcode=Hash::make(rand(0,1000)); 
+        $hashcode=Hash::make(md5(rand(0,1000))); 
+
 
         $usertipe="1"; //tipe user donatur
 
@@ -33,6 +37,7 @@ class DonaturAPI extends Controller
         #buat user baru dengan alamat email yang dimasukan
         $user=new User;
         $user->user_email=$useremail;
+        $user->user_name=$username;
         $user->user_hash_code=$hashcode; 
         $exec=$user->save();
 
@@ -44,6 +49,7 @@ class DonaturAPI extends Controller
         $donatur=new Donatur;
         $donatur->donatur_kode=$this->donaturKode();
         $donatur->donatur_email=$useremail; 
+        $donatur->donatur_nama=$username;
         $donatur->donatur_status='1'; //aktif belum terpilih 
         $donatur->save();
 
@@ -99,16 +105,21 @@ class DonaturAPI extends Controller
     #memperbaharui profile donatur
     public function donaturUpdateProfile($id,Request $request){
         $exec=Donatur::where('id','=' ,$id)
-        ->update(['donatur_ktp'=>$request->get('donatur_ktp'),
+        ->update(['donatur_id'=>$request->get('donatur_id'),
                   'donatur_nama'=>$request->get('donatur_nama'),
-                  'donatur_mobile_no'=>$request->get('donatur_mobile_no'), 
-                  'donatur_email'=>$request->get('donatur_email'), 
+                  'donatur_tmp_lahir'=>$request->get('donatur_tmp_lahir'), 
+                  'donatur_tgl_lahir'=>$request->get('donatur_tgl_lahir'), 
                   'donatur_gender'=>$request->get('donatur_gender'), 
                   'donatur_agama'=>$request->get('donatur_agama'), 
-                  'donatur_photo'=>$request->get('donatur_photo'), 
+                  'donatur_telepon'=>$request->get('donatur_telepon'), 
+                  'donatur_lokasi_photo'=>$request->get('donatur_lokasi_photo'), 
                   'donatur_kerja'=>$request->get('donatur_kerja'),
                   'donatur_alamat'=>$request->get('donatur_alamat'), 
-                  'donatur_status'=>$request->get('donatur_status'),
+                  'donatur_kode_pos'=>$request->get('donatur_kode_pos'),
+                  'donatur_kelurahan'=>$request->get('donatur_kelurahan'),
+                  'donatur_kecamatan'=>$request->get('donatur_kecamatan'),
+                  'donatur_kota'=>$request->get('donatur_kota'),
+                  'donatur_provinsi'=>$request->get('donatur_provinsi'),
                   ]);
         $donatur=Donatur::where('id',$id)->first();
         return response()->json($donatur,200);

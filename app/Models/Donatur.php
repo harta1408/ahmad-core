@@ -27,7 +27,7 @@ class Donatur extends Model
         'donatur_kota', //kota/kabupaten
         'donatur_provinsi', //provinsi
         'donatur_rangkap', //status merangkap, santri donatur
-        'donatur_status', //0=tidak aktif 1=aktif 2=sudah dapat produk 3=dalam bimbingan
+        'donatur_status', //0=tidak aktif 1=aktif data belum lengkap 2=aktif data sudah lengkap 
     ];
     public function santri(){
         return $this->belongsToMany('App\Models\Donatur','donatur_santri','donatur_id','santri_id','id','id')
