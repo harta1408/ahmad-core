@@ -103,6 +103,16 @@ class SantriAPI extends Controller
     }
   
     public function santriUpdateProfile($id,Request $request){
+        $validator = Validator::make($request->all(), [
+            'santri_nama' => 'required|string',
+            'santri_telepon' => 'required|string',
+            'santri_alamat' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 'error', 'message' => $validator->messages()->first(), 'code' => 404]);
+        }
+
         $exec=Santri::where('id','=' ,$id)
         ->update(['santri_id'=>$request->get('santri_id'),
                   'santri_nama'=>$request->get('santri_nama'),

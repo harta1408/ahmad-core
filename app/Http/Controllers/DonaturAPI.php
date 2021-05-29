@@ -103,6 +103,16 @@ class DonaturAPI extends Controller
 
     #memperbaharui profile donatur
     public function donaturUpdateProfile($id,Request $request){
+        $validator = Validator::make($request->all(), [
+            'donatur_nama' => 'required|string',
+            'donatur_telepon' => 'required|string',
+            'donatur_alamat' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 'error', 'message' => $validator->messages()->first(), 'code' => 404]);
+        }
+
         $exec=Donatur::where('id','=' ,$id)
         ->update(['donatur_id'=>$request->get('donatur_id'),
                   'donatur_nama'=>$request->get('donatur_nama'),
