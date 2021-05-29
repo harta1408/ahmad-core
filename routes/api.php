@@ -35,13 +35,23 @@ Route::middleware(['cors'])->group(function () {
     Route::get('santri/byid/{id}','SantriAPI@santriById');
     
     Route::post('produk/save','ProdukAPI@produkSimpan');
-    Route::get('produk/list','ProdukAPI@getProdukList');
-    Route::get('produk/byid/{id}','ProdukAPI@getProdukById');
+    Route::get('produk/byid/{id}','ProdukAPI@produkById');
     
+    Route::post('donasi/save','DonasiAPI@donasiSimpan');
     
     Route::post('kuesioner/simpan','KuesionerAPI@kuesionerSimpan');
     Route::get('kuesioner/list','KuesionerAPI@kuesionerList');
     Route::post('kuesioner/santri/simpan','KuesionerAPI@kuesionerSantriSimpan');
+
+    Route::get('kodepos/list/provinsi/{provinsi}','KodePosAPI@kodeposProvinsi');
+    Route::get('kodepos/list/kota/{kota}','KodePosAPI@kodeposKota');
+    Route::get('kodepos/list/kecamatan/{kecamatan}','KodePosAPI@kodeposKecamatan');
+    Route::get('kodepos/list/kelurahan/{kelurahan}','KodePosAPI@kodeposKelurahan');
+    Route::get('kodepos/list/kodepos/{kodepos}','KodePosAPI@kodeposKodePos');
+    Route::get('kodepos/kotabyprovinsi/{provinsi}','KodePosAPI@kotaByProvinsi');
+    Route::get('kodepos/kecamatanbykota/{kota}','KodePosAPI@kecamatanByKota');
+    Route::get('kodepos/kelurahanbykecamatan/{kecamatan}','KodePosAPI@kelurahanByKecamatan');
+    Route::get('kodepos/kodeposbykelurahan/{kelurahan}','KodePosAPI@kodeposByKeluarahan');
 });
 
 

@@ -17,10 +17,10 @@ class Produk extends Model
         'produk_stok', // jumlah stok
         'produk_status',  //0=aktif 1=non aktif
     ];
-    public function beli(){
-        return $this->belongsToMany('App\Models\Produk','beli_produk','produk_id','beli_id','id','id')
-                    ->as('produkbeli')
-                    ->withPivot('beli_produk_jml','beli_produk_harga','beli_produk_total')
+    public function donasi(){
+        return $this->belongsToMany('App\Models\Produk','donasi_produk','produk_id','donasi_id','id','id')
+                    ->as('donasiproduk')
+                    ->withPivot('donasi_produk_jml','donasi_produk_harga','donasi_produk_total')
                     ->withTimestamps();
     }
 }

@@ -7,11 +7,7 @@ use Validator;
 
 class ProdukAPI extends Controller
 {
-    public function getProdukList(){
-        $produk=Produk::where('produk_status','1')->get();
-        return response()->json($produk,200);
-    }
-    public function getProdukById($id){
+    public function produkById($id){
         $produk=Produk::where('id',$id)->first();
         return $produk;
     }            
@@ -34,5 +30,8 @@ class ProdukAPI extends Controller
         $produk->produk_stok=$request->get('produk_stok');
         $produk->produk_status='1'; //aktif
         $produk->save();
+
+        return response()->json($produk,200);
+
     }
 }

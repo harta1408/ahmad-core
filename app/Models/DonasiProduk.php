@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class DonasiProduk extends Model
+class DonasiProduk extends Pivot
 {
     #tabel yang berisi produk yang di donasikan, hubungan many to many karena ada
     #kemungkinan produk lebih dari satu jenis

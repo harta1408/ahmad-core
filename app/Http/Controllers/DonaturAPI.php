@@ -119,6 +119,7 @@ class DonaturAPI extends Controller
                   'donatur_kecamatan'=>$request->get('donatur_kecamatan'),
                   'donatur_kota'=>$request->get('donatur_kota'),
                   'donatur_provinsi'=>$request->get('donatur_provinsi'),
+                  'donatur_status' => '2', //data sudah lengkap
                   ]);
         $donatur=Donatur::where('id',$id)->first();
         return response()->json($donatur,200);

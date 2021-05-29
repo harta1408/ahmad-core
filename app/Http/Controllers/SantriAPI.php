@@ -108,7 +108,6 @@ class SantriAPI extends Controller
                   'santri_nama'=>$request->get('santri_nama'),
                   'santri_tmp_lahir'=>$request->get('santri_tmp_lahir'),
                   'santri_tgl_lahir'=>$request->get('santri_tgl_lahir'),
-                  'santri_mobile_no'=>$request->get('santri_mobile_no'),
                   'santri_gender'=>$request->get('santri_gender'),
                   'santri_telepon'=>$request->get('santri_telepon'),
                   'santri_kerja'=>$request->get('santri_kerja'),
@@ -119,7 +118,11 @@ class SantriAPI extends Controller
                   'santri_kecamatan'=>$request->get('santri_kecamatan'),
                   'santri_kota'=>$request->get('santri_kota'),
                   'santri_provinsi'=>$request->get('santri_provinsi'),
+                  'santri_status' => '2',
                   ]);
+        if(!$exec){
+            return response()->json(['status' => 'error', 'message' => "Data Cannot be Save", 'code' => 404]);
+        }
         $santri=Santri::where('id',$id)->first();
         return response()->json($santri,200);
     }
@@ -139,7 +142,9 @@ class SantriAPI extends Controller
         return response()->json($santri,200);
     }
   
+    public function randomSantri(){
 
+    }
     public function santriKode()
     {
       //otomatis pengaturan kode santri dengan format 
