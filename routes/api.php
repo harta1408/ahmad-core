@@ -43,6 +43,16 @@ Route::middleware(['cors'])->group(function () {
     Route::get('kuesioner/list','KuesionerAPI@kuesionerList');
     Route::post('kuesioner/santri/simpan','KuesionerAPI@kuesionerSantriSimpan');
 
+    Route::post('kampanye/save','KampanyeAPI@kampanyeSimpan');
+    Route::put('kampanye/update/{id}','KampanyeAPI@kampanyeUpdate');
+    Route::get('kampanye/entitas/{jenis}','KampanyeAPI@kampanyeEntitas');
+    Route::get('kampanye/list','KampanyeAPI@kampanyeList');
+
+    Route::post('berita/save','beritaAPI@beritaSimpan');
+    Route::put('berita/update/{id}','beritaAPI@beritaUpdate');
+    Route::get('berita/entitas/{jenis}','beritaAPI@beritaEntitas');
+    Route::get('berita/list','beritaAPI@beritaList');
+
     Route::get('kodepos/list/provinsi/{provinsi}','KodePosAPI@kodeposProvinsi');
     Route::get('kodepos/list/kota/{kota}','KodePosAPI@kodeposKota');
     Route::get('kodepos/list/kecamatan/{kecamatan}','KodePosAPI@kodeposKecamatan');

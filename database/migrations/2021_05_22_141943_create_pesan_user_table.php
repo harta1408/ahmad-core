@@ -18,7 +18,6 @@ class CreatePesanUserTable extends Migration
             $table->foreign('pesan_id')->references('id')->on('pesan');
             $table->bigInteger('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
-            $table->char('pesan_terbaca',1)->default(0);
             $table->timestamps();
         });
     }

@@ -16,7 +16,7 @@ class CreatePesanTable extends Migration
         Schema::create('pesan', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('pembuat_id')->nullable();
-            $table->char('pesan_jenis',1)->default(0);
+            $table->char('pesan_entitas',1)->default(0);
             $table->text('pesan_isi')->nullable();
             $table->dateTime('pesan_waktu_kirim')->nullable();
             $table->char('pesan_status',1)->default(0);

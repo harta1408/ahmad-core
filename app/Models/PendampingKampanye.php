@@ -15,6 +15,7 @@ class PendampingKampanye extends Pivot
         'pendamping_id', //id pendamping
         'kampanye_id', //id kampanye
         'referral_web_link', //alamat link referral, berisi id pendamping dan id kampanye
+        'calon_no_telepon', //nomor telepon calon entitas (donatur/ santri)
         'referral_status', //referral yang sedang aktif 0=non aktif, 1=aktif
     ];
 }

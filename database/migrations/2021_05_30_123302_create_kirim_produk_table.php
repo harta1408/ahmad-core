@@ -29,6 +29,7 @@ class CreateKirimProdukTable extends Migration
             $table->string('kirim_penerima_provinsi',50)->nullable();
             $table->string('kirim_no_resi',50)->nullable();
             $table->double('kirim_biaya',12,2)->default(0); 
+            $table->string('produk_serial_no')->nullable();
             $table->char('kirim_status',1)->default(0);
             $table->timestamps();
         });

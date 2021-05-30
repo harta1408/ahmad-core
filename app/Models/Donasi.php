@@ -15,6 +15,7 @@ class Donasi extends Model
         'donatur_id', //id donatur
         'donasi_tanggal', //tanggal donasi(mulai donasi)
         'donasi_catatan', //jika ada catatan
+        'donasi_jumlah_santri', //jumlah santri penerima manfaat
         'donasi_total_harga', //total transaksi
         'donasi_pengingat_harian', //donatur menginginkan notifikasi harian
         'donasi_pengingat_mingguan', //donatur meninginkan notifikasi mingguan
