@@ -5,6 +5,10 @@ use Illuminate\Http\Request;
 use App\Models\User;
 class UserAPI extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('cors');
+	}
     public function registerUser(Request $request) 
     { 
         $validator = Validator::make($request->all(), [ 

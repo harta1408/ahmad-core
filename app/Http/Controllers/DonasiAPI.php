@@ -8,6 +8,10 @@ use App\Models\Produk;
 use Validator;
 class DonasiAPI extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('cors');
+	}
     public function donasiSimpan(Request $request){
         $validator = Validator::make($request->all(), [
             'donatur_id' => 'required|string',

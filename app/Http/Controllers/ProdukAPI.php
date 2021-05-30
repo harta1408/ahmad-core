@@ -7,6 +7,10 @@ use Validator;
 
 class ProdukAPI extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('cors');
+	}
     public function produkById($id){
         $produk=Produk::where('id',$id)->first();
         return $produk;

@@ -10,6 +10,10 @@ use Validator;
 
 class PendampingAPI extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('cors');
+	}
     public function pendampingRegister(Request $request){
         $validator = Validator::make($request->all(), [
             'user_email' => 'required|email|unique:users|max:100',

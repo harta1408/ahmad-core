@@ -7,6 +7,10 @@ use App\Models\Santri;
 
 class KuesionerAPI extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('cors');
+	}
     public function kuesionerSimpan(Request $request){
         $kuesioner=new Kuesioner;
         $kuesioner->kuesioner_tanya=$request->get('kuesioner_tanya');

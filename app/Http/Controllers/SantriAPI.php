@@ -9,6 +9,10 @@ use Validator;
 
 class SantriAPI extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('cors');
+	}
     #modul pendaftaran santri, menanyakan informasi spesifik saja
     #untuk mempermudah ketika pendaftaran
     #pendaftaran pertama hanya memasukan alamat email, password sementara akan

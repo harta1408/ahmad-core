@@ -10,6 +10,10 @@ use Validator;
 
 class DonaturAPI extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('cors');
+	}
     #register donatur dengan email pribadi hanya menanyakan alamat email
     #sistem mengirimkan email verifikasi untuk penggantian password
     public function donaturRegister(Request $request){

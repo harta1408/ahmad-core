@@ -6,6 +6,10 @@ use App\Models\KodePos;
 
 class KodePosAPI extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('cors');
+	}
     public function kodeposProvinsi($provinsi){
         $kodepos=KodePos::where('provinsi',$provinsi)->get();
         return response()->json($kodepos,200);
