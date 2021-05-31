@@ -18,7 +18,7 @@ class CreateBeritaSantriTable extends Migration
             $table->foreign('berita_id')->references('id')->on('berita');
             $table->bigInteger('santri_id')->unsigned();
             $table->foreign('santri_id')->references('id')->on('santri');
-            $table->char('berita_santri_status')->default(0);
+            $table->char('berita_santri_status',1)->default(0);
             $table->timestamps();
         });
     }

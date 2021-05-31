@@ -18,7 +18,7 @@ class CreateBeritaPendampingTable extends Migration
             $table->foreign('berita_id')->references('id')->on('berita');
             $table->bigInteger('pendamping_id')->unsigned();
             $table->foreign('pendamping_id')->references('id')->on('pendamping');
-            $table->char('berita_pendamping_status')->default(0);
+            $table->char('berita_pendamping_status',1)->default(0);
             $table->timestamps();
         });
     }

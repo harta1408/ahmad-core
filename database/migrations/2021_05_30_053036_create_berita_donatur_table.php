@@ -18,7 +18,7 @@ class CreateBeritaDonaturTable extends Migration
             $table->foreign('berita_id')->references('id')->on('berita');
             $table->bigInteger('donatur_id')->unsigned();
             $table->foreign('donatur_id')->references('id')->on('donatur');
-            $table->char('berita_donatur_status')->default(0);
+            $table->char('berita_donatur_status',1)->default(0);
             $table->timestamps();
         });
     }

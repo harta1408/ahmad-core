@@ -21,9 +21,9 @@ class CreateReferralTable extends Migration
             $table->string('referral_id_penerima',9)->nullable();
             $table->char('referral_entitas_pengirim',1)->default(0);
             $table->char('referral_entitas_penerima',1)->default(0);
-            $table->string('referral_telepon')->nullable();
-            $table->text('referral_web_link')->nullable();
-            $table->char('referral_status')->defaulr(0);
+            $table->string('referral_telepon',20)->nullable();
+            $table->string('referral_web_link',200)->nullable();
+            $table->char('referral_status',1)->defaulr(0);
             $table->timestamps();
         });
     }

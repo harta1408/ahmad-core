@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use App\Models\Donatur;
 use App\Models\User;
 use Validator;
@@ -31,8 +32,9 @@ class DonaturAPI extends Controller
         #link verifikasi di panggil berdasarkan user, nama dan hash code
         $useremail=$request->get('user_email'); 
         $username=$request->get('user_name');
+        $url=$request->get('url');
         // $hashcode=Hash::make(rand(0,1000)); 
-        $hashcode=Hash::make(md5(rand(0,1000))); 
+        $hashcode=md5(rand(0,1000)); 
         $usertipe="1"; //tipe user donatur
 
 
@@ -55,6 +57,16 @@ class DonaturAPI extends Controller
         $donatur->donatur_nama=$username;
         $donatur->donatur_status='1'; //aktif belum melengkapi data
         $donatur->save();
+
+        //kirim email registrasi
+        $url=$url.'/register?'."&hashcode=".$hashcode;
+        $data = array('name'=>$username,'url'=>$url);
+        Mail::send('emailregister', $data, function($message) use($useremail, $username) {
+           $message->to($useremail, $username)->subject
+              ('Pendaftaran AHMaD Project');
+           $message->from('ahmad@gmail.com','AHMaD Project');
+        });
+        echo "HTML Email Sent. Check your inbox.";
 
         $user=User::with('donatur')->where('user_email',$useremail)->first();
         return response()->json($user,200);        
