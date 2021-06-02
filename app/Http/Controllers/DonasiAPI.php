@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Donasi;
 use App\Models\DonasiTemp;
 use App\Models\Produk;
+use App\Models\Bayar;
 use Validator;
 class DonasiAPI extends Controller
 {
@@ -53,8 +54,8 @@ class DonasiAPI extends Controller
         $donasi=new Donasi();
         $donasi->donasi_no=$donasino;
         $donasi->donatur_id=$request->get('donatur_id');
+        $donasi->rekening_id=$request->get('rekening_id');
         $donasi->donasi_tanggal=$request->get('donasi_tanggal');  
-        $donasi->donasi_catatan=$request->get('donasi_catatan');
         $donasi->donasi_jumlah_santri=$request->get('donasi_jumlah_santri');
         $donasi->donasi_total_harga=$request->get('donasi_total_harga');
         $donasi->donasi_cara_bayar=$request->get('donasi_cara_bayar'); //cara pembayaran 1=harian, 2=mingguan, 3=bulanan 4=tunai
@@ -62,6 +63,7 @@ class DonasiAPI extends Controller
         $donasi->save();
 
         $donasiid=Donasi::where('donasi_no',$donasino)->first()->id;
+        
         for ($i=0; $i < count($request->input('donasiproduk')) ; $i++) {
             $produkid=$request->input('donasiproduk')[$i]['produk_id'];
             $produk=Produk::where('id',$produkid)->first(); 
@@ -73,14 +75,35 @@ class DonasiAPI extends Controller
                     'donasi_produk_total' => $request->input('donasiproduk')[$i]['donasi_produk_total'],
                 ]);
         }
-        $donasi=Donasi::with('produk')->where('donasi_no',$donasino)->first();
+
+        //simpan pembayaran dengan status belum dibayar, pembayaran akan berubah status menjadi 
+        //sudah di bayar ketika melakukan pengecekan ke rekening bank
+        $kodeunik=rand(0,999);
+        $bayar=new Bayar;
+        $bayar->donasi_id=$donasiid;
+        $bayar->bayar_total=$donasi->donasi_total_harga;
+        $bayar->bayar_kode_unik=$kodeunik;
+        $bayar->bayar_disc=0;
+        $bayar->bayar_onkir=0;
+        $bayar->bayar_status=1;
+        $donasi=Donasi::with('produk','bayar')->where('donasi_no',$donasino)->first();
+        return response()->json($donasi,200);
+    }
+    public function donasiById($id){
+        $donasi=Donasi::with('donatur','produk','bayar')->where('id',$id)->first();
         return response()->json($donasi,200);
     }
     public function donasiBayar(){
 
     }
-    public function donasiPengingat(){
-
+    public function donasiPengingat($id,Request $request){
+        Donasi::where('id','=' ,$id)
+        ->update(['donasi_pengingat_harian'=>$request->get('donasi_pengingat_harian'),
+                  'donasi_pengingat_mingguan'=>$request->get('donasi_pengingat_mingguan'),
+                  'donasi_pengingat_bulanan'=>$request->get('donasi_pengingat_bulanan'), 
+                  ]);
+        $donasi=Donasi::with('produk','bayar')->where('id',$id)->first();
+        return response()->json($donasi,200);
     }
     
     public function donasino()

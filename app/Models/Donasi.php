@@ -29,9 +29,11 @@ class Donasi extends Model
                     ->withPivot('donasi_produk_jml','donasi_produk_harga','donasi_produk_total')
                     ->withTimestamps();
     }
-    public function donatur()
-    {
-        return $this->belongTo('App\Models\Donatur','id','donatur_id');
+    public function donatur(){
+        return $this->hasOne('App\Models\Donatur','id','donatur_id');
+    }
+    public function bayar(){
+        return $this->hasOne('App\Models\Bayar','donasi_id','id');
     }
 }
 

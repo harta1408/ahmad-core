@@ -22,6 +22,7 @@ class BeritaAPI extends Controller
         $berita->berita_entitas=$request->get('berita_entitas');
         $berita->berita_lokasi_gambar=$request->get('berita_lokasi_gambar');
         $berita->berita_lokasi_video=$request->get('berita_lokasi_video');
+        $berita->berita_web_link=$request->get('berita_web_link');
         $berita->berita_status='1';//aktif
         $exec=$berita->save();
 
@@ -41,7 +42,7 @@ class BeritaAPI extends Controller
 
         $exec=Berita::where('id','=' ,$id)
         ->update(['berita_isi'=>$request->get('berita_isi'),
-                  'berita_jenis'=$request->get('berita_jenis'),
+                  'berita_jenis'=>$request->get('berita_jenis'),
                   'berita_entitas'=>$request->get('berita_entitas'),
                   'berita_lokasi_gambar'=>$request->get('berita_lokasi_gambar'), 
                   'berita_lokasi_video'=>$request->get('berita_lokasi_video'), 

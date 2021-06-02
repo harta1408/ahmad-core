@@ -17,9 +17,10 @@ class Berita extends Model
     protected $fillable=[
         'berita_isi', //isi berita
         'berita_jenis', //1=berita 2-kampanye 3=kampanye broadcast wa
-        'berita_entitas', //1=donatur 2=santri 3=pendamping 4=all
+        'berita_entitas', //0=all 1=donatur 2=santri 3=pendamping 
         'berita_lokasi_gambar', //lokasi gambar
         'berita_lokasi_video', //lokasi video
+        'berita_web_link', //alamat web berira (khusud web)
         'berita_status', //0=not aktif 1=aktif 
     ];
 }

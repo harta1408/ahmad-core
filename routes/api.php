@@ -44,13 +44,14 @@ Route::middleware(['cors'])->group(function () {
     
     Route::post('donasi/temp/save','DonasiAPI@donasiTempSimpan');
     Route::post('donasi/save','DonasiAPI@donasiSimpan');
+    Route::get('donasi/byid/{id}','DonasiAPI@donasiById');
 
     Route::post('berita/save','beritaAPI@beritaSimpan');
     Route::put('berita/update/{id}','beritaAPI@beritaUpdate');
     Route::get('berita/entitas/{jenis}','beritaAPI@beritaEntitas');
     Route::get('berita/list','beritaAPI@beritaList');
 
-    Route::post('referral/send','ReferralAPI@referralKirim');
+    Route::post('referral/getlink','ReferralAPI@referralWebLink');
     Route::put('referral/update/berita','ReferralAPI@rreferralUpdateIdBerita');
 
     Route::post('pengingat/save','pengingatAPI@pengingatSimpan');

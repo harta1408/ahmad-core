@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Referral;
+use App\Models\Berita;
 use App\Models\Donatur;
 use App\Models\Santri;
 use App\Models\Pendamping;
@@ -10,28 +11,16 @@ use Validator;
 
 class ReferralAPI extends Controller
 {
-    #modul untuk mengirimkan referral beserta beritanya, termasuk menyimpan nomor
-    #telepon tujuan referal
-    public function referralKirim(Request $request){
-        $validator = Validator::make($request->all(), [
-            'berita_id' => 'required',
-            'referral_id_pengirim' => 'required|string',
-            'referral_telepon' => 'required|string', 
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['status' => 'error', 'message' => $validator->messages()->first(), 'code' => 404]);
+    #modul untuk mendapatkan pesan yang akan dikirim sebagai referral
+    #page yang di share sama, oleh karena itu pake metode post, yang mengirimkan
+    #id pengirim untuk di catat sistem sebagai pemberi referral
+    public function referralWebLink(Request $request){
+        $berita=Berita::where('berita_jenis','3')->first();
+        $referral=$berita->berita_isi." ".$berita->berita_web_link."register";
+        $idpengirim=$request->get('referral_id_pengirim');
+        if(!$idpengirim){
+            $referral=$berita->berita_isi." ".$berita->berita_web_link;
         }
-
-        $referral=new Referral;
-        $referral->berita_id=$request->get('berita_id');
-        $referral->referral_id_pengirim=$request->get('referral_id_pengirim');
-        $referral->referral_entitas_pengirim=$request->get('referral_entitas_pengirim');
-        $referral->referral_telepon=$request->get('referral_telepon');
-        $referral->referral_web_link=$request->get('referral_web_link');
-        $referral->referral_status='1';
-        $referral->save();
-
         return response()->json($referral,200);    
     }
 

@@ -15,8 +15,8 @@ class CreateBayarTable extends Migration
     {
         Schema::create('bayar', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('donatur_id')->unsigned();
-            $table->foreign('donatur_id')->references('id')->on('donatur');
+            $table->bigInteger('donasi_id')->unsigned();
+            $table->foreign('donasi_id')->references('id')->on('donasi');
             $table->double('bayar_total',12,2)->default(0);
             $table->double('bayar_onkir',12,2)->default(0);
             $table->double('bayar_kode_unik',10)->default(0);

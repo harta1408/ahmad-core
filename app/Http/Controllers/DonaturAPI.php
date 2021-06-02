@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Donasi;
 use App\Models\DonasiTemp;
 use App\Models\Produk;
+use App\Models\Bayar;
 use App\Http\Controllers\DonasiAPI;
 use App\Http\Controllers\ReferralAPI;
 use Validator;
@@ -187,7 +188,16 @@ class DonaturAPI extends Controller
                     'donasi_produk_total' =>$donasiproduktotal,
                 ]);
         }
-
+        //simpan pembayaran dengan status belum dibayar, pembayaran akan berubah status menjadi 
+        //sudah di bayar ketika melakukan pengecekan ke rekening bank
+        $kodeunik=rand(0,999);
+        $bayar=new Bayar;
+        $bayar->donasi_id=$id;
+        $bayar->bayar_total=$donasi->donasi_total_harga;
+        $bayar->bayar_kode_unik=$kodeunik;
+        $bayar->bayar_disc=0;
+        $bayar->bayar_onkir=0;
+        $bayar->bayar_status=1;
         //hapus pemesanan sementara sebelum register
         $donasitemp=DonasiTemp::where('temp_donasi_no',$temp_donasi_no)->first()->produk()->detach();
         $donasitemp=DonasiTemp::where('temp_donasi_no',$temp_donasi_no)->delete();
