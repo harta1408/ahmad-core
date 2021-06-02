@@ -13,7 +13,7 @@ class Pendamping extends Model
         'pendamping_email', //alamat email pendamping
         'pendamping_nama', //nama pendamping
         'pendamping_kode', //kode pendamping
-        'pendamping_id',  //ktp, sim, kta 
+        'pendamping_nid',  //ktp, sim, kta 
         'pendamping_telepon', //nomor telepon
         'pendamping_gender', //jenis kelamin PRIA atau WANITA
         'pendamping_alamat', //alamat pendamping
@@ -26,6 +26,7 @@ class Pendamping extends Model
         'pendamping_honor', //honor yang diterima
         'pendamping_komisi', //komisi yang diterima
         'pendamping_rangkap', // untuk memeriksa apakah santri merangkap entitas lain (donatur/pendamping)
+        'pendamping_min_referral', //hitungan minimal refferal untuk selalu mengingatkan
         'pendamping_status',  //0=tidak aktif 1=aktif 2=sudah dapat produk 3=dalam bimbingan
     ];
 }

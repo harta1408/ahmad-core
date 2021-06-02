@@ -18,6 +18,7 @@ class BeritaAPI extends Controller
 
         $berita=new Berita;
         $berita->berita_isi=$request->get('berita_isi');
+        $berita->berita_jenis=$request->get('berita_jenis');
         $berita->berita_entitas=$request->get('berita_entitas');
         $berita->berita_lokasi_gambar=$request->get('berita_lokasi_gambar');
         $berita->berita_lokasi_video=$request->get('berita_lokasi_video');
@@ -40,6 +41,7 @@ class BeritaAPI extends Controller
 
         $exec=Berita::where('id','=' ,$id)
         ->update(['berita_isi'=>$request->get('berita_isi'),
+                  'berita_jenis'=$request->get('berita_jenis'),
                   'berita_entitas'=>$request->get('berita_entitas'),
                   'berita_lokasi_gambar'=>$request->get('berita_lokasi_gambar'), 
                   'berita_lokasi_video'=>$request->get('berita_lokasi_video'), 

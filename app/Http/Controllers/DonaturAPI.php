@@ -6,6 +6,11 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Models\Donatur;
 use App\Models\User;
+use App\Models\Donasi;
+use App\Models\DonasiTemp;
+use App\Models\Produk;
+use App\Http\Controllers\DonasiAPI;
+use App\Http\Controllers\ReferralAPI;
 use Validator;
 
 
@@ -21,6 +26,7 @@ class DonaturAPI extends Controller
         $validator = Validator::make($request->all(), [
             'user_email' => 'required|email|unique:users|max:100',
             'user_name' => ['required','string','max:30'],
+            'url'=>'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -28,15 +34,30 @@ class DonaturAPI extends Controller
         }
 
         #buat hash code acak untuk default yang harus langsung diganti
-        #ketika email tervirifikasi
+        #ketika email terverifikasi
         #link verifikasi di panggil berdasarkan user, nama dan hash code
         $useremail=$request->get('user_email'); 
         $username=$request->get('user_name');
         $url=$request->get('url');
-        // $hashcode=Hash::make(rand(0,1000)); 
-        $hashcode=md5(rand(0,1000)); 
-        $usertipe="1"; //tipe user donatur
+        $temp_donasi_no=$request->get('nomor_donasi');
+        $referralid=$request->get('referral_id'); 
 
+
+        $usertipe="1"; //tipe user donatur
+        $hashcode=md5(rand(100000,999999)); 
+        $sudahorder=true; //defaulnya donatur sudah order
+        $darireferral=true; //defaultnya berasal dari referral
+
+
+        // periksa apakah pendaftaran ini berdasarkan id referral
+        if(!$referralid){
+            $darireferral=false;
+        }
+        
+        // periksa apakah sebelum pendaftaran, calon donatur sempat melakukan donasi
+        if(!$temp_donasi_no){
+            $sudahorder=false;
+        }
 
         #buat user baru dengan alamat email yang dimasukan
         $user=new User;
@@ -51,24 +72,39 @@ class DonaturAPI extends Controller
         }
 
         #simpan data registrasi donatur
+        $donaturkode=$this->donaturKode();
         $donatur=new Donatur;
-        $donatur->donatur_kode=$this->donaturKode();
+        $donatur->donatur_kode=$donaturkode;
         $donatur->donatur_email=$useremail; 
         $donatur->donatur_nama=$username;
         $donatur->donatur_status='1'; //aktif belum melengkapi data
         $donatur->save();
 
-        //kirim email registrasi
-        $url=$url.'/register?'."&hashcode=".$hashcode;
-        $data = array('name'=>$username,'url'=>$url);
-        Mail::send('emailregister', $data, function($message) use($useremail, $username) {
-           $message->to($useremail, $username)->subject
-              ('Pendaftaran AHMaD Project');
-           $message->from('ahmad@gmail.com','AHMaD Project');
-        });
-        echo "HTML Email Sent. Check your inbox.";
 
-        $user=User::with('donatur')->where('user_email',$useremail)->first();
+        // kirim email registrasi
+        // $url=$url.'register?'."idreg=".$hashcode;
+        // $data = array('name'=>$username,'url'=>$url);
+        // Mail::send('emailregister', $data, function($message) use($useremail, $username) {
+        //    $message->to($useremail, $username)->subject
+        //       ('no-reply : Pendaftaran AHMaD Project');
+        //    $message->from('ahmad@gmail.com','AHMaD Project');
+        // });
+        // echo "HTML Email Sent. Check your inbox.";
+
+        //jika sudah ada pemesanan produk
+        $donaturid=Donatur::where('donatur_email',$useremail)->first()->id;
+
+        if($sudahorder){
+            $this->pindahkanDonasi($temp_donasi_no,$donaturid);
+            $user=User::with('donatur.donasi')->where('user_email',$useremail)->first();
+        }else{
+            $user=User::with('donatur')->where('user_email',$useremail)->first();
+        }
+
+        //jika berasal dari referral maka cari id pemberi referral kemudian tambahkan
+        //penghitung pada minimal, karena yang diberi referral telah mendaftarkan diri
+        $refAPI=new ReferralAPI;
+        $refAPI->referralUpdateMinimal($referralid,$donaturkode);
         return response()->json($user,200);        
     }
     #register donatur melalui sosial media seperti gmail dan sejenisnya
@@ -115,6 +151,47 @@ class DonaturAPI extends Controller
 
         $user=User::with('donatur')->where('user_email',$useremail)->first();
         return response()->json($user,200);    
+    }
+
+    private function pindahkanDonasi($temp_donasi_no,$donaturid){
+        $donasiTemp=DonasiTemp::with('produk')->where('temp_donasi_no',$temp_donasi_no)->first();
+        $donasiapi=new DonasiAPI;
+
+        $donasi=new Donasi;
+        $donasino=$donasiapi->donasino();
+        $donasi->donasi_no=$donasino;
+        $donasi->donatur_id=$donaturid;
+        $donasi->donasi_tanggal=$donasiTemp->temp_donasi_tanggal;  
+        $donasi->rekening_id=$donasiTemp->rekening_id;
+        $donasi->donasi_tagih=$donasiTemp->temp_donasi_tagih;
+        $donasi->donasi_jumlah_santri=$donasiTemp->temp_donasi_jumlah_santri;
+        $donasi->donasi_total_harga=$donasiTemp->temp_donasi_total_harga;
+        $donasi->donasi_cara_bayar=$donasiTemp->temp_donasi_cara_bayar; //cara pembayaran 1=harian, 2=mingguan, 3=bulanan 4=tunai
+        $donasi->donasi_status='1'; //donasi disimpan, belum di bayar
+        $donasi->save();
+
+        $donasiid=Donasi::where('donasi_no',$donasino)->first()->id;
+        foreach ($donasiTemp->produk as $key => $produk) {
+            $produkid=$produk->id;
+            // var_dump($produk);
+            // dd($produk->donasiproduktemp['temp_donasi_produk_harga']);
+            $donasiprodukjml=$produk->donasiproduktemp['temp_donasi_produk_jml'];
+            $donasiprodukharga=$produk->donasiproduktemp['temp_donasi_produk_harga'];
+            $donasiproduktotal=$produk->donasiproduktemp['temp_donasi_produk_total'];
+            $produk=Produk::where('id',$produkid)->first(); 
+            $donasi->produk()->attach(['produk_id'=>$produkid],
+                [
+                    'donasi_id'=>$donasiid,
+                    'donasi_produk_jml' => $donasiprodukjml,
+                    'donasi_produk_harga' =>$donasiprodukharga,
+                    'donasi_produk_total' =>$donasiproduktotal,
+                ]);
+        }
+
+        //hapus pemesanan sementara sebelum register
+        $donasitemp=DonasiTemp::where('temp_donasi_no',$temp_donasi_no)->first()->produk()->detach();
+        $donasitemp=DonasiTemp::where('temp_donasi_no',$temp_donasi_no)->delete();
+        return $donasi;
     }
 
     #memperbaharui profile donatur

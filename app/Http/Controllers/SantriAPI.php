@@ -21,6 +21,7 @@ class SantriAPI extends Controller
         $validator = Validator::make($request->all(), [
             'user_email' => 'required|email|unique:users|max:100',
             'user_name' => ['required','string','max:30'],
+            'url'=>'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -32,7 +33,8 @@ class SantriAPI extends Controller
         #link verifikasi di panggil berdasarkan user dan hash code
         $useremail=$request->get('user_email'); 
         $username=$request->get('user_name');
-        $hashcode=Hash::make(md5(rand(0,1000))); 
+        $hashcode=md5(rand(0,1000)); 
+        $url=$request->get('url');
 
         $usertipe="2"; //tipe user santri
 
@@ -56,6 +58,16 @@ class SantriAPI extends Controller
         $santri->santri_nama=$username;
         $santri->santri_status='1'; //aktif belum terpilih 
         $santri->save();
+
+
+        //kirim email registrasi
+        $url=$url.'register?'."hashcode=".$hashcode;
+        $data = array('name'=>$username,'url'=>$url);
+        Mail::send('emailregister', $data, function($message) use($useremail, $username) {
+           $message->to($useremail, $username)->subject
+              ('no-reply : Pendaftaran AHMaD Project');
+           $message->from('ahmad@gmail.com','AHMaD Project');
+        });
 
         $user=User::with('santri')->where('user_email',$useremail)->first();
         return response()->json($user,200);

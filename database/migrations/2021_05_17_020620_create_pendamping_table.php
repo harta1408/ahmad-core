@@ -18,7 +18,7 @@ class CreatePendampingTable extends Migration
             $table->string('pendamping_email',100)->unique();   
             $table->string('pendamping_nama',100)->nullable();
             $table->string('pendamping_kode',9)->nullable();
-            $table->string('pendamping_id',20)->nullable();
+            $table->string('pendamping_nid',20)->nullable();
             $table->string('pendamping_telepon',100)->nullable();
             $table->string('pendamping_gender',10)->default('PRIA');
             $table->text('pendamping_alamat')->nullable();
@@ -31,6 +31,7 @@ class CreatePendampingTable extends Migration
             $table->decimal('pendamping_honor', 18, 2)->default(0);
             $table->decimal('pendamping_komisi', 18, 2)->default(0);
             $table->char('pendamping_rangkap',1)->default('0');
+            $table->char('pendamping_min_referral',1)->default(0);
             $table->char('pendamping_status', 1, ['1', '0'])->default('1');
             $table->timestamps();
         });

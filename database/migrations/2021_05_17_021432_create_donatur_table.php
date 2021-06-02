@@ -16,7 +16,7 @@ class CreateDonaturTable extends Migration
         Schema::create('donatur', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('donatur_kode',9)->nullable();
-            $table->string('donatur_id',20)->nullable(); 
+            $table->string('donatur_nid',20)->nullable(); 
             $table->string('donatur_email',100)->unique();
             $table->string('donatur_nama',50)->nullable();
             $table->string('donatur_tmp_lahir',50)->nullable();
@@ -33,6 +33,7 @@ class CreateDonaturTable extends Migration
             $table->string('donatur_kecamatan',50)->nullable();
             $table->string('donatur_provinsi',50)->nullable();
             $table->char('donatur_rangkap',1)->default('0');
+            $table->char('donatur_min_referral',1)->default(0);
             $table->char('donatur_status',1)->default('0');
             $table->timestamps();
         });

@@ -14,4 +14,5 @@
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/kirim-email', 'EmailController@index');
+
+Route::resource('email', 'EmailController');

@@ -36,18 +36,31 @@ Route::middleware(['cors'])->group(function () {
     
     Route::post('produk/save','ProdukAPI@produkSimpan');
     Route::get('produk/byid/{id}','ProdukAPI@produkById');
-    
-    Route::post('donasi/save','DonasiAPI@donasiSimpan');
-    
-    Route::post('kuesioner/simpan','KuesionerAPI@kuesionerSimpan');
-    Route::get('kuesioner/list','KuesionerAPI@kuesionerList');
-    Route::post('kuesioner/santri/simpan','KuesionerAPI@kuesionerSantriSimpan');
 
+    Route::post('rekening/save','RekeningAPI@rekeningSimpan');
+    Route::put('rekening/update/{id}','RekeningAPI@rekeningUpdate');
+    Route::get('rekening/byid/{id}','RekeningAPI@rekeningById');
+    Route::get('rekening/list','RekeningAPI@rekeningList');
+    
+    Route::post('donasi/temp/save','DonasiAPI@donasiTempSimpan');
+    Route::post('donasi/save','DonasiAPI@donasiSimpan');
 
     Route::post('berita/save','beritaAPI@beritaSimpan');
     Route::put('berita/update/{id}','beritaAPI@beritaUpdate');
     Route::get('berita/entitas/{jenis}','beritaAPI@beritaEntitas');
     Route::get('berita/list','beritaAPI@beritaList');
+
+    Route::post('referral/send','ReferralAPI@referralKirim');
+    Route::put('referral/update/berita','ReferralAPI@rreferralUpdateIdBerita');
+
+    Route::post('pengingat/save','pengingatAPI@pengingatSimpan');
+    Route::put('pengingat/update/{id}','pengingatAPI@pengingatUpdate');
+    Route::get('pengingat/jenis/{jenis}','pengingatAPI@pengingatJenis');
+    Route::get('pengingat/list','pengingatAPI@pengingatList');
+
+    Route::post('kuesioner/simpan','KuesionerAPI@kuesionerSimpan');
+    Route::get('kuesioner/list','KuesionerAPI@kuesionerList');
+    Route::post('kuesioner/santri/simpan','KuesionerAPI@kuesionerSantriSimpan');
 
     Route::get('kodepos/list/provinsi/{provinsi}','KodePosAPI@kodeposProvinsi');
     Route::get('kodepos/list/kota/{kota}','KodePosAPI@kodeposKota');

@@ -10,7 +10,7 @@ class Santri extends Model
     protected $table='santri';
     protected $fillable=[
         'santri_kode', //kode santri
-        'santri_id', //ktp, sim, kta 
+        'santri_nid', //ktp, sim, kta 
         'santri_email', //alamat email
         'santri_nama', //nama santri
         'santri_tmp_lahir', //tempat lahir
@@ -26,6 +26,7 @@ class Santri extends Model
         'santri_kota', //kota
         'santri_provinsi',// propinsi
         'santri_rangkap', // untuk memeriksa apakah santri merangkap entitas lain (donatur/pendamping)
+        'santri_min_referral', //hitungan minimal refferal untuk selalu mengingatkan
         'santri_status', //0=tidak aktif 1=aktif data belum lengkap 2=aktif data sudah lengkap 3=sudah dapat produk 4=dalam bimbingan 5=sudah selesai
     ];
 

@@ -31,7 +31,7 @@ class Donasi extends Model
     }
     public function donatur()
     {
-        return $this->hasOne('App\Models\Donatur','donatur_id','donatur_id');
+        return $this->belongTo('App\Models\Donatur','id','donatur_id');
     }
 }
 

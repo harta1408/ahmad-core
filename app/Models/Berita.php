@@ -15,12 +15,12 @@ class Berita extends Model
     #berita di buat oleh lembaga ketika akan di share oleh pendamping, dengan memilah yang ada
     protected $table='berita';
     protected $fillable=[
-        'berita_isi',
+        'berita_isi', //isi berita
         'berita_jenis', //1=berita 2-kampanye 3=kampanye broadcast wa
-        'berita_entitas',
-        'berita_lokasi_gambar',
-        'berita_lokasi_video',
-        'berita_status',
+        'berita_entitas', //1=donatur 2=santri 3=pendamping 4=all
+        'berita_lokasi_gambar', //lokasi gambar
+        'berita_lokasi_video', //lokasi video
+        'berita_status', //0=not aktif 1=aktif 
     ];
 }
 

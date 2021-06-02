@@ -10,7 +10,7 @@ class Donatur extends Model
     protected $table='donatur';
     protected $fillable=[
         'donatur_kode',
-        'donatur_id', //nomor ktp, sim. kta
+        'donatur_nid', //nomor ktp, sim. kta
         'donatur_email', //email sebagai relasi ke user
         'donatur_nama', //nama donatur
         'donatur_tmp_lahir',
@@ -27,6 +27,7 @@ class Donatur extends Model
         'donatur_kota', //kota/kabupaten
         'donatur_provinsi', //provinsi
         'donatur_rangkap', //status merangkap, santri donatur
+        'donatur_min_referral', //hitungan minimal refferal untuk selalu mengingatkan
         'donatur_status', //0=tidak aktif 1=aktif data belum lengkap 2=aktif data sudah lengkap 
     ];
     public function santri(){
@@ -35,5 +36,8 @@ class Donatur extends Model
                     ->withPivot('donatur_santri_status')
                     ->withTimestamps();
     }
- 
+    public function donasi()
+    {
+        return $this->hasOne('App\Models\Donasi','donatur_id','id');
+    }
 } 

@@ -23,5 +23,11 @@ class Produk extends Model
                     ->withPivot('donasi_produk_jml','donasi_produk_harga','donasi_produk_total')
                     ->withTimestamps();
     }
+    public function donasitemp(){
+        return $this->belongsToMany('App\Models\DonasiTemp','donasi_temp_produk','produk_id','temp_donasi_no','id','temp_donasi_no')
+                    ->as('donasiproduktemp')
+                    ->withPivot('temp_donasi_produk_jml','temp_donasi_produk_harga','temp_donasi_produk_total')
+                    ->withTimestamps();
+    }
 }
 
