@@ -60,6 +60,7 @@ Route::middleware(['cors'])->group(function () {
     Route::get('pengingat/list','pengingatAPI@pengingatList');
 
     Route::post('kuesioner/simpan','KuesionerAPI@kuesionerSimpan');
+    Route::put('kuesioner/update/{id}','KuesionerAPI@kuesionerUpdate');
     Route::get('kuesioner/list','KuesionerAPI@kuesionerList');
     Route::post('kuesioner/santri/simpan','KuesionerAPI@kuesionerSantriSimpan');
 

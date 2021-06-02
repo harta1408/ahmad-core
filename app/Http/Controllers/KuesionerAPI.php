@@ -20,6 +20,16 @@ class KuesionerAPI extends Controller
         $kuesioner->save();
         return response()->json($kuesioner,200);
     }
+    public function kuesionerUpdate($id, Request $request){
+        Kuesioner::where('id',$id)
+            ->update(['kuesioner_tanya'=>$request->get('kuesioner_tanya'),
+                      'kuesioner_bobot_yes'=>$request->get('kuesioner_bobot_yes'),
+                      'kuesioner_bobot_no'=>$request->get('kuesioner_bobot_no'),
+            ]);
+        $kuesioner=Kuesioner::where('id',$id)->first();
+        return response()->json($kuesioner,200);
+
+    }
     public function kuesionerList(){
         $kuesioner=Kuesioner::where('kuesioner_status','1')->get();
         return response()->json($kuesioner,200);

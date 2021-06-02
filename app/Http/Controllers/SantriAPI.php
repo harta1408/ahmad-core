@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Santri;
 use App\Models\User;
+use App\Http\Controllers\ReferralAPI;
 use Validator;
 
 class SantriAPI extends Controller
@@ -33,11 +34,17 @@ class SantriAPI extends Controller
         #link verifikasi di panggil berdasarkan user dan hash code
         $useremail=$request->get('user_email'); 
         $username=$request->get('user_name');
-        $hashcode=md5(rand(0,1000)); 
         $url=$request->get('url');
+        $referralid=$request->get('referral_id'); 
 
         $usertipe="2"; //tipe user santri
+        $hashcode=md5(rand(100000,999999)); 
+        $darireferral=true; //defaultnya berasal dari referral
 
+        // periksa apakah pendaftaran ini berdasarkan id referral
+        if(!$referralid){
+            $darireferral=false;
+        }
 
         #buat user baru dengan alamat email yang dimasukan
         $user=new User;
@@ -52,8 +59,9 @@ class SantriAPI extends Controller
         }
 
         #simpan data registrasi santri
+        $santrikode=$this->santriKode();
         $santri=new Santri;
-        $santri->santri_kode=$this->santriKode();
+        $santri->santri_kode=$santrikode;
         $santri->santri_email=$useremail; 
         $santri->santri_nama=$username;
         $santri->santri_status='1'; //aktif belum terpilih 
@@ -61,15 +69,20 @@ class SantriAPI extends Controller
 
 
         //kirim email registrasi
-        $url=$url.'register?'."hashcode=".$hashcode;
-        $data = array('name'=>$username,'url'=>$url);
-        Mail::send('emailregister', $data, function($message) use($useremail, $username) {
-           $message->to($useremail, $username)->subject
-              ('no-reply : Pendaftaran AHMaD Project');
-           $message->from('ahmad@gmail.com','AHMaD Project');
-        });
+        // $url=$url.'register?'."hashcode=".$hashcode;
+        // $data = array('name'=>$username,'url'=>$url);
+        // Mail::send('emailregister', $data, function($message) use($useremail, $username) {
+        //    $message->to($useremail, $username)->subject
+        //       ('no-reply : Pendaftaran AHMaD Project');
+        //    $message->from('ahmad@gmail.com','AHMaD Project');
+        // });
 
         $user=User::with('santri')->where('user_email',$useremail)->first();
+
+        //jika berasal dari referral maka cari id pemberi referral kemudian tambahkan
+        //penghitung pada minimal, karena yang diberi referral telah mendaftarkan diri
+        $refAPI=new ReferralAPI;
+        $refAPI->referralUpdateMinimal($referralid,$santrikode);
         return response()->json($user,200);
     }
     #modul pendaftaran santri melalui account media sosial
