@@ -5,8 +5,9 @@ namespace App\Models;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Notifications\VerifyEmail;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable;
 
@@ -16,12 +17,12 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'user_name', 
-        'user_email', 
-        'user_password',
-        'user_hash', //untuk link verifikasi email
+        'name', 
+        'email', 
+        'password',
+        'hash', //untuk link verifikasi email
         'email_verified_at',
-        'user_tipe', // 1=donatur 2=santri, 3=pendamping 4=manager, 5=finance, 6=helpdesk, 7=superadmin
+        'tipe', // 1=donatur 2=santri, 3=pendamping 4=manager, 5=finance, 6=helpdesk, 7=superadmin
         'referensi_id',
     ];
 
@@ -44,7 +45,10 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
+    public function sendEmailVerificationNotification()
+    {
+        $this->notify(new VerifyEmail); // my notification
+    }
     public function santri(){
         return $this->hasOne('App\Models\Santri','santri_email','user_email');
     }

@@ -41,6 +41,7 @@
     Untuk menindaklanjuti pendaftaran, Silakan lakukan aktivasi account untuk melanjutkan proses registrasi 
     dengan membuat password melalui klik tombol di bawah ini :
 </div>
+<a href="{{ $url }}" class="button button-primary" target="_blank">Verfikasi Email</a>
 
 <img src="images/button.png"
      srcset="images/button@2x.png 2x,
