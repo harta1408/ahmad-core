@@ -20,6 +20,7 @@ Route::get('/', function () {
 Auth::routes(['verify' => true]);
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::group(['prefix' => 'dashboard', 'middleware' => ['role:superadmin']], function() {
+Route::group(['prefix' => 'dashboard', 'middleware' => ['role:super-admin']], function() {
+    Route::post('users/main','UserController@userMain')->name('users.main');
     Route::resource('users','UserController');
 }); 

@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-use App\Models\Users;
-use App\Models\Roles;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+use App\Models\User;
 
 class UserController extends Controller
 {
@@ -12,11 +13,18 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+     public function __construct()
+     {
+         $this->middleware('auth');
+     }
     public function index()
     {
-        //
+        $user=User::all();
+        return view('securities/userindex',compact('user'));
     }
+    public function userMain(Request $request){
 
+    }
     /**
      * Show the form for creating a new resource.
      *

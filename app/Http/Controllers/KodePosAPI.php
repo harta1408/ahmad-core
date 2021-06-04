@@ -10,6 +10,10 @@ class KodePosAPI extends Controller
     {
         $this->middleware('cors');
 	}
+    public function kodeposProvinsiAll(){
+        $kodepos=KodePos::groupBy('provinsi')->get('provinsi');
+        return response()->json($kodepos,200);
+    }
     public function kodeposProvinsi($provinsi){
         $kodepos=KodePos::where('provinsi',$provinsi)->get();
         return response()->json($kodepos,200);
@@ -42,7 +46,7 @@ class KodePosAPI extends Controller
         $kodepos=KodePos::where('kecamatan',$kecamatan)->groupBy('kelurahan')->get('kelurahan');
         return response()->json($kodepos,200);
     }
-    public function kodeposByKeluarahan($kelurahan){
+    public function kodeposByKelurahan($kelurahan){
         $kodepos=KodePos::where('kelurahan',$kelurahan)->groupBy('kode_pos')->get('kode_pos');
         // $kodepos=KodePos::where('kelurahan',$kelurahan)->groupBy('kode_pos')->pluck('kode_pos');
         return response()->json($kodepos,200);

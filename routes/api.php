@@ -64,6 +64,7 @@ Route::middleware(['cors'])->group(function () {
     Route::get('kuesioner/list','KuesionerAPI@kuesionerList');
     Route::post('kuesioner/santri/simpan','KuesionerAPI@kuesionerSantriSimpan');
 
+    Route::get('kodepos/list/provinsi/all','KodePosAPI@kodeposProvinsiAll');
     Route::get('kodepos/list/provinsi/{provinsi}','KodePosAPI@kodeposProvinsi');
     Route::get('kodepos/list/kota/{kota}','KodePosAPI@kodeposKota');
     Route::get('kodepos/list/kecamatan/{kecamatan}','KodePosAPI@kodeposKecamatan');
@@ -72,7 +73,7 @@ Route::middleware(['cors'])->group(function () {
     Route::get('kodepos/kotabyprovinsi/{provinsi}','KodePosAPI@kotaByProvinsi');
     Route::get('kodepos/kecamatanbykota/{kota}','KodePosAPI@kecamatanByKota');
     Route::get('kodepos/kelurahanbykecamatan/{kecamatan}','KodePosAPI@kelurahanByKecamatan');
-    Route::get('kodepos/kodeposbykelurahan/{kelurahan}','KodePosAPI@kodeposByKeluarahan');
+    Route::get('kodepos/kodeposbykelurahan/{kelurahan}','KodePosAPI@kodeposByKelurahan');
 });
 
 

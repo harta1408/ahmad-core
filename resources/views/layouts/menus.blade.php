@@ -143,12 +143,12 @@
           </a>
         </li>
         @endrole --}}
-        @role(array('superadmin','manager'))
+        {{-- @role('superadmin') --}}
         <li class="nav-item">
           <a href="#" class="nav-link" data-toggle="tooltip" data-placement="bottom" title="Dashboard Store">
             <i class="fas fa-store"></i></a> 
         </li>
-        @endrole
+        {{-- @endrole --}}
         {{-- <li class="nav-item d-none d-sm-inline-block">
           <a href="#" class="nav-link"><i class="fas fa-store"></i></a>
         </li> --}}
@@ -214,8 +214,6 @@
               </a>
             </li> --}}
              
-
-            @role('admin')
             <li class="nav-item has-treeview">
               <a href="#" class="nav-link active"> 
                 <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -496,9 +494,6 @@
                 </li>
               </ul>
             </li>
-            @endrole
-    
-            @role(array('admin','manager'))
             <li class="nav-item has-treeview">
               <a href="#" class="nav-link active"> 
                 <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -622,7 +617,7 @@
                 </li>
               </ul>
             </li>
-            <li class="nav-item has-treeview">
+             <li class="nav-item has-treeview">
               <a href="#" class="nav-link">
                 <i class="fas fa-users nav-icon"></i>
                 <p>
@@ -790,12 +785,6 @@
                 </li>
               </ul>
             </li>
-            @endrole
-
-             
-
-             
-            @role(array('manager','finance'))
             <li class="nav-header">TRANSAKSI</li>
             <li class="nav-item has-treeview">
               <a href="#" class="nav-link">
@@ -970,9 +959,7 @@
                 </li>
               </ul>
             </li>
-            @endrole
              
-            @role(array('superadmin','manager'))
             <li class="nav-item has-treeview">
               <a href="#" class="nav-link">
                 <i class="nav-icon far fa-file"></i>
@@ -1020,9 +1007,7 @@
                 </li>
               </ul>
             </li>
-            @endrole
             
-            @role(array('superadmin'))
             <li class="nav-header">PENGATURAN</li>
             <li class="nav-item has-treeview">
               <a href="#" class="nav-link">
@@ -1034,7 +1019,7 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{route('users.index')}}" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
                     <p>Atur Pengguna</p>
                   </a>
@@ -1059,34 +1044,7 @@
                 </li>
               </ul>
             </li>
-            @endrole
-            @role([['admin'],['manager']])
-            <li class="nav-header">PENGATURAN</li>
-            <li class="nav-item has-treeview">
-              <a href="#" class="nav-link">
-                {{-- <i class="nav-icon far fa-image"></i> --}}
-                <i class="nav-icon 	fas fa-user-shield"></i>
-                <p>
-                  Keamanan
-                  <i class="fas fa-angle-left right"></i>
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                    <p>Pengguna</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                    <p>Akses Toko</p>
-                  </a>
-                </li>
-              </ul>
-            </li>
-            @endrole
+      
             <li class="nav-item">
               <a class="nav-link" href="{{ route('logout')}}"
                 data-toggle="tooltip" data-placement="left" title="Sign Out"
