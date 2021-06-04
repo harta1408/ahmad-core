@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, shrink-to-fit=no" />
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>AHMaD Project Dashboard</title>
+    <!-- <title>{{ config('app.name', ' 00 Shop') }}</title> -->
+
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="{{asset('/css/dx.common.css')}}"  type="text/css">
+    <link rel="stylesheet" href="{{asset('/css/dx.greenmist.css')}}"  type="text/css">
+    {{-- <link rel="stylesheet" href="{{asset('/css/jquery-ui.css')}}" type="text/css"> --}}
+    <link rel="stylesheet" href="{{asset('/css/bootstrap.min.css')}}" type="text/css">
+    <link rel="stylesheet" href="{{asset('/css/datepicker3.css')}}" type="text/css">
+    <link rel="stylesheet" href="{{asset('/css/jquery.dataTables.min.css')}}" type="text/css">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="{{asset('plugins/fontawesome/css/all.min.css')}}">
+
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{{asset('/css/adminlte.min.css')}}">
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="{{asset('plugins/overlayScrollbars/css/OverlayScrollbars.min.css')}}">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+
+
+    <script src="{{ asset('plugins/jquery/jquery.min.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('plugins/chart.js/dist/Chart.min.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('js/adminlte.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js')}}" type="text/javascript"></script>
+
+    <script src="{{ asset('js/sweetalert.min.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.min.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('js/datepicker/bootstrap-datepicker.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('js/jquery.dataTables.js')}}" type="text/javascript" charset="utf8"></script>
+    <script src="{{ asset('js/jszip/dist/jszip.min.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('js/dx.all.js')}}" type="text/javascript"></script>
+    <script>window.jQuery || document.write(decodeURIComponent('%3Cscript src="js/jquery.min.js"%3E%3C/script%3E'))</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+
+
+    <style>
+      .long-title h3 {
+        font-family: 'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana;
+        font-weight: 250;
+        font-size: 28px;
+        text-align: center;
+        margin-bottom: 10px;
+      }
+      .short-title h4 {
+        font-family: 'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana;
+        font-weight: 150;
+        font-size: 20px;
+        text-align: center;
+        margin-bottom: 10px;
+      }
+      .content {
+          /* max-width: 500px; */
+          margin: auto;
+          /* padding: 2px; */
+          margin-left:5px;
+          margin-right:5px;
+      }
+      .container {
+          /* max-width: 1200px;  */
+          margin: auto;
+          padding: 5px;
+          margin-left:100px;
+          margin-right:5px;
+      }
+      .blinking{
+        animation:blinkingText 1.2s infinite;
+      }
+      @keyframes blinkingText{
+          0%{     color: #000;    }
+          49%{    color: #000; }
+          60%{    color: transparent; }
+          99%{    color:transparent;  }
+          100%{   color: #000;    }
+      }
+
+      .contentwithleftmenu{
+          margin: auto;
+          padding: 5px;
+          margin-left:10px;
+          margin-right:5px;
+          /* max-width: 700px; */
+      }
+      /* #chart {
+          height: 450px;
+      } */
+      img {
+          height: 100px;
+          width: 100px;
+          display: block;
+      }
+      /* On small screens, set height to 'auto' for sidenav and grid */
+      @media screen and (max-width: 767px) {
+        .sidenav {
+          height: auto;
+          padding: 15px;
+        }
+        .row.content {height:auto;}
+      }
+    </style>
+    <!-- </head> -->
+    <link rel="shortcut icon" href="">  <!-- hadle faveico error -->
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+
+  <div class="wrapper">
+
+    <!-- Navbar -->
+    <nav class="main-header navbar navbar-expand navbar-dark navbar-light">
+      <!-- Left navbar links -->
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('login') }}" data-toggle="tooltip" data-placement="bottom" title="Home">
+            <i class="fas fa-home"></i>
+                  {{-- <img src="{{asset('images/ic_home_white_24dp.png')}}"
+                       class="media-object" style="width:20px;height:20px"></i> --}}
+                  <span class="sr-only">(current)</span>
+          </a>
+        </li>
+        {{-- @role(array('storeleader','cashier'));
+        <li>
+          <a class="nav-link" href="{{route('sales.create')}}"
+                    data-toggle="tooltip" data-placement="bottom" title="Poin of Sales">
+                    <img src="{{asset('images/ic_shopping_cart_white_24dp.png')}}"
+                         class="media-object" style="width:20px;height:20px"></i>
+          </a>
+        </li>
+        @endrole --}}
+        @role(array('superadmin','manager'))
+        <li class="nav-item">
+          <a href="#" class="nav-link" data-toggle="tooltip" data-placement="bottom" title="Dashboard Store">
+            <i class="fas fa-store"></i></a> 
+        </li>
+        @endrole
+        {{-- <li class="nav-item d-none d-sm-inline-block">
+          <a href="#" class="nav-link"><i class="fas fa-store"></i></a>
+        </li> --}}
+      </ul>
+
+
+
+      <!-- Right navbar links -->
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('logout')}}"
+                    data-toggle="tooltip" data-placement="left" title="Sign Out"
+                    onclick="event.preventDefault();
+                    document.getElementById('logout-form').submit();">
+                    <i class="nav-icon fas fa-sign-out-alt"></i>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+           @csrf
+    </form>
+    <!-- /.navbar -->
+
+    <!-- Main Sidebar Container -->
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+      <!-- Brand Logo -->
+      <a href="{{ route('login') }}" class="brand-link">
+        <img src="{{asset('images/agile_logo.png')}}" alt="Agile" class="brand-image img-circle elevation-3"
+             style="opacity: .8">
+             @guest
+               <span class="brand-text font-weight-light">Agile Dashboard</span>
+             @else
+               <span class="brand-text font-weight-light">{{ Auth::user()->name}}</span>
+             @endguest
+      </a>
+
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <!-- Sidebar user panel (optional) -->
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+          <div class="image">
+            <img src="{{asset('images/kidswa_logos.png')}}" class="img-circle elevation-2" alt="User">
+          </div>
+          <div class="info">
+            <a href="#" class="d-block"><span class="text-muted">{{ Auth::user()->name }}</span></a>
+          </div>
+        </div>
+
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+          <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            <!-- Add icons to the links using the .nav-icon class
+                 with font-awesome or any other icon font library -->
+                 {{-- <li class="nav-item has-treeview menu-open"> --}}
+            {{-- <li class="nav-item">
+              <a href="pages/widgets.html" class="nav-link">
+                <i class="nav-icon fas fa-th"></i>
+                <p>
+                  Widgets
+                  <span class="right badge badge-danger">New</span>
+                </p>
+              </a>
+            </li> --}}
+             
+
+            @role('admin')
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link active"> 
+                <i class="nav-icon fas fa-tachometer-alt"></i>
+                <p>
+                  Dashboard
+                  <i class="right fas fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Merchant</p>
+                  </a>
+                </li>
+                {{-- <li class="nav-item">
+                  <a href="{{route('dashboard.manager.products')}}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Produk</p>
+                  </a>
+                </li> --}}
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Store</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-copy"></i>
+                <p>
+                  File
+                  <i class="right fas fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Pajak Penjualan & Service</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Aktivasi Pembayaran</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon text-success"></i>
+                    <p>Aktivasi Online Store</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon text-info"></i>
+                    <p>Generate eVoucher</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon text-warning"></i>
+                    <p>Tukar Poin ke eVoucher</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-layer-group"></i>
+                <p>
+                  Master
+                  <i class="right fas fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Perusahaan</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Toko/ Resto</p>
+                  </a>
+                </li>
+                
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Jenis Pembayaran</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Jenis Berita Acara</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Jenis Lokasi Meja</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="fas fa-users nav-icon"></i>
+                <p>
+                  Keanggotaan
+                  <i class="right fas fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="far fa-dot-circle nav-icon"></i>
+                    <p>Jenis Keanggotaan</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="far fa-dot-circle nav-icon"></i>
+                    <p>Keanggotaan</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="far fa-dot-circle nav-icon"></i>
+                    <p>Daftar Poin Anggota</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-header">PRODUK</li>
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="nav-icon 	fa fa-cubes"></i>
+                <p>
+                  Produk
+                  <i class="fas fa-angle-left right"></i>
+                  {{-- <span class="badge badge-info right">6</span> --}}
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Kategori Produk</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Merek</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Pengaturan Produk</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Upload Gambar Produk</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Pembaharuan Harga</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Aktivasi Produk</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Buffer Stok</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Konversi Unit</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Produk Biller</p>
+                  </a>
+                </li>
+                {{-- <li class="nav-item">
+                  <a href="{{route('products.pay.active.index')}}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Aktivasi Close Loop</p>
+                  </a>
+                </li> --}}
+              </ul>
+            </li>
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fas  fa-utensils"></i>
+                <p>
+                  Menu Resto
+                  <i class="fas fa-angle-left right"></i>
+                  {{-- <span class="badge badge-info right">6</span> --}}
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Buat Baru</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Aktivasi Menu</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Menu Aktif</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Update Menu</p>
+                  </a>
+                </li>
+
+              </ul>
+            </li>
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-gift"></i>
+                <p>
+                  Promotions
+                  <i class="fas fa-angle-left right"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Promo Discount</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Promo Merchandise</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Aktivasi Promo</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            @endrole
+    
+            @role(array('admin','manager'))
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link active"> 
+                <i class="nav-icon fas fa-tachometer-alt"></i>
+                <p>
+                  Dashboard
+                  <i class="right fas fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Sales</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Produk</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Store</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-copy"></i>
+                <p>
+                  File
+                  <i class="right fas fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Pajak Penjualan & Service</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Aktivasi Pembayaran</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon text-success"></i>
+                    <p>Penyesuaian Pembayaran</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon text-danger"></i>
+                    <p>Aktivasi Online Store</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon text-info"></i>
+                    <p>Generate eVoucher</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon text-warning"></i>
+                    <p>Tukar Poin ke eVoucher</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-layer-group"></i>
+                <p>
+                  Master
+                  <i class="right fas fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Toko/ Resto</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Logo Toko/Resto</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Supplier</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Gudang/Dapur</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Atur Gudang/Dapur</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Meja Resto</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="fas fa-users nav-icon"></i>
+                <p>
+                  Keanggotaan
+                  <i class="right fas fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-dot-circle nav-icon"></i>
+                    <p>Jenis Keanggotaan</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-dot-circle nav-icon"></i>
+                    <p>Keanggotaan</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-dot-circle nav-icon"></i>
+                    <p>Daftar Poin Anggota</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-header">PRODUK</li>
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="nav-icon 	fa fa-cubes"></i>
+                <p>
+                  Produk
+                  <i class="fas fa-angle-left right"></i>
+                  {{-- <span class="badge badge-info right">6</span> --}}
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Kategori Produk</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Merek</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Pengaturan Produk</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Upload Gambar Produk</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Pembaharuan Harga</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Aktivasi Produk</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Buffer Stok</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Konversi Unit</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Produk Biller</p>
+                  </a>
+                </li>
+                {{-- <li class="nav-item">
+                  <a href="{{route('products.pay.active.index')}}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Aktivasi Close Loop</p>
+                  </a>
+                </li> --}}
+              </ul>
+            </li>
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fas  fa-utensils"></i>
+                <p>
+                  Menu Resto
+                  <i class="fas fa-angle-left right"></i>
+                  {{-- <span class="badge badge-info right">6</span> --}}
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Buat Baru</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Aktivasi Menu</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Menu Aktif</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Update Menu</p>
+                  </a>
+                </li>
+
+              </ul>
+            </li>
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-gift"></i>
+                <p>
+                  Promotions
+                  <i class="fas fa-angle-left right"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Promo Discount</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Promo Merchandise</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Aktivasi Promo</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            @endrole
+
+             
+
+             
+            @role(array('manager','finance'))
+            <li class="nav-header">TRANSAKSI</li>
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-luggage-cart"></i>
+                <p>
+                  Pembelian
+                  <i class="fas fa-angle-left right"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item has-treeview">
+                  <a href="#" class="nav-link">
+                    <i class="fas fa-arrow-circle-down nav-icon"></i>
+                    <p>
+                      Pembelian
+                      <i class="right fas fa-angle-left"></i>
+                    </p>
+                  </a>
+                  <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-arrow-alt-circle-right nav-icon"></i>
+                        <p>Buat Baru</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-arrow-alt-circle-right nav-icon"></i>
+                        <p>Daftar</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-arrow-alt-circle-right nav-icon"></i>
+                        <p>Pembatalan</p>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+                <li class="nav-item has-treeview">
+                  <a href="#" class="nav-link">
+                    <i class="far fa-arrow-alt-circle-up nav-icon"></i>
+                    <p>
+                      Retur
+                      <i class="right fas fa-angle-left"></i>
+                    </p>
+                  </a>
+                  <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="far fa-arrow-alt-circle-right nav-icon"></i>
+                        <p>Buat Baru</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="far fa-arrow-alt-circle-right nav-icon"></i>
+                        <p>Daftar</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="far fa-arrow-alt-circle-right nav-icon"></i>
+                        <p>Pembatalan</p>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fa fa-truck"></i>               
+                <p>
+                  Mutasi
+                  <i class="fas fa-angle-left right"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item has-treeview">
+                  <a href="#" class="nav-link">
+                    <i class="fas fa-arrow-circle-down nav-icon"></i>
+                    <p>
+                      Penerimaan
+                      <i class="right fas fa-angle-left"></i>
+                    </p>
+                  </a>
+                  <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-arrow-alt-circle-right nav-icon"></i>
+                        <p>Buat Baru</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-arrow-alt-circle-right nav-icon"></i>
+                        <p>Daftar</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-arrow-alt-circle-right nav-icon"></i>
+                        <p>Pembatalan</p>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+                <li class="nav-item has-treeview">
+                  <a href="#" class="nav-link">
+                    <i class="far fa-arrow-alt-circle-up nav-icon"></i>
+                    <p>
+                      Pengeluaran
+                      <i class="right fas fa-angle-left"></i>
+                    </p>
+                  </a>
+                  <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="far fa-arrow-alt-circle-right nav-icon"></i>
+                        <p>Buat Baru</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="far fa-arrow-alt-circle-right nav-icon"></i>
+                        <p>Daftar</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="far fa-arrow-alt-circle-right nav-icon"></i>
+                        <p>Pembatalan</p>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Berita Acara</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Daftar Berita Acara</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-shopping-cart"></i>
+                <p>
+                  Penjualan
+                  <i class="fas fa-angle-left right"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Daftar</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Pembatalan</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            @endrole
+             
+            @role(array('superadmin','manager'))
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="nav-icon far fa-file"></i>
+                <p>
+                  Laporan
+                  <i class="fas fa-angle-left right"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Stok Produk</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Penjualan Harian</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Penjualan Periodik</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Rugi Laba Gross</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Rincian Daftar Menu Resto</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Penjualan Pembayaran</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            @endrole
+            
+            @role(array('superadmin'))
+            <li class="nav-header">PENGATURAN</li>
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fa fa-wrench"></i>
+                <p>
+                  Pengguna
+                  <i class="fas fa-angle-left right"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Atur Pengguna</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Level Akses</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Akses Holding</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Migrasi</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            @endrole
+            @role([['admin'],['manager']])
+            <li class="nav-header">PENGATURAN</li>
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                {{-- <i class="nav-icon far fa-image"></i> --}}
+                <i class="nav-icon 	fas fa-user-shield"></i>
+                <p>
+                  Keamanan
+                  <i class="fas fa-angle-left right"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Pengguna</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                    <p>Akses Toko</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            @endrole
+            <li class="nav-item">
+              <a class="nav-link" href="{{ route('logout')}}"
+                data-toggle="tooltip" data-placement="left" title="Sign Out"
+                onclick="event.preventDefault();
+                document.getElementById('logout-form').submit();">
+                <i class="nav-icon fas fa-sign-out-alt"></i>
+                <p>Sign Out</p>
+              </a>
+            </li>
+ 
+          </ul>
+        </nav>
+       </div>
+     </aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <div class="container-fluid">
+        @yield('content')
+      </div>
+    </div>
+    <!-- /.content-wrapper -->
+    <footer class="main-footer">
+      <strong>Copyright &copy; 2018 <a href="http://agile.co.id">Agile Ritel Solution </a></strong>
+      All rights reserved.
+      <div class="float-right d-none d-sm-inline-block">
+        {{ Auth::user()->name}} - <b>Version</b> BETA 1.0
+      </div>
+    </footer>
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+      <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+  </div>
+  <!-- ./wrapper -->
+
+
+
+<!-- mencegah injection -->
+<!-- </body></html> -->
+</body>
+@yield('script')
+<script>
+$(document).ready(function(){
+  $('[data-toggle="tooltip"]').tooltip();
+});
+</script>
+</html>

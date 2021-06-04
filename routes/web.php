@@ -20,3 +20,6 @@ Route::get('/', function () {
 Auth::routes(['verify' => true]);
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::group(['prefix' => 'dashboard', 'middleware' => ['role:superadmin']], function() {
+    Route::resource('users','UserController');
+}); 
