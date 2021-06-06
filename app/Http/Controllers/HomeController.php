@@ -23,8 +23,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $role_id=Auth::user()->role_id;
-        if($role_id=='9' ){ //superadmin
+        $approve=Auth::user()->approve;
+        if($approve=='1' ){ //approved
             // return redirect()->action('HomeController@saDashboardIndex'); 
             return view('layouts.menus');
         }else{

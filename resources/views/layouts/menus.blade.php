@@ -213,7 +213,8 @@
                 </p>
               </a>
             </li> --}}
-             
+
+             @hasrole('manajer')
             <li class="nav-item has-treeview">
               <a href="#" class="nav-link active"> 
                 <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -226,346 +227,121 @@
                 <li class="nav-item">
                   <a href="#" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Merchant</p>
+                    <p>Donatur</p>
                   </a>
                 </li>
-                {{-- <li class="nav-item">
-                  <a href="{{route('dashboard.manager.products')}}" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Produk</p>
-                  </a>
-                </li> --}}
                 <li class="nav-item">
                   <a href="#" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Store</p>
+                    <p>Santri</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Pendamping</p>
                   </a>
                 </li>
               </ul>
             </li>
+            @endrole
+            @hasrole('helpdesk')
+            <li class="nav-header">FILE</li>
             <li class="nav-item has-treeview">
               <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-copy"></i>
+                <i class="nav-icon fas fa-donate"></i>
                 <p>
-                  File
+                  Donatur
                   <i class="right fas fa-angle-left"></i>
                 </p>
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="#" class="nav-link">
+                  <a href="{{route('donatur.index')}}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Pajak Penjualan & Service</p>
+                    <p>List Donatur</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="#" class="nav-link">
+                  <a href="{{route('donatur.create')}}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Aktivasi Pembayaran</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="far fa-circle nav-icon text-success"></i>
-                    <p>Aktivasi Online Store</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="far fa-circle nav-icon text-info"></i>
-                    <p>Generate eVoucher</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="far fa-circle nav-icon text-warning"></i>
-                    <p>Tukar Poin ke eVoucher</p>
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <li class="nav-item has-treeview">
-              <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-layer-group"></i>
-                <p>
-                  Master
-                  <i class="right fas fa-angle-left"></i>
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Perusahaan</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Toko/ Resto</p>
-                  </a>
-                </li>
-                
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Jenis Pembayaran</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Jenis Berita Acara</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Jenis Lokasi Meja</p>
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <li class="nav-item has-treeview">
-              <a href="#" class="nav-link">
-                <i class="fas fa-users nav-icon"></i>
-                <p>
-                  Keanggotaan
-                  <i class="right fas fa-angle-left"></i>
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="far fa-dot-circle nav-icon"></i>
-                    <p>Jenis Keanggotaan</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="far fa-dot-circle nav-icon"></i>
-                    <p>Keanggotaan</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="far fa-dot-circle nav-icon"></i>
-                    <p>Daftar Poin Anggota</p>
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <li class="nav-header">PRODUK</li>
-            <li class="nav-item has-treeview">
-              <a href="#" class="nav-link">
-                <i class="nav-icon 	fa fa-cubes"></i>
-                <p>
-                  Produk
-                  <i class="fas fa-angle-left right"></i>
-                  {{-- <span class="badge badge-info right">6</span> --}}
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Kategori Produk</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Merek</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Pengaturan Produk</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Upload Gambar Produk</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Pembaharuan Harga</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Aktivasi Produk</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Buffer Stok</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Konversi Unit</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Produk Biller</p>
-                  </a>
-                </li>
-                {{-- <li class="nav-item">
-                  <a href="{{route('products.pay.active.index')}}" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Aktivasi Close Loop</p>
-                  </a>
-                </li> --}}
-              </ul>
-            </li>
-            <li class="nav-item has-treeview">
-              <a href="#" class="nav-link">
-                <i class="nav-icon fas  fa-utensils"></i>
-                <p>
-                  Menu Resto
-                  <i class="fas fa-angle-left right"></i>
-                  {{-- <span class="badge badge-info right">6</span> --}}
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
                     <p>Buat Baru</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                    <p>Aktivasi Menu</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                    <p>Menu Aktif</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                    <p>Update Menu</p>
-                  </a>
-                </li>
-
-              </ul>
-            </li>
-            <li class="nav-item has-treeview">
-              <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-gift"></i>
-                <p>
-                  Promotions
-                  <i class="fas fa-angle-left right"></i>
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                    <p>Promo Discount</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                    <p>Promo Merchandise</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                    <p>Aktivasi Promo</p>
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <li class="nav-item has-treeview">
-              <a href="#" class="nav-link active"> 
-                <i class="nav-icon fas fa-tachometer-alt"></i>
-                <p>
-                  Dashboard
-                  <i class="right fas fa-angle-left"></i>
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                    <p>Sales</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                    <p>Produk</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                    <p>Store</p>
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Update</p>
                   </a>
                 </li>
               </ul>
             </li>
             <li class="nav-item has-treeview">
               <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-copy"></i>
+                <i class="nav-icon fas fa-book-reader"></i>
                 <p>
-                  File
+                  Santri
                   <i class="right fas fa-angle-left"></i>
                 </p>
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                    <p>Pajak Penjualan & Service</p>
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>List Santri</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                    <p>Aktivasi Pembayaran</p>
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Buat Baru</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon text-success"></i>
-                    <p>Penyesuaian Pembayaran</p>
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Update</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon text-danger"></i>
-                    <p>Aktivasi Online Store</p>
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Otorisasi</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-chalkboard-teacher"></i>
+                <p>
+                  Pendamping
+                  <i class="right fas fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>List Pendamping</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon text-info"></i>
-                    <p>Generate eVoucher</p>
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Buat Baru</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon text-warning"></i>
-                    <p>Tukar Poin ke eVoucher</p>
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Update</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Otorisasi</p>
                   </a>
                 </li>
               </ul>
@@ -574,82 +350,43 @@
               <a href="#" class="nav-link">
                 <i class="nav-icon fas fa-layer-group"></i>
                 <p>
-                  Master
+                  Artikel
                   <i class="right fas fa-angle-left"></i>
                 </p>
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                    <p>Toko/ Resto</p>
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Pengingat</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                    <p>Logo Toko/Resto</p>
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Berita</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                    <p>Supplier</p>
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Pesan</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                    <p>Gudang/Dapur</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                    <p>Atur Gudang/Dapur</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                    <p>Meja Resto</p>
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Referral</p>
                   </a>
                 </li>
               </ul>
             </li>
-             <li class="nav-item has-treeview">
-              <a href="#" class="nav-link">
-                <i class="fas fa-users nav-icon"></i>
-                <p>
-                  Keanggotaan
-                  <i class="right fas fa-angle-left"></i>
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-dot-circle nav-icon"></i>
-                    <p>Jenis Keanggotaan</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-dot-circle nav-icon"></i>
-                    <p>Keanggotaan</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-dot-circle nav-icon"></i>
-                    <p>Daftar Poin Anggota</p>
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <li class="nav-header">PRODUK</li>
+            @endrole
+            @hasrole('helpdesk')
+            <li class="nav-header">PRODUK & MATERI</li>
             <li class="nav-item has-treeview">
               <a href="#" class="nav-link">
-                <i class="nav-icon 	fa fa-cubes"></i>
+                <i class="nav-icon 	fas fa-gift"></i>
                 <p>
                   Produk
                   <i class="fas fa-angle-left right"></i>
@@ -660,137 +397,61 @@
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
-                    <p>Kategori Produk</p>
+                    <p>List Produk</p>
                   </a>
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                    <p>Merek</p>
+                      <i class="far fa-circle nav-icon"></i>
+                    <p>Buat Baru</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                    <p>Pengaturan Produk</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                    <p>Upload Gambar Produk</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                    <p>Pembaharuan Harga</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                    <p>Aktivasi Produk</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                    <p>Buffer Stok</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                    <p>Konversi Unit</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                    <p>Produk Biller</p>
-                  </a>
-                </li>
-                {{-- <li class="nav-item">
-                  <a href="{{route('products.pay.active.index')}}" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Aktivasi Close Loop</p>
-                  </a>
-                </li> --}}
+                  <a href="#" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                  <p>Pengiriman</p>
+                </a>
+              </li>  
               </ul>
             </li>
             <li class="nav-item has-treeview">
               <a href="#" class="nav-link">
-                <i class="nav-icon fas  fa-utensils"></i>
+                <i class="nav-icon 	fas fa-book-open"></i>
                 <p>
-                  Menu Resto
+                  Materi
                   <i class="fas fa-angle-left right"></i>
                   {{-- <span class="badge badge-info right">6</span> --}}
                 </p>
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                    <p>Buat Baru</p>
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Kuisioner</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                    <p>Aktivasi Menu</p>
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Soal</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                    <p>Menu Aktif</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                    <p>Update Menu</p>
-                  </a>
-                </li>
-
+                  <a href="#" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                  <p>Daftar Nilai</p>
+                </a>
+              </li>              
               </ul>
-            </li>
-            <li class="nav-item has-treeview">
-              <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-gift"></i>
-                <p>
-                  Promotions
-                  <i class="fas fa-angle-left right"></i>
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                    <p>Promo Discount</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                    <p>Promo Merchandise</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                    <p>Aktivasi Promo</p>
-                  </a>
-                </li>
-              </ul>
-            </li>
+            </li> 
+            @endrole
+            @hasrole('manajer')            
             <li class="nav-header">TRANSAKSI</li>
             <li class="nav-item has-treeview">
               <a href="#" class="nav-link">
                 <i class="nav-icon fas fa-luggage-cart"></i>
                 <p>
-                  Pembelian
+                  Distribusi
                   <i class="fas fa-angle-left right"></i>
                 </p>
               </a>
@@ -799,7 +460,7 @@
                   <a href="#" class="nav-link">
                     <i class="fas fa-arrow-circle-down nav-icon"></i>
                     <p>
-                      Pembelian
+                      Pengiriman
                       <i class="right fas fa-angle-left"></i>
                     </p>
                   </a>
@@ -813,7 +474,7 @@
                     <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="fas fa-arrow-alt-circle-right nav-icon"></i>
-                        <p>Daftar</p>
+                        <p>Lacak</p>
                       </a>
                     </li>
                     <li class="nav-item">
@@ -855,111 +516,6 @@
                 </li>
               </ul>
             </li>
-            <li class="nav-item has-treeview">
-              <a href="#" class="nav-link">
-                <i class="nav-icon fa fa-truck"></i>               
-                <p>
-                  Mutasi
-                  <i class="fas fa-angle-left right"></i>
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item has-treeview">
-                  <a href="#" class="nav-link">
-                    <i class="fas fa-arrow-circle-down nav-icon"></i>
-                    <p>
-                      Penerimaan
-                      <i class="right fas fa-angle-left"></i>
-                    </p>
-                  </a>
-                  <ul class="nav nav-treeview">
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-arrow-alt-circle-right nav-icon"></i>
-                        <p>Buat Baru</p>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-arrow-alt-circle-right nav-icon"></i>
-                        <p>Daftar</p>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-arrow-alt-circle-right nav-icon"></i>
-                        <p>Pembatalan</p>
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-                <li class="nav-item has-treeview">
-                  <a href="#" class="nav-link">
-                    <i class="far fa-arrow-alt-circle-up nav-icon"></i>
-                    <p>
-                      Pengeluaran
-                      <i class="right fas fa-angle-left"></i>
-                    </p>
-                  </a>
-                  <ul class="nav nav-treeview">
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="far fa-arrow-alt-circle-right nav-icon"></i>
-                        <p>Buat Baru</p>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="far fa-arrow-alt-circle-right nav-icon"></i>
-                        <p>Daftar</p>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="far fa-arrow-alt-circle-right nav-icon"></i>
-                        <p>Pembatalan</p>
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                    <p>Berita Acara</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                    <p>Daftar Berita Acara</p>
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <li class="nav-item has-treeview">
-              <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-shopping-cart"></i>
-                <p>
-                  Penjualan
-                  <i class="fas fa-angle-left right"></i>
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Daftar</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Pembatalan</p>
-                  </a>
-                </li>
-              </ul>
-            </li>
-             
             <li class="nav-item has-treeview">
               <a href="#" class="nav-link">
                 <i class="nav-icon far fa-file"></i>
@@ -1007,7 +563,8 @@
                 </li>
               </ul>
             </li>
-            
+            @endrole
+            @hasrole('super-admin')
             <li class="nav-header">PENGATURAN</li>
             <li class="nav-item has-treeview">
               <a href="#" class="nav-link">
@@ -1037,14 +594,14 @@
                   </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{route('users.approve.index')}}" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
-                    <p>Migrasi</p>
-                  </a>
+                        <p>Daftar Pengajuan User</p>
+                    </a>
                 </li>
               </ul>
             </li>
-      
+            @endrole
             <li class="nav-item">
               <a class="nav-link" href="{{ route('logout')}}"
                 data-toggle="tooltip" data-placement="left" title="Sign Out"
@@ -1069,7 +626,7 @@
     </div>
     <!-- /.content-wrapper -->
     <footer class="main-footer">
-      <strong>Copyright &copy; 2018 <a href="http://agile.co.id">Agile Ritel Solution </a></strong>
+      <strong>Copyright &copy; 2021 <a href="http://agile.co.id">AHMaD Project</a></strong>
       All rights reserved.
       <div class="float-right d-none d-sm-inline-block">
         {{ Auth::user()->name}} - <b>Version</b> BETA 1.0

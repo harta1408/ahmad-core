@@ -81,7 +81,8 @@ class PermissionsDemoSeeder extends Seeder
             'name' => 'Wawan Hartawan',
             'email' => 'harta@gimanamas.com',
             'password' => Hash::make('admin127'),
-
+            'approve' => '1',
+            'email_verified_at' =>date("Y-m-d H:i:s"),
         ]);
        
         $user->assignRole($role9); 

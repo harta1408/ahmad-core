@@ -29,8 +29,8 @@ class CreateSantriTable extends Migration
             $table->text('santri_alamat')->nullable();
             $table->string('santri_kode_pos',10)->nullable();
             $table->string('santri_kelurahan',50)->nullable();
-            $table->string('santri_kota',50)->nullable();
             $table->string('santri_kecamatan',50)->nullable();
+            $table->string('santri_kota',50)->nullable();
             $table->string('santri_provinsi',50)->nullable();
             $table->char('santri_rangkap',1)->default('0');
             $table->char('santri_min_referral',1)->default(0);

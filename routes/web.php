@@ -20,7 +20,19 @@ Route::get('/', function () {
 Auth::routes(['verify' => true]);
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::group(['prefix' => 'dashboard', 'middleware' => ['role:super-admin']], function() {
+Route::group(['prefix' => 'superadmin', 'middleware' => ['role:super-admin']], function() {
+    Route::resource('users','UserController'); //crud route
+
     Route::post('users/main','UserController@userMain')->name('users.main');
-    Route::resource('users','UserController');
+
+
+    Route::get('users/approve/index','UserController@userApproveIndex')->name('users.approve.index');
+    Route::get('users/approve/load','UserController@userApprovalLoad')->name('users.approve.load');
+    Route::put('users/approve/update/{id}','UserController@userApprovalUpdate');
+
+}); 
+Route::group(['prefix' => 'dashboard', 'middleware' => ['role:manajer|helpdesk']], function() {
+    Route::resource('donatur', 'DonaturController');
+
+    Route::get('kodepos/provinsi/all','KodePosController@kodeposProvinsiAll');
 }); 

@@ -21,7 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('hash_code')->nullable();
             $table->string('tipe',2)->nullable();
             $table->string('password');
-            $table->char('approve')->default(0);
+            $table->char('approve',1)->default(0);
             $table->rememberToken();
             $table->timestamps();
         });

@@ -24,7 +24,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'hash', //untuk link verifikasi email
         'email_verified_at',
         'tipe', // 1=donatur 2=santri, 3=pendamping 4=manager, 5=helpdesk, 9=superadmin
-        'referensi_id',
+        'approve', //0:belum disetujui 1:setujui
     ];
 
  
