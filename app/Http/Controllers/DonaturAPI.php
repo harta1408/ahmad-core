@@ -280,6 +280,35 @@ class DonaturAPI extends Controller
       }
       return $strNewId;
     }
+    public function donaturUploadImage(Request $request){
+
+        //ambil id donatur, kemudian cari di database kodenya
+        $id=$request->get('id');  
+        $donatur_kode=Donatur::where('id',$id)->first()->donatur_kode;
+
+        $this->validate($request, [
+          'donatur_photo' => 'required | image | mimes:jpeg,png,jpg,gif | max:256'
+        ]);
+    
+      
+        // menyimpan data file yang diupload ke variabel $file
+        $images = $request->file('donatur_photo');
+        $new_name=$donatur_kode.'.'.$images->getClientOriginalExtension();
+
+        //tujuan penyimpanan file
+        $tujuan_upload = base_path("images");
+        $images->move($tujuan_upload,$new_name); 
+
+        // dd($request->root());
+
+        // $fileloc=substr($request->root(),0,strlen($request->root())-6) ."images/".$new_name;
+        $fileloc=$request->root()."/"."images/".$new_name;
+
+        Donatur::where('donatur_kode','=',$donatur_kode)->update(['donatur_lokasi_photo'=>$fileloc]);
+
+        $donatur=Donatur::where('id',$id)->first();
+        return response()->json($donatur,200);
+    }
     private function findDonaturKode($donaturKode){
         $donatur=Donatur::where('donatur_kode',$donaturKode)->first();
         if($donatur){

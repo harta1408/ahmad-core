@@ -26,6 +26,7 @@ Route::middleware(['cors'])->group(function () {
     Route::get('donatur/byemail/{email}','DonaturAPI@donaturByEmail');
     Route::get('donatur/list','DonaturAPI@donaturList');
     Route::get('donatur/byid/{id}','DonaturAPI@donaturById');
+    Route::post('donatur/upload/photo','DonaturAPI@donaturUploadImage');
     
     Route::post('santri/register','SantriAPI@santriRegister');
     Route::post('santri/register/sosmed','SantriAPI@santriRegisterSosmed');
