@@ -15,7 +15,7 @@ class PermissionsDemoSeeder extends Seeder
     {
         // Reset cached roles and permissions
         // app()[PermissionsDemoSeeder::class]->forgetCachedPermissions();
-
+        // php artisan migrate:fresh --seed --seeder=PermissionsDemoSeeder
         // create permissions
         Permission::create(['name' => 'donasi produk']);
         Permission::create(['name' => 'perkembangan santri']);

@@ -18,7 +18,7 @@ class CreateDonasiTable extends Migration
             $table->bigInteger('donatur_id')->unsigned();
             $table->foreign('donatur_id')->references('id')->on('donatur');
             $table->integer('rekening_id')->unsigned();
-            $table->foreign('rekening_id')->references('id')->on('rekening');
+            $table->foreign('rekening_id')->references('id')->on('rekening_bank');
             $table->string('donasi_no',10)->nullable();
             $table->dateTime('donasi_tanggal')->nullable();
             $table->double('donasi_tagih',12,2)->default(0);
