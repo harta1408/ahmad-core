@@ -20,6 +20,8 @@ class CreatePendampingTable extends Migration
             $table->string('pendamping_kode',9)->nullable();
             $table->string('pendamping_nid',20)->nullable();
             $table->string('pendamping_telepon',100)->nullable();
+            $table->string('pendamping_tmp_lahir',50)->nullable();
+            $table->date('pendamping_tgl_lahir')->nullable();
             $table->string('pendamping_gender',10)->default('PRIA');
             $table->text('pendamping_alamat')->nullable();
             $table->string('pendamping_kode_pos',10)->nullable();
@@ -27,9 +29,10 @@ class CreatePendampingTable extends Migration
             $table->string('pendamping_kecamatan',50)->nullable();
             $table->string('pendamping_kota',50)->nullable();
             $table->string('pendamping_provinsi',50)->nullable();
-            $table->string('pendamping_status_pegawai', 10, ['PERMANEN', 'KONTRAK'])->default('PERMANEN');
-            $table->decimal('pendamping_honor', 18, 2)->default(0);
-            $table->decimal('pendamping_komisi', 18, 2)->default(0);
+            $table->text('pendamping_lokasi_photo')->nullable();
+            $table->string('pendamping_status_pegawai', 10, ['TETAP', 'KONTRAK'])->default('TETAP');
+            $table->double('pendamping_honor', 18, 2)->default(0);
+            $table->double('pendamping_komisi', 18, 2)->default(0);
             $table->char('pendamping_rangkap',1)->default('0');
             $table->char('pendamping_min_referral',1)->default(0);
             $table->char('pendamping_status', 1, ['1', '0'])->default('1');

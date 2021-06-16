@@ -15,6 +15,7 @@ class Pesan extends Model
     protected $fillable=[
         'pembuat_id', //user pembuat pesan
         'pesan_entitas', //1=donatur 2=santri 3=pendamping 
+        'pesan_judul', //judul pesan
         'pesan_isi',//isi pesan
         'pesan_waktu_kirim', //waktu pengiriman
         'pesan_status', //0=not aktif 1=aktif

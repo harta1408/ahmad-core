@@ -249,6 +249,80 @@
             <li class="nav-header">FILE</li>
             <li class="nav-item has-treeview">
               <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-archive"></i>
+                <p>
+                  Master
+                  <i class="right fas fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="{{route('lembaga.index')}}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Lembaga</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{route('faq.index')}}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>FAQ</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{route('rekeningbank.index')}}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Rekening Bank</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{route('kuesioner.index')}}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Kuisioner</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Referral</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-layer-group"></i>
+                <p>
+                  Artikel
+                  <i class="right fas fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="{{route('pengingat.index')}}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Pengingat</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{route('berita.index')}}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Berita</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{route('pesan.index')}}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Pesan</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            
+            @endrole
+            @hasrole('helpdesk')
+            <li class="nav-header">ENTITAS</li>
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
                 <i class="nav-icon fas fa-donate"></i>
                 <p>
                   Donatur
@@ -269,15 +343,15 @@
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="#" class="nav-link">
+                  <a href="{{route('donatur.pembaharuan.index')}}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Update</p>
+                    <p>Pembaharuan</p>
                   </a>
                 </li>
               </ul>
             </li>
             <li class="nav-item has-treeview">
-              <a href="#" class="nav-link">
+              <a href="" class="nav-link">
                 <i class="nav-icon fas fa-book-reader"></i>
                 <p>
                   Santri
@@ -286,25 +360,25 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="#" class="nav-link">
+                  <a href="{{route('santri.index')}}"  class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>List Santri</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="#" class="nav-link">
+                  <a href="{{route('santri.create')}}"  class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Buat Baru</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="#" class="nav-link">
+                  <a href="{{route('santri.pembaharuan.index')}}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Update</p>
+                    <p>Pembaharuan</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="#" class="nav-link">
+                  <a href="{{route('santri.otorisasi.index')}}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Otorisasi</p>
                   </a>
@@ -321,62 +395,27 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="#" class="nav-link">
+                  <a href="{{route('pendamping.index')}}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>List Pendamping</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="#" class="nav-link">
+                  <a href="{{route('pendamping.create')}}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Buat Baru</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="#" class="nav-link">
+                  <a href="{{route('pendamping.pembaharuan.index')}}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Update</p>
+                    <p>Pembaharuan</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="#" class="nav-link">
+                  <a href="{{route('pendamping.otorisasi.index')}}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Otorisasi</p>
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <li class="nav-item has-treeview">
-              <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-layer-group"></i>
-                <p>
-                  Artikel
-                  <i class="right fas fa-angle-left"></i>
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Pengingat</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Berita</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Pesan</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Referral</p>
                   </a>
                 </li>
               </ul>
@@ -395,19 +434,19 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                    <p>List Produk</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{route('produk.index')}}" class="nav-link">
                       <i class="far fa-circle nav-icon"></i>
                     <p>Buat Baru</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="#" class="nav-link">
+                  <a href="{{route('produk.edit','1')}}" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                  <p>Perbaharui</p>
+                </a>
+              </li>
+                <li class="nav-item">
+                  <a href="{{route('kirimproduk.create')}}"  class="nav-link">
                       <i class="far fa-circle nav-icon"></i>
                   <p>Pengiriman</p>
                 </a>
@@ -425,15 +464,15 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="#" class="nav-link">
+                  <a href="{{route('materi.index')}}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Kuisioner</p>
+                    <p>Materi Belajar</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="#" class="nav-link">
+                  <a href="{{route('soal.index')}}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Soal</p>
+                    <p>Soal Ujian</p>
                   </a>
                 </li>
                 <li class="nav-item">

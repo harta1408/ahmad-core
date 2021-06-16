@@ -36,6 +36,9 @@ class Donatur extends Model
                     ->withPivot('donatur_santri_status')
                     ->withTimestamps();
     }
+    public function user(){
+        return $this->hasOne('App\Models\User','email','donatur_email');
+    }
     public function donasi()
     {
         return $this->hasOne('App\Models\Donasi','donatur_id','id');

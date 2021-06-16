@@ -1,15 +1,20 @@
 @extends('layouts.menus')
 @section('content')
     <div class="long-title"><h3>Daftar Donatur</h3></div>
-    <div id="gridProduk"></div>
+    <div id="gridData"></div>
 @endsection
 
 @section('script')
 <script type="text/javascript">
 $(function(){
-    $("#gridProduk").dxDataGrid({
+  $.ajaxSetup({
+      headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+  });
+    $("#gridData").dxDataGrid({
         dataSource: {!! $donatur !!},
-        keyExpr: "product_id",
+        keyExpr: "id",
         showBorders: true,
         "export": {
             enabled: true,
@@ -35,6 +40,9 @@ $(function(){
             },{
               dataField: "donatur_nama",
               caption: "Nama",
+            },{
+              dataField: "donatur_email",
+              caption: "Alamat Email",
             },{
               dataField: "donatur_telepon",
               caption: "Telepon",
@@ -78,6 +86,9 @@ $(function(){
               dataField: "donatur_kode_pos",
               caption: "Kode Pos",
               visible:false,
+            },{
+              dataField: "donatur_status",
+              caption: "Status",
             },
             
         ],

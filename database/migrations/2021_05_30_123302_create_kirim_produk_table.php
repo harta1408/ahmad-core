@@ -17,11 +17,14 @@ class CreateKirimProdukTable extends Migration
             $table->bigIncrements('id');
             $table->integer('produk_id')->unsigned();
             $table->foreign('produk_id')->references('id')->on('produk');
+            $table->bigInteger('santri_id')->unsigned();
+            $table->foreign('santri_id')->references('id')->on('santri');
+            $table->string('kirim_produk_no_seri',100)->nullable();
             $table->string('kirim_nama',30)->nullable();
             $table->string('kirim_telepon',20)->nullable();
             $table->string('kirim_penerima_nama',30)->nullable();
             $table->string('kirim_penerima_telepon',20)->nullable();
-            $table->text('kirim_penerima_alamat')->nullable();
+            $table->string('kirim_penerima_alamat')->nullable();
             $table->string('kirim_penerima_kode_pos',10)->nullable();
             $table->string('kirim_penerima_kelurahan',50)->nullable();
             $table->string('kirim_penerima_kota',50)->nullable();
@@ -30,6 +33,8 @@ class CreateKirimProdukTable extends Migration
             $table->string('kirim_no_resi',50)->nullable();
             $table->double('kirim_biaya',12,2)->default(0); 
             $table->string('produk_serial_no')->nullable();
+            $table->date('kirim_tanggal_kirim')->nullable();
+            $table->date('kirim_tanggal_terima')->nullable();
             $table->char('kirim_status',1)->default(0);
             $table->timestamps();
         });

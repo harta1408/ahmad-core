@@ -27,7 +27,7 @@ class Santri extends Model
         'santri_provinsi',// propinsi
         'santri_rangkap', // untuk memeriksa apakah santri merangkap entitas lain (donatur/pendamping)
         'santri_min_referral', //hitungan minimal refferal untuk selalu mengingatkan
-        'santri_status', //0=tidak aktif 1=aktif data belum lengkap 2=aktif data sudah lengkap 3=sudah dapat produk 4=dalam bimbingan 5=sudah selesai
+        'santri_status', //0=tidak aktif 1=aktif data belum lengkap 2=belum otorisasi 3=aktif data sudah lengkap  4=menunggu produk 5=sudah dapat produk 6=dalam bimbingan 7=sudah selesai
     ];
 
     public function donatur(){
@@ -41,5 +41,8 @@ class Santri extends Model
                     ->as('santrikuesioner')
                     ->withPivot('kuesioner_jawab','kuesioner_nilai')
                     ->withTimestamps();
+    }
+    public function user(){
+        return $this->hasOne('App\Models\User','email','santri_email');
     }
 }

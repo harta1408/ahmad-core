@@ -14,27 +14,24 @@ class CreateLembagaTable extends Migration
     public function up()
     {
         Schema::create('lembaga', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('lembaga_kode',50)->nullable();
-            $table->string('lembaga_email', 100);
-            $table->string('lembaga_phone',100)->nullable();
+            $table->string('lembaga_id',5)->primary();
             $table->string('lembaga_nama',100)->nullable();
+            $table->string('lembaga_email', 100);
+            $table->string('lembaga_telepon',100)->nullable();
             $table->string('lembaga_alamat',100)->nullable();
-            $table->text('lembaga_deskripsi')->nullable();    
-            $table->string('lembaga_main_judul',100)->nullable(); 
-            $table->text('lembaga_main_konten')->nullable();
-            $table->string('lembaga_main_lokasi_gambar',100)->nullable(); 
-            $table->string('lembaga_donatur_judul',100)->nullable(); 
-            $table->text('lembaga_donatur_konten')->nullable();    
-            $table->string('lambaga_santri_judul',100)->nullable();    
-            $table->text('lembaha_santri_konten')->nullable();
-            $table->string('lambaga_pendamping_judul',100)->nullable(); 
-            $table->text('lembaha_pendamping_konten')->nullable();    
-            $table->string('lambaga_produk_judul',100)->nullable();  
-            $table->text('lembaha_produk_konten')->nullable();
-            $table->string('lambaga_mitra_judul',100)->nullable(); 
-            $table->text('lembaha_mitra_konten')->nullable();        
-            $table->timestamp('created_at');   
+            $table->string('lembaga_tentang_ahmad_judul',50)->nullable(); 
+            $table->text('lembaga_tentang_ahmad_isi')->nullable();   
+            $table->string('lembaga_landing_donatur_judul',50)->nullable(); 
+            $table->text('lembaga_landing_donatur_isi')->nullable();
+            $table->string('lembaga_landing_santri_judul',50)->nullable(); 
+            $table->text('lembaga_landing_santri_isi')->nullable();
+            $table->string('lembaga_landing_pendamping_judul',50)->nullable(); 
+            $table->text('lembaga_landing_pendamping_isi')->nullable();
+            $table->string('lembaga_landing_mitra_judul',50)->nullable(); 
+            $table->text('lembaga_landing_mitra_isi')->nullable();
+            $table->string('lembaga_landing_produk_judul',50)->nullable(); 
+            $table->text('lembaga_landing_produk_isi')->nullable();       
+            $table->timestamps(); 
         });
     }
 

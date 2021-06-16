@@ -34,6 +34,9 @@ class CreateSantriTable extends Migration
             $table->string('santri_provinsi',50)->nullable();
             $table->char('santri_rangkap',1)->default('0');
             $table->char('santri_min_referral',1)->default(0);
+            $table->date('santri_mulai_pendidikan')->nullable();
+            $table->date('santri_akhir_pendidikan')->nullaable();
+            $table->string('santri_produk_no_seri',100)->nullable();
             $table->char('santri_status',1)->default('0');
             $table->timestamps();
         });

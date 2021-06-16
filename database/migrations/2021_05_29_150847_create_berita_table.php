@@ -19,8 +19,8 @@ class CreateBeritaTable extends Migration
             $table->text('berita_isi')->nullable();
             $table->char('berita_jenis',1)->default(0);
             $table->char('berita_entitas',1)->default(0);
-            $table->text('berita_lokasi_gambar')->nullable();
-            $table->text('berita_lokasi_video')->nullable();
+            $table->string('berita_lokasi_gambar')->nullable();
+            $table->string('berita_lokasi_video')->nullable();
             $table->string('berita_web_link')->nullable();
             $table->char('berita_status',1)->default(0);
             $table->timestamps();

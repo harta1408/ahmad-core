@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
+use App\Models\KodePos;
+
 
 class KodePosController extends Controller
 {
@@ -10,7 +11,7 @@ class KodePosController extends Controller
         $kodepos=KodePos::groupBy('provinsi')->get('provinsi');
         return response()->json($kodepos,200);
     }
-    public function kotaByProvinsi($provinsi){
+    public function kodeposKotaByProvinsi($provinsi){
         $kodepos=KodePos::where('provinsi',$provinsi)->groupBy('kota')->get('kota');
         return response()->json($kodepos,200);
     }
@@ -24,7 +25,6 @@ class KodePosController extends Controller
     }
     public function kodeposByKelurahan($kelurahan){
         $kodepos=KodePos::where('kelurahan',$kelurahan)->groupBy('kode_pos')->get('kode_pos');
-        // $kodepos=KodePos::where('kelurahan',$kelurahan)->groupBy('kode_pos')->pluck('kode_pos');
         return response()->json($kodepos,200);
     }
 }

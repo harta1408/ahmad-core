@@ -17,6 +17,7 @@ class CreateSoalTable extends Migration
             $table->increments('id');
             $table->integer('materi_id')->unsigned();
             $table->foreign('materi_id')->references('id')->on('materi');
+            $table->string('soal_no',3)->default('000');
             $table->text('soal_deskripsi')->nullable();
             $table->char('soal_jenis',1)->default(0);
             $table->string('soal_pilihan_a',50)->nullable();

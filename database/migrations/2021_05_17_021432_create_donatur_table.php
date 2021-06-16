@@ -34,6 +34,7 @@ class CreateDonaturTable extends Migration
             $table->string('donatur_provinsi',50)->nullable();
             $table->char('donatur_rangkap',1)->default('0');
             $table->char('donatur_min_referral',1)->default(0);
+            $table->char('donatur_hide',1)->default();
             $table->char('donatur_status',1)->default('0');
             $table->timestamps();
         });

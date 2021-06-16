@@ -15,6 +15,7 @@ class CreatePengingatTable extends Migration
     {
         Schema::create('pengingat', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('pengingat_judul')->nullable();
             $table->text('pengingat_isi')->nullable();
             $table->char('pengingat_jenis',1)->default(0);
             $table->text('pengingat_lokasi_gambar')->nullable();

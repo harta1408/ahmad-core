@@ -17,9 +17,10 @@ class CreateProdukTable extends Migration
             $table->increments('id');
             $table->string('produk_nama',100)->nullable();
             $table->text('produk_deskripsi')->nullable();
-            $table->text('produk_lokasi_gambar')->nullable();
-            $table->text('produk_lokasi_video')->nullable();
+            $table->string('produk_lokasi_gambar')->nullable();
+            $table->string('produk_lokasi_video')->nullable();
             $table->double('produk_harga',12,2)->default(0);
+            $table->double('produk_discount',6,2)->default(0);
             $table->integer('produk_stok')->default(0);
             $table->char('produk_status',1)->default(0);
             $table->timestamps();

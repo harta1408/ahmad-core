@@ -8,7 +8,7 @@ class Donasi extends Model
 {
     #berisi data/ informasi donasi, jika memilih pembayaran cicilan, maka
     #status pengingat akan sesuai dengan waktu donasi yang di pilih
-    #jika donatur membayar tunai, maka di berikan opsi apakah menginkan notifikasi
+    #jika donatur membayar penuh, maka di berikan opsi apakah menginkan notifikasi
     protected $table='donasi';
     protected $fillable=[
         'donasi_no', //no bukti/ referensi donasi untuk pelacakan oleh donatur

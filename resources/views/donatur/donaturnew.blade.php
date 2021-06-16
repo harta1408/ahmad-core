@@ -1,7 +1,10 @@
 @extends('layouts.menus')
 @section('content')
 <div class="long-title"><h3>Daftarkan Donatur Baru</h3></div>
-<div id="form"></div>
+{!! Form::open(['id' => 'frm','route' => 'donatur.store','class' => 'form-horizontal']) !!}
+  <div id="form"></div>
+{!! Form::close()!!}
+
 <div class="second-group">
     
 </div>
@@ -33,31 +36,13 @@ $(function() {
       }
   });
 
-
-
-
-  //menggunakan konsep load, karena kalau produk di kirim langsung dari promotion main 
-  //terjadi double save pada saat di server
-  var prodDataSource = new DevExpress.data.DataSource({
-      load: function() {
-        return $.getJSON("{{URL::to('office/promotion/discount/product/load')}}");
-      },
-      update: function (key, values) {
-          var productid= key.product_id;
-          return $.ajax({
-              url: "{{URL::to('office/promotion/discount/product/update')}}"+"/"+productid,
-              method: "PUT",
-              data: {values,productid},
-          })
-      }
-  });
-
- 
- 
-
-  var selecteddays=[];
+  var provinsi;
+  var kota;
+  var kecamatan;
   $("#form").dxForm({
       colCount: 1,
+      showColonAfterLabel: true,
+      showValidationSummary: true,
       items:[
       {
         itemType:"group",
@@ -76,15 +61,92 @@ $(function() {
           label:{
             text:"Alamat Email",
           },
+          validationRules: [{
+                    type: "required",
+                    message: "Alamat Email Harus Di isi"
+                }, {
+                    type: "email",
+                    message: "Alamat Email tidak valid"
+                }]
         },{
           dataField: "donatur_nama",
           label:{
             text:"Nama Donatur",
           },
+          validationRules: [{
+              type: "required",
+              message: "Nama harus di isi"
+          }, {
+              type: "pattern",
+              pattern: "^[^0-9]+$",
+              message: "Jangan Gunakan Angka"
+          }]
         },{
           dataField: "donatur_nid",
           label:{
             text:"No KTP",
+          },
+        },{
+          dataField: "donatur_telepon",
+          label:{
+            text:"Handphone",
+          },
+          validationRules: [{
+              type: "required",
+              message: "Nomor Handphone Harus di Isi"
+          }]
+        },{
+          dataField: "donatur_gender",
+          label:{
+            text:"Jenis Kelamin",
+          },
+          editorType: "dxRadioGroup",
+          editorOptions: {
+                items: [{"donatur_gender":"PRIA","donatur_gender_desc":"PRIA"},
+                        {"donatur_gender":"WANITA","donatur_gender_desc":"WANITA"},],
+                value:"PRIA",
+                displayExpr: "donatur_gender_desc",
+                valueExpr: "donatur_gender",
+                layout: "horizontal",
+              }
+        },{
+          dataField: "donatur_agama",
+          label:{
+            text:"Agama",
+          },
+          editorType: "dxSelectBox",
+          editorOptions: {
+              items: [{"donatur_religion":"ISLAM","donatur_religion_desc":"ISLAM"},
+                      {"donatur_religion":"PROTESTAN","donatur_religion_desc":"PROTESTAN"},
+                      {"donatur_religion":"KATOLIK","donatur_religion_desc":"KATOLIK"},
+                      {"donatur_religion":"BUDHA","donatur_religion_desc":"BUDHA"},
+                      {"donatur_religion":"HINDU","donatur_religion_desc":"HINDU"},
+                      {"donatur_religion":"LAINNYA","donatur_religion_desc":"LAINNYA"}],
+              displayExpr: "donatur_religion_desc",
+              valueExpr: "donatur_religion",
+              value:"ISLAM",
+          },
+        },{
+          dataField: "donatur_kerja",
+          label:{
+            text:"Pekerjaan",
+          },
+          editorType: "dxSelectBox",
+          editorOptions: {
+              items: [{"donatur_job":"PEGAWAI NEGERI","donatur_job_desc":"PEGAWAI NEGERI"},
+                      {"donatur_job":"KARYAWAN SWASTA","donatur_job_desc":"KARYAWAN SWASTA"},
+                      {"donatur_job":"TNI/POLRI","donatur_job_desc":"TNI/POLRI"},
+                      {"donatur_job":"PENGUSAHA","donatur_job_desc":"PENGUSAHA"},
+                      {"donatur_job":"GURU/DOSEN","donatur_job_desc":"GURU/DOSEN"},
+                      {"donatur_job":"TENAGA KESEHATAN","donatur_job_desc":"TENAGA KESEHATAN"},
+                      {"donatur_job":"BIDANG HUKUM","donatur_job_desc":"BIDANG HUKUM"},
+                      {"donatur_job":"PEDAGANG","donatur_job_desc":"PEDAGANG"},
+                      {"donatur_job":"BIDANG JASA","donatur_job_desc":"BIDANG JASA"},
+                      {"donatur_job":"IBU RUMAH TANGGA","donatur_job_desc":"IBU RUMAH TANGGA"},
+                      {"donatur_job":"LAINNYA","donatur_job_desc":"LAINNYA"}],
+              displayExpr: "donatur_job_desc",
+              valueExpr: "donatur_job",
+              value:"LAINNYA",
           },
         },{
           dataField: "donatur_tmp_lahir",
@@ -102,138 +164,148 @@ $(function() {
             editorOptions: {
                 displayFormat: "dd-MM-yyyy",
                 value : new Date(),
+                invalidDateMessage: "The date must have the following format: dd-MM-yyyy"
             }
-        },{
+          },],
+      },{
+        itemType:"group",
+        colCount:1,
+        items: [{
+            dataField: "donatur_alamat",
+            label:{
+              text:"Alamat",
+            },
+            editorOptions: {
+              height: 100
+            },
+            validationRules: [{
+                    type: "required",
+                    message: "Alamat Harus di isi",
+            }],
+        },],
+      },{
+        itemType:"group",
+        colCount:2,
+        items: [{
             dataField: "donatur_provinsi",
             label:{
               text:"Provinsi",
             },  
+            validationRules: [{
+                    type: "required",
+                    message: "Provinsi harus di isi"
+            }],
             editorType: "dxSelectBox",
             editorOptions: {
-                dataSource: new DevExpress.data.ArrayStore({
-                    data: {!!$provinsi!!},
-                    // key: "ID"
+                dataSource: new DevExpress.data.CustomStore({
+                    loadMode: "raw", // omit in the DataGrid, TreeList, PivotGrid, and Scheduler
+                    load: function() {
+                        return $.getJSON("{{URL::to('dashboard/kodepos/provinsi/all')}}")
+                            .fail(function() { throw "Data loading error" });
+                    }
                 }),
                 displayExpr: "provinsi",
                 valueExpr: "provinsi",
-                searchEnabled: true
-                // value: products[0].ID,
-            }
+                searchEnabled: true,
+                onValueChanged : function (e){
+                    provinsi=e.value;
+                    var form=$('#form').dxForm('instance')
+                    var itemKota=form.getEditor('donatur_kota');
+                    itemKota.getDataSource().load();
+                }
+            },
+           
         },{
             dataField: "donatur_kota",
             label:{
               text:"Kota",
             },  
+            editorType: "dxSelectBox",
+            validationRules: [{
+                    type: "required",
+                    message: "Silakan Pilih Kota"
+            }],
+            editorOptions: {
+              dataSource: new DevExpress.data.CustomStore({          
+                    load: function() {
+                        return $.getJSON("{{URL::to('dashboard/kodepos/kota')}}"+"/"+encodeURIComponent(provinsi));
+                    }
+              }),                
+              displayExpr: "kota",
+              valueExpr: "kota",
+              searchEnabled: true,
+              onValueChanged : function (e){
+                  kota=e.value;
+                  var form=$('#form').dxForm('instance');
+                  var itemKecamatan=form.getEditor('donatur_kecamatan');
+                  itemKecamatan.getDataSource().load();
+              }
+            }
         },{
             dataField: "donatur_kecamatan",
             label:{
               text:"Kecamatan",
             },  
+            editorType: "dxSelectBox",
+            validationRules: [{
+                    type: "required",
+                    message: "Silakan Pilih Kecamatan"
+            }],
+            editorOptions: {
+              dataSource: new DevExpress.data.CustomStore({          
+                    load: function() {
+                        return $.getJSON("{{URL::to('dashboard/kodepos/kabupaten')}}"+ "/" + encodeURIComponent(kota));
+                    }
+              }),
+              displayExpr: "kecamatan",
+              valueExpr: "kecamatan",
+              searchEnabled: true,
+              onValueChanged : function (e){
+                  kecamatan=e.value;
+                  var form=$('#form').dxForm('instance');
+                  var itemKelurahan=form.getEditor('donatur_kelurahan');
+                  // itemKelurahan.getDataSource().filter(['kecamatan','=',e.value]);
+                  itemKelurahan.getDataSource().load();
+              }
+            }
         },{
             dataField: "donatur_kelurahan",
             label:{
               text:"Kelurahan",
             },  
+            editorType: "dxSelectBox",
+            validationRules: [{
+                    type: "required",
+                    message: "Silakan pilih kelurahan"
+            }],
+            editorOptions: {
+              dataSource: new DevExpress.data.CustomStore({          
+                    load: function() {
+                        return $.getJSON("{{URL::to('dashboard/kodepos/kelurahan')}}"+ "/" + encodeURIComponent(kecamatan));
+                    }
+              }),
+              displayExpr: "kelurahan",
+              valueExpr: "kelurahan",
+              searchEnabled: true,
+            },
         },{
-            dataField: "donatur_kodepos",
+            dataField: "donatur_kode_pos",
             label:{
               text:"Kode Pos",
             }, 
+       
         },]
-      },]
-  }); 
-
-  $("#donatur_provinsi").dxSelectBox({
-        dataSource: new DevExpress.data.ArrayStore({
-            data: products,
-            key: "ID"
-        }),
-        displayExpr: "Name",
-        valueExpr: "ID",
-        value: products[0].ID,
-    });
-
-  // save penerimaan
-  $("#btnSave").dxButton({
-      text: "Simpan",
-      type: "success",
-      width: 125,
-      onClick: function(e) {
-        var data = dataGrid._controllers.data._dataSource._cachedStoreData;
-        console.log(data);
-          var form =$('#form-container').serializeObject();
-          if(form['promo_desc']==""){
-            DevExpress.ui.notify({
-                message: "Silakan isi Nama Promo...",
-                position: {
-                    my: "center top",
-                    at: "center top"
-                }
-            }, "warning", 3000);
-            return false;
+      },{
+          itemType: "button",
+          horizontalAlignment: "left",
+          buttonOptions: {
+              text: "Simpan",
+              type: "success",
+              useSubmitBehavior: true
           }
-          if(selecteddays.length==0){
-            DevExpress.ui.notify({
-                message: "Silakan pilih Hari...",
-                position: {
-                    my: "center top",
-                    at: "center top"
-                }
-            }, "warning", 3000);
-            return false;
-          }         
-          // $("#btnSave").dxButton("instance").option("disabled",true);
-          $.ajax({
-              type: "POST",
-              url: "{{route('donatur.store')}}",
-              data: JSON.stringify({form:form,table:data,selecteddays:selecteddays}),
-              contentType: "application/json; charset=utf-8",
-              dataType: "json",
-              success: function (data) {
-                if(data.code != 200) {
-                    swal({
-                        title: "Validation Error",
-                        icon: data.status,
-                        text: data.message,
-                        value: true,
-                        visible: true,
-                        className: "",
-                        closeModal: true,
-                    });
-                }else{
-                    swal({
-                        title: "OK",
-                        icon: data.status,
-                        text: data.message,
-                        value: true,
-                        visible: true,
-                        className: "",
-                        closeModal: true,
-                    })
-                    .then((value) => {
-                          window.location = '{{route('donatur.index')}}';
-                    });
-                }
-                return false;
-              },    
-              error: function(jqXHR, textStatus, errorThrown) {
-                swal({
-                    title: "Validation Error",
-                    icon: data.status,
-                    text: data.message,
-                    value: true,
-                    visible: true,
-                    className: "",
-                    closeModal: true,
-                });
-                return false;
-              }            
-          });
-          
-          return false;
-      }
-  });
-  
+      },]
+  }).dxForm("instance"); 
+
 });
 </script>
 @endsection

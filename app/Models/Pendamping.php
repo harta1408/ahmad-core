@@ -10,9 +10,11 @@ class Pendamping extends Model
     #atau di input melalui lembaga dan otorisasi lembaga
     protected $table='pendamping';
     protected $fillable=[
+        'pendamping_kode', //kode pendamping
         'pendamping_email', //alamat email pendamping
         'pendamping_nama', //nama pendamping
-        'pendamping_kode', //kode pendamping
+        'pendamping_tmp_lahir', //tempat lahir
+        'pendamping_tgl_lahir',  //tanggal lahir
         'pendamping_nid',  //ktp, sim, kta 
         'pendamping_telepon', //nomor telepon
         'pendamping_gender', //jenis kelamin PRIA atau WANITA
@@ -22,6 +24,7 @@ class Pendamping extends Model
         'pendamping_kecamatan', //kecamatan
         'pendamping_kota', //kota
         'pendamping_provinsi', //provinsi
+        'pendamping_lokasi_photo',//lokasi photo di server
         'pendamping_status_pegawai', //status kepegawaian pendampung
         'pendamping_honor', //honor yang diterima
         'pendamping_komisi', //komisi yang diterima
@@ -29,6 +32,9 @@ class Pendamping extends Model
         'pendamping_min_referral', //hitungan minimal refferal untuk selalu mengingatkan
         'pendamping_status',  //0=tidak aktif 1=aktif 2=sudah dapat produk 3=dalam bimbingan
     ];
+    public function user(){
+        return $this->hasOne('App\Models\User','email','pendamping_email');
+    }
 }
 
     

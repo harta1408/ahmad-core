@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateRekeningTable extends Migration
+class CreateRekeningBankTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateRekeningTable extends Migration
      */
     public function up()
     {
-        Schema::create('rekening', function (Blueprint $table) {
+        Schema::create('rekening_bank', function (Blueprint $table) {
             $table->increments('id');
             $table->string('rekening_nama',30)->nullable();
             $table->string('rekening_no',20)->nullable();
@@ -30,6 +30,6 @@ class CreateRekeningTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('rekening');
+        Schema::dropIfExists('rekening_bank');
     }
 }

@@ -1,102 +1,14 @@
-@extends('layouts.app')
+@extends('layouts.menus')
 @section('content')
-<div class="long-title"><h3>Pembaharuan Promo Discount</h3></div>
-<form id="form-container" class="first-group">
-    <div id="form"></div>
-    <div id="btnAddProduct"></div>
-    <div class="box-body" style="padding-top: 5px;">
-      <div id="dataGrid"></div>
-    </div>
-    <div class="box-body" style="padding-top: 5px;">
-      <div id="btnSave"></div>
-    </div>
-</form>
+<div class="long-title"><h3>Pembaharuan Donatur</h3></div>
+{!! Form::open(['id' => 'frm','route' => ['donatur.update',$donatur->id],'method' => 'PUT', 'class' => 'form-horizontal']) !!}
+  <div id="form"></div>
+{!! Form::close()!!}
 
-    {{-- add products dialog --}}
-    <div class="modal fade" id="mdlAddProduct" role="dialog">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header bg-primary">
-            <h5 class="modal-title"><span class="badge badge-primary">Tambahkan Produk Kedalam Tabel</span></h5>
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-          </div>
-          <div class="modal-body">
-            <div class="form-horizontal">
-              <div class="row">
-                <div class="col-sm-6">
-                  <div class="panel panel-info">
-                  <div class="panel-heading">
-                    <div class="form-group">
-                          {!! Form::text('doc_date',null,['class' => 'form-control',
-                          'id'=>'txtProdSearch','placeholder'=>'Cari...']) !!}
-                    </div>
-                  </div>
-                  <div class="panel-body" style="overflow-y: scroll; height:350px;">
-                    <div class="btn-group" role="group" aria-label="...">
-                      <table id="tableProd" class="table table-bordered table-striped" style="font-size:14px">
-                            @foreach ($products as $key => $prod)
-                            <tr>
-                                <td>
-                                  <a href="#" onclick="sendId('{{$prod->product_id}}','{{$prod->product_desc}}'
-                                    ,'{{$prod->product_stock}}','{{$prod->product_price}}');"
-                                          id="plist{{$prod->product_id}}" 
-                                          name="{{$prod->product_id}}">{{$prod->product_id}}</a>
-                                </td>
-                                <td>{{$prod->product_desc}}</td>
-                            </tr>
-                            @endforeach
-                      </table>
-                    </div>
-                  </div>
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="panel panel-info">
-                    <div class="panel-body">
-                      <div class="form-group row">
-                        <label for="txtProdId" class="col-sm-4 control-label text-md-right">ID Produk</label>
-                        <div class="col-sm-8">
-                          <input id="txtProdId" type="text" name="{{'product_id'}}"
-                                  class="form-control" placeholder="ID Produk" readonly>
-                        </div>
-                      </div>
-                      <div class="form-group row">
-                        <label for="txtProdDesc" class="col-sm-4 control-label text-md-right">Deskripsi</label>
-                        <div class="col-sm-8">
-                          <input id="txtProdDesc" type="text" name="{{'product_shortdesc'}}"
-                                  class="form-control" placeholder="Deskripsi" readonly>
-                        </div>
-                      </div>
-                      <div class="form-group row">
-                        <label for="txtProdPrice" class="col-sm-4 control-label text-md-right">Harga</label>
-                        <div class="col-sm-8">
-                          <input id="txtProdPrice" type="text" name="{{'product_shortdesc'}}"
-                                  class="form-control" placeholder="Harga Rata Rata" readonly>
-                        </div>
-                      </div>                        
-                      <div class="form-group row">
-                        <label for="numProdDisc" class="col-sm-4 control-label text-md-right">Discount</label>
-                        <div class="col-sm-8">
-                          <input id="numProdDisc" type="number" min="0" name="{{'product_disc'}}"
-                                class="form-control" value="0" placeholder="Price">
-                        </div>
-                    </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-              <div class="form-group">
-                  <p id="wrmsg" style="color:red; font-size:12px;"></p>
-              </div>
-          </div>
-          <div class="modal-footer">
-            <button id="btnAdd" type="button" class="btn btn-info" data-dismiss="modal">Tambahkan</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-          </div>
-        </div>
-      </div>
-    </div>
+<div class="second-group">
+    
+</div>
+
 @endsection
 
 @section('script')
@@ -124,331 +36,283 @@ $(function() {
       }
   });
 
-  var makeAsyncDataSource = function(jsonFile){
-      return new DevExpress.data.CustomStore({
-          loadMode: "raw",
-          key: "promo_no",
-          load: function() {
-              return jsonFile;
-          }
-      });
-  };
-  var promo={!!$promo!!}; 
+  var provinsi='{!!$donatur->donatur_provinsi!!}';
+  var kota='{!!$donatur->donatur_kota!!}';
+  var kecamatan='{!!$donatur->donatur_kecamatan!!}';
   $("#form").dxForm({
-      formData: promo,
       colCount: 1,
+      formData: {!!$donatur!!},
+      showColonAfterLabel: true,
+      showValidationSummary: true,
       items:[
       {
         itemType:"group",
         colCount:2,
         items: [{
-          dataField: "promo_no",
+          dataField: "donatur_kode",
           label:{
-            text:"Kode Promo ",
+            text:"Kode Donatur",
           },
           editorOptions: { 
-              readOnly: true
+              value : "Penomoran Otomatis",
+              disabled: true
           }
         },{
-          dataField: "promo_date_start",
+          dataField: "donatur_email",
           label:{
-            text:"Tanggal Mulai Promo",
+            text:"Alamat Email",
           },
-          editorType: "dxDateBox",
+          validationRules: [{
+                    type: "required",
+                    message: "Alamat Email Harus Di isi"
+                }, {
+                    type: "email",
+                    message: "Alamat Email tidak valid"
+                }]
+        },{
+          dataField: "donatur_nama",
+          label:{
+            text:"Nama Donatur",
+          },
+          validationRules: [{
+              type: "required",
+              message: "Nama harus di isi"
+          }, {
+              type: "pattern",
+              pattern: "^[^0-9]+$",
+              message: "Jangan Gunakan Angka"
+          }]
+        },{
+          dataField: "donatur_nid",
+          label:{
+            text:"No KTP",
+          },
+        },{
+          dataField: "donatur_telepon",
+          label:{
+            text:"Handphone",
+          },
+          validationRules: [{
+              type: "required",
+              message: "Nomor Handphone Harus di Isi"
+          }]
+        },{
+          dataField: "donatur_gender",
+          label:{
+            text:"Jenis Kelamin",
+          },
+          editorType: "dxRadioGroup",
           editorOptions: {
-              displayFormat: "dd-MM-yyyy",
-            //   value : new Date(),
+                items: [{"donatur_gender":"PRIA","donatur_gender_desc":"PRIA"},
+                        {"donatur_gender":"WANITA","donatur_gender_desc":"WANITA"},],
+                // value:"PRIA",
+                displayExpr: "donatur_gender_desc",
+                valueExpr: "donatur_gender",
+                layout: "horizontal",
+              }
+        },{
+          dataField: "donatur_agama",
+          label:{
+            text:"Agama",
+          },
+          editorType: "dxSelectBox",
+          editorOptions: {
+              items: [{"donatur_religion":"ISLAM","donatur_religion_desc":"ISLAM"},
+                      {"donatur_religion":"PROTESTAN","donatur_religion_desc":"PROTESTAN"},
+                      {"donatur_religion":"KATOLIK","donatur_religion_desc":"KATOLIK"},
+                      {"donatur_religion":"BUDHA","donatur_religion_desc":"BUDHA"},
+                      {"donatur_religion":"HINDU","donatur_religion_desc":"HINDU"},
+                      {"donatur_religion":"LAINNYA","donatur_religion_desc":"LAINNYA"}],
+              displayExpr: "donatur_religion_desc",
+              valueExpr: "donatur_religion",
+              // value:"ISLAM",
+          },
+        },{
+          dataField: "donatur_kerja",
+          label:{
+            text:"Pekerjaan",
+          },
+          editorType: "dxSelectBox",
+          editorOptions: {
+              items: [{"donatur_job":"PEGAWAI NEGERI","donatur_job_desc":"PEGAWAI NEGERI"},
+                      {"donatur_job":"KARYAWAN SWASTA","donatur_job_desc":"KARYAWAN SWASTA"},
+                      {"donatur_job":"TNI/POLRI","donatur_job_desc":"TNI/POLRI"},
+                      {"donatur_job":"PENGUSAHA","donatur_job_desc":"PENGUSAHA"},
+                      {"donatur_job":"GURU/DOSEN","donatur_job_desc":"GURU/DOSEN"},
+                      {"donatur_job":"TENAGA KESEHATAN","donatur_job_desc":"TENAGA KESEHATAN"},
+                      {"donatur_job":"BIDANG HUKUM","donatur_job_desc":"BIDANG HUKUM"},
+                      {"donatur_job":"PEDAGANG","donatur_job_desc":"PEDAGANG"},
+                      {"donatur_job":"BIDANG JASA","donatur_job_desc":"BIDANG JASA"},
+                      {"donatur_job":"IBU RUMAH TANGGA","donatur_job_desc":"IBU RUMAH TANGGA"},
+                      {"donatur_job":"LAINNYA","donatur_job_desc":"LAINNYA"}],
+              displayExpr: "donatur_job_desc",
+              valueExpr: "donatur_job",
+              value:"LAINNYA",
+          },
+        },{
+          dataField: "donatur_tmp_lahir",
+          label:{
+            text:"Tempat Lahir",
+          },
+          editorOptions: {
           }
         },{
-          dataField: "promo_desc",
-          label:{
-            text:"Nama Promo ",
-          },
-          editorOptions: {
-          }
-        },{
-          dataField: "promo_date_end",
-          label:{
-            text:"Tanggal Akhir Promo ",
-          },
-          editorType: "dxDateBox",
-          editorOptions: {
-              displayFormat: "dd-MM-yyyy",
-            //   value : new Date(),
-          }
-        },]
+            dataField: "donatur_tgl_lahir",
+            label:{
+                text:"Tanggal Lahir",
+            },
+            editorType: "dxDateBox",
+            editorOptions: {
+                displayFormat: "dd-MM-yyyy",
+                value : new Date(),
+                invalidDateMessage: "The date must have the following format: dd-MM-yyyy"
+            }
+          },],
+      },{
+        itemType:"group",
+        colCount:1,
+        items: [{
+            dataField: "donatur_alamat",
+            label:{
+              text:"Alamat",
+            },
+            editorOptions: {
+              height: 100
+            },
+            validationRules: [{
+                    type: "required",
+                    message: "Alamat Harus di isi",
+            }],
+        },],
       },{
         itemType:"group",
         colCount:2,
-        items:[
-          {
-            dataField: "promo_type",
+        items: [{
+            dataField: "donatur_provinsi",
             label:{
-              text:"Jenis Promosi",
+              text:"Provinsi",
             },  
+            validationRules: [{
+                    type: "required",
+                    message: "Provinsi harus di isi"
+            }],
+            editorType: "dxSelectBox",
             editorOptions: {
-                value : "Discount",
-                readOnly: true,
-             },
-          }]
-      },
-      {
-        itemType:"group",
-        colCount:2,
-        items:[
-          {
-            dataField: "promo_rule",
-            label:{
-              text:"Ketentuan ",
+                dataSource: new DevExpress.data.CustomStore({
+                    loadMode: "raw", // omit in the DataGrid, TreeList, PivotGrid, and Scheduler
+                    load: function() {
+                      return $.getJSON("{{URL::to('dashboard/kodepos/provinsi/all')}}")
+                            .fail(function() { throw "Data loading error" });
+                    }
+                }),
+                displayExpr: "provinsi",
+                valueExpr: "provinsi",
+                searchEnabled: true,
+                onValueChanged : function (e){
+                    provinsi=e.value;
+                    var form=$('#form').dxForm('instance')
+                    var itemKota=form.getEditor('donatur_kota');
+                    itemKota.getDataSource().load();
+                }
             },
-            editorType: "dxTextArea",
+           
+        },{
+            dataField: "donatur_kota",
+            label:{
+              text:"Kota",
+            },  
+            editorType: "dxSelectBox",
+            validationRules: [{
+                    type: "required",
+                    message: "Silakan Pilih Kota"
+            }],
             editorOptions: {
-                // width: "300px",
-                height: 75,
-                placeholder : "Ketentuan Promo"
-              }
-          },]
-      },
-    ]
-  });
-
-  // table
-  var products = {!!$promo->products!!};
- 
-  var dataGrid =$("#dataGrid").dxDataGrid({
-      dataSource: products,
-      keyExpr: "product_id",
-      showBorders: true,
-      height: 250,
-      paging: {
-          enabled: false
-      },
-      scrolling: {
-        mode: "virtual"
-      },
-      editing: {
-            allowDeleting: true,
-            useIcons: true,
-      },
-      columns: [
-          {
-            caption: "PLU",
-            dataField: "product_id",
-          },{
-              dataField: "product_shortdesc",
-              caption:"Deskripsi"
-          },{
-              dataField: "product_price",
-              caption: "Harga Jual Rata-rata",
-              dataType: "number",
-              format: "fixedPoint",
-          },{
-              dataField: "promotionproducts.promo_product_qty",
-              caption: "Jumlah",
-              dataType: "number",
-              format: "fixedPoint",
-          },{
-              dataField: "promotionproducts.promo_product_disc",
-              caption: "Discount",
-              dataType: "number",
-              format: "fixedPoint",
-          },
-      ],
-      summary: {
-      totalItems: [{
-          column: "product_id",
-          summaryType: "count",
-          displayFormat: "Data: {0}",
-      },
-    ]
-  }
-  }).dxDataGrid("instance");
-
-
-  //open form
-  $("#btnAddProduct").dxButton({
-      text: "Tambah Produk",
-      icon: "plus",
-      onClick: function(e) {
-        var form =$('#form-container').serializeObject();
-        if(form['promo_desc']==""){
-            DevExpress.ui.notify({
-                message: "Silakan isi Nama Promo...",
-                position: {
-                    my: "center top",
-                    at: "center top"
-                }
-            }, "warning", 3000);
-            return false;
-        }
-        $('#mdlAddProduct').modal('show');
-      }
-  });
-
-  // save penerimaan
-  $("#btnSave").dxButton({
-      text: "Simpan",
-      type: "success",
-      width: 125,
-      onClick: function(e) {
-          var datatable = products;
-          var form =$('#form-container').serializeObject();
-          if(form['promo_desc']==""){
-            DevExpress.ui.notify({
-                message: "Silakan isi Nama Promo...",
-                position: {
-                    my: "center top",
-                    at: "center top"
-                }
-            }, "warning", 3000);
-            return false;
-          }
-
-
-          if(products.length==0){
-            {
-              DevExpress.ui.notify({
-                  message: "Silakan isi produk pada tabel...",
-                  position: {
-                      my: "center top",
-                      at: "center top"
+              dataSource: new DevExpress.data.CustomStore({       
+                  loadMode: "raw",   
+                  cacheRawData: false,
+                  load: function() {
+                    return $.getJSON("{{URL::to('dashboard/kodepos/kota')}}"+"/"+encodeURIComponent(provinsi));
                   }
-              }, "warning", 3000);
-              return false;
-            }
-          }
-
-          $.ajax({
-              type: "POST",
-              url: "{{route('promotions.discount.update')}}",
-              data: JSON.stringify({form:form,table:datatable}),
-              contentType: "application/json; charset=utf-8",
-              dataType: "json",
-              success: function (data) {
-                if(data.code != 200) {
-                    swal({
-                        title: "Validation Error",
-                        icon: data.status,
-                        text: data.message,
-                        value: true,
-                        visible: true,
-                        className: "",
-                        closeModal: true,
-                    });
-                }else{
-                    swal({
-                        title: "OK",
-                        icon: data.status,
-                        text: data.message,
-                        value: true,
-                        visible: true,
-                        className: "",
-                        closeModal: true,
-                    })
-                    .then((value) => {
-                          window.location = '{{route('promotions.discount.index')}}';
-                    });
-                }
-               
-                return false;
-              }, 
-              error: function(jqXHR) {
-                swal({
-                    title: "Validation Error",
-                    icon: data.status,
-                    text: data.message,
-                    value: true,
-                    visible: true,
-                    className: "",
-                    closeModal: true,
-                });
-                return false;
+              }),                
+              displayExpr: "kota",
+              valueExpr: "kota",
+              searchEnabled: true,
+              onValueChanged : function (e){
+                  kota=e.value;
+                  var form=$('#form').dxForm('instance');
+                  var itemKecamatan=form.getEditor('donatur_kecamatan');
+                  itemKecamatan.getDataSource().load();
               }
-          });
-          return false;
-      }
-  });
+            }
+        },{
+            dataField: "donatur_kecamatan",
+            label:{
+              text:"Kecamatan",
+            },  
+            editorType: "dxSelectBox",
+            validationRules: [{
+                    type: "required",
+                    message: "Silakan Pilih Kecamatan"
+            }],
+            editorOptions: {
+              dataSource: new DevExpress.data.CustomStore({  
+                  loadMode: "raw",
+                  cacheRawData: false,         
+                  load: function() {
+                    return $.getJSON("{{URL::to('dashboard/kodepos/kabupaten')}}"+ "/" + encodeURIComponent(kota));
+                  }
+              }),
+              displayExpr: "kecamatan",
+              valueExpr: "kecamatan",
+              searchEnabled: true,
+              onValueChanged : function (e){
+                  kecamatan=e.value;
+                  var form=$('#form').dxForm('instance');
+                  var itemKelurahan=form.getEditor('donatur_kelurahan');
+                  // itemKelurahan.getDataSource().filter(['kecamatan','=',e.value]);
+                  itemKelurahan.getDataSource().load();
+              }
+            }
+        },{
+            dataField: "donatur_kelurahan",
+            label:{
+              text:"Kelurahan",
+            },  
+            editorType: "dxSelectBox",
+            validationRules: [{
+                    type: "required",
+                    message: "Silakan pilih kelurahan"
+            }],
+            editorOptions: {
+              dataSource: new DevExpress.data.CustomStore({  
+                  loadMode: "raw",    
+                  cacheRawData: false,        
+                  load: function() {
+                    return $.getJSON("{{URL::to('dashboard/kodepos/kelurahan')}}"+ "/" + encodeURIComponent(kecamatan));
+                  }
+              }),
+              displayExpr: "kelurahan",
+              valueExpr: "kelurahan",
+              searchEnabled: true,
+            },
+        },{
+            dataField: "donatur_kode_pos",
+            label:{
+              text:"Kode Pos",
+            }, 
+       
+        },]
+      },{
+          itemType: "button",
+          horizontalAlignment: "left",
+          buttonOptions: {
+              text: "Perbaharui",
+              type: "success",
+              useSubmitBehavior: true
+          }
+      },]
+  }).dxForm("instance"); 
+
 });
-</script>
-
-
-<script type="text/javascript">
-  // script for modal
-  var prodSearch = document.getElementById("txtProdSearch");
-  prodSearch.addEventListener("keyup", function(event) {
-    event.preventDefault();
-    var kriteria=document.getElementById("txtProdSearch").value ;
-
-    // console.log(kriteria);
-    if(kriteria==0){
-      kriteria="ALL";
-    }
-    var url="{{URL::to('products/searchproductbykriteria')}}"+"/"+kriteria;
-    $.getJSON( url, function( data ) {
-      var eTable="<table id='tableProd' class='table table-bordered table-striped' style='font-size:12px'>"
-      for(var i=0;i<data.length;i++)
-      {
-        eTable += "<tr>";
-        eTable += "<td><a href='#' onclick='sendId(\""+data[i].product_id+"\",\"";
-        eTable += data[i].product_desc+"\",\"";
-        eTable += data[i].product_stock+"\",\"";
-        eTable += data[i].product_price+"\");'";
-        eTable += "id=plist"+data[i].product_id;
-        eTable += "name='"+data[i].product_id+"'>";
-        eTable += data[i].product_id+"</a>";
-        eTable +="</td>";
-        eTable += "<td>"+data[i].product_desc+"</td>";
-        eTable += "</tr>";
-      }
-      eTable +="</table>";
-      $('#tableProd').html(eTable);
-    });
-  });
-
-  function sendId(prodid,proddesc,prodstock,prodprice){
-      $("#txtProdId").val(prodid);
-      $("#txtProdDesc").val(proddesc);
-      $("#numProdStock").val(prodstock);
-      $("#txtProdPrice").val(prodprice);
-      $("#numProdDisc").val(0);
-   }
-
- 
-
-  $("#btnAdd").off('click').click(function(clickEvent){
-    var prodid=document.getElementById("txtProdId").value;
-    var proddesc=document.getElementById("txtProdDesc").value;
-    var prodprice=document.getElementById("txtProdPrice").value;
-    var prodqty=1;
-    var proddisc=document.getElementById("numProdDisc").value;
-    if(!prodid){
-       document.getElementById("wrmsg").innerHTML = 'WARNING : Siakan Pilih Produk';
-       clickEvent.stopPropagation();
-        return;
-    }
-    if(!proddisc || proddisc==='0'){
-      document.getElementById("wrmsg").innerHTML = 'WARNING : Discount tidak boleh 0 atau kosong';
-      clickEvent.stopPropagation();
-      return;
-    }
-
-    var table=$('#dataGrid').dxDataGrid("instance");
-    var objpromoprod={promo_product_qty:prodqty,promo_product_disc:proddisc}
-    var objprod={product_id: prodid,
-                product_shortdesc: proddesc,
-                product_price:prodprice,
-                promotionproducts: objpromoprod}
-
-    table.getDataSource().store().insert(objprod);
-    table.refresh();
-
-     //mengembalikan nilai dialog
-     $("#txtProdId").val("");
-     $("#txtProdDesc").val("");
-     $("#numProdDisc").val("0");
-     $("#txtProdPrice").val("0");
-     document.getElementById("wrmsg").innerHTML = '';
-  });
-
 </script>
 @endsection

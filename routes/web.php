@@ -20,6 +20,7 @@ Route::get('/', function () {
 Auth::routes(['verify' => true]);
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/register/{hashcode}');
 Route::group(['prefix' => 'superadmin', 'middleware' => ['role:super-admin']], function() {
     Route::resource('users','UserController'); //crud route
 
@@ -32,7 +33,48 @@ Route::group(['prefix' => 'superadmin', 'middleware' => ['role:super-admin']], f
 
 }); 
 Route::group(['prefix' => 'dashboard', 'middleware' => ['role:manajer|helpdesk']], function() {
+    Route::resource('lembaga', 'LembagaController');
+    Route::resource('faq', 'FAQController');
+    Route::resource('rekeningbank', 'RekeningBankController');
+
     Route::resource('donatur', 'DonaturController');
+    Route::get('donatur/pembaharuan/index','DonaturController@donaturRenewIndex')->name('donatur.pembaharuan.index');
+    Route::post('donatur/pembaharuan/main','DonaturController@donaturRenewMain')->name('donatur.pembaharuan.main');
+
+    Route::resource('santri', 'SantriController');
+    Route::get('santri/pembaharuan/index','SantriController@santriRenewIndex')->name('santri.pembaharuan.index');
+    Route::post('santri/pembaharuan/main','SantriController@santriRenewMain')->name('santri.pembaharuan.main');
+    Route::get('santri/otorisasi/load','SantriController@SantriOtorisasiLoad')->name('santri.otorisasi.load');
+    Route::put('santri/otorisasi/update/{id}','SantriController@santriOtorisasiUpdate')->name('santri.otorisasi.update');
+    Route::get('santri/otoriasasi/index','SantriController@santriOtorisasiIndex')->name('santri.otorisasi.index');
+
+    Route::resource('pendamping', 'PendampingController');
+    Route::get('pendamping/pembaharuan/index','PendampingController@pendampingRenewIndex')->name('pendamping.pembaharuan.index');
+    Route::post('pendamping/pembaharuan/main','PendampingController@pendampingRenewMain')->name('pendamping.pembaharuan.main');
+    Route::get('pendamping/otorisasi/load','PendampingController@pendampingOtorisasiLoad')->name('pendamping.otorisasi.load');
+    Route::put('pendamping/otorisasi/update/{id}','PendampingController@pendampingOtorisasiUpdate')->name('pendamping.otorisasi.update');
+    Route::get('pendamping/otoriasasi/index','PendampingController@pendampingOtorisasiIndex')->name('pendamping.otorisasi.index');
+    
+    Route::resource('produk', 'ProdukController');
+    Route::resource('kirimproduk', 'KirimProdukController');
+
+    Route::resource('pengingat', 'PengingatController');
+    Route::post('pengingat/main','PengingatController@main')->name('pengingat.main');
+
+    Route::resource('berita','BeritaController');
+    Route::post('berita/main','BeritaController@main')->name('berita.main');
+
+    Route::resource('pesan', 'PesanController');
+    Route::post('pesan/main','PesanController@main')->name('pesan.main');
+
+    Route::resource('materi','MateriController');
+    Route::resource('kuesioner', 'KuesionerController');
+    Route::resource('soal','SoalController');
+    Route::post('soal/main','SoalController@main')->name('soal.main');
+    Route::post('soal/new/menu','SoalController@soalNewMenu')->name('soal.new.menu');
 
     Route::get('kodepos/provinsi/all','KodePosController@kodeposProvinsiAll');
+    Route::get('kodepos/kota/{provinsi}','KodePosController@kodeposKotaByProvinsi');
+    Route::get('kodepos/kabupaten/{kota}','KodePosController@kecamatanByKota');
+    Route::get('kodepos/kelurahan/{kabupaten}','KodePosController@kelurahanByKecamatan');
 }); 

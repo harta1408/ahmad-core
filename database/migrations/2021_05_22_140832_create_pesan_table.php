@@ -17,6 +17,7 @@ class CreatePesanTable extends Migration
             $table->bigIncrements('id');
             $table->integer('pembuat_id')->nullable();
             $table->char('pesan_entitas',1)->default(0);
+            $table->string('pesan_judul')->nullable();
             $table->text('pesan_isi')->nullable();
             $table->dateTime('pesan_waktu_kirim')->nullable();
             $table->char('pesan_status',1)->default(0);
