@@ -19,6 +19,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::middleware(['cors'])->group(function () {
     Route::post('user/login','userAPI@userLogin');
     Route::put('user/change/password/{id}','userAPI@userChangePassword');
+
+    Route::get('lembaga','LembagaAPI@getLembaga');
+    Route::get('lembaga/rekening/bank','LembagaAPI@getRekeningBankList');
     
     Route::post('donatur/register','DonaturAPI@donaturRegister');
     Route::post('donatur/register/sosmed','DonaturAPI@donaturRegisterSosmed');

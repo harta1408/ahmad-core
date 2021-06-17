@@ -14,7 +14,7 @@ class Bayar extends Model
     protected $table='bayar';
     protected $fillable=[
         'donasi_id', //id donasi
-        'bayar_total', //total pembayaran, jika berupa cicilan maka sebesar nilai cicilannya
+        'bayar_total', //total pembayaran, termasuk kode unik jika berupa cicilan maka sebesar nilai cicilannya
         'bayar_kode_unik', //kode unik untuk melakukan tracing ke rekening bank
         'bayar_kode_voucer', //jika ada promo
         'bayar_disc', //nilai potongan harga

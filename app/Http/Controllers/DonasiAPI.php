@@ -14,6 +14,9 @@ class DonasiAPI extends Controller
     {
         $this->middleware('cors');
 	}
+
+    #untuk eksekusi penambahan donatur dengan donasi, maka harus eksekusi 
+    #donasitempsimpan, agar bisa mendapatkan nomor donasinya
     public function donasiTempSimpan(Request $request){
         $tempdonasino=rand(100000,999999);
         $donasitemp=new DonasiTemp;
@@ -78,7 +81,7 @@ class DonasiAPI extends Controller
 
         //simpan pembayaran dengan status belum dibayar, pembayaran akan berubah status menjadi 
         //sudah di bayar ketika melakukan pengecekan ke rekening bank
-        $kodeunik=rand(0,999);
+        $kodeunik=rand(0,200);
         $bayar=new Bayar;
         $bayar->donasi_id=$donasiid;
         $bayar->bayar_total=$donasi->donasi_total_harga;

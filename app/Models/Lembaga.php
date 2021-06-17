@@ -27,4 +27,8 @@ class Lembaga extends Model
         'lembaga_landing_produk_judul', 
         'lembaga_landing_produk_isi',
     ];
+    public function faq()
+    {
+        return $this->hasMany('App\Models\FAQ','lembaga_id','lembaga_id');
+    }
 }

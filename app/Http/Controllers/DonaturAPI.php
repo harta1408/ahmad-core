@@ -25,8 +25,8 @@ class DonaturAPI extends Controller
     #sistem mengirimkan email verifikasi untuk penggantian password
     public function donaturRegister(Request $request){
         $validator = Validator::make($request->all(), [
-            'user_email' => 'required|email|unique:users|max:100',
-            'user_name' => ['required','string','max:30'],
+            'email' => 'required|email|unique:users|max:100',
+            'name' => ['required','string','max:30'],
             'url'=>'required|string',
         ]);
 
@@ -37,8 +37,8 @@ class DonaturAPI extends Controller
         #buat hash code acak untuk default yang harus langsung diganti
         #ketika email terverifikasi
         #link verifikasi di panggil berdasarkan user, nama dan hash code
-        $useremail=$request->get('user_email'); 
-        $username=$request->get('user_name');
+        $useremail=$request->get('email'); 
+        $username=$request->get('name');
         $url=$request->get('url');
         $temp_donasi_no=$request->get('nomor_donasi');
         $referralid=$request->get('referral_id'); 
@@ -62,10 +62,11 @@ class DonaturAPI extends Controller
 
         #buat user baru dengan alamat email yang dimasukan
         $user=new User;
-        $user->user_email=$useremail;
-        $user->user_name=$username;
-        $user->user_hash_code=$hashcode; 
-        $user->user_tipe=$usertipe;
+        $user->email=$useremail;
+        $user->name=$username;
+        $user->hash_code=$hashcode; 
+        $user->password=$hashcode;
+        $user->tipe=$usertipe;
         $exec=$user->save();
 
         if(!$exec){
@@ -97,9 +98,9 @@ class DonaturAPI extends Controller
 
         if($sudahorder){
             $this->pindahkanDonasi($temp_donasi_no,$donaturid);
-            $user=User::with('donatur.donasi')->where('user_email',$useremail)->first();
+            $user=User::with('donatur.donasi')->where('email',$useremail)->first();
         }else{
-            $user=User::with('donatur')->where('user_email',$useremail)->first();
+            $user=User::with('donatur')->where('email',$useremail)->first();
         }
 
         //jika berasal dari referral maka cari id pemberi referral kemudian tambahkan
@@ -190,14 +191,15 @@ class DonaturAPI extends Controller
         }
         //simpan pembayaran dengan status belum dibayar, pembayaran akan berubah status menjadi 
         //sudah di bayar ketika melakukan pengecekan ke rekening bank
-        $kodeunik=rand(0,999);
+        $kodeunik=rand(0,200);
         $bayar=new Bayar;
-        $bayar->donasi_id=$id;
-        $bayar->bayar_total=$donasi->donasi_total_harga;
+        $bayar->donasi_id=$donasiid;
+        $bayar->bayar_total=$donasi->donasi_total_harga+$kodeunik;
         $bayar->bayar_kode_unik=$kodeunik;
         $bayar->bayar_disc=0;
         $bayar->bayar_onkir=0;
         $bayar->bayar_status=1;
+        $bayar->save();
         //hapus pemesanan sementara sebelum register
         $donasitemp=DonasiTemp::where('temp_donasi_no',$temp_donasi_no)->first()->produk()->detach();
         $donasitemp=DonasiTemp::where('temp_donasi_no',$temp_donasi_no)->delete();
@@ -217,7 +219,7 @@ class DonaturAPI extends Controller
         }
 
         $exec=Donatur::where('id','=' ,$id)
-        ->update(['donatur_id'=>$request->get('donatur_id'),
+        ->update(['donatur_nid'=>$request->get('donatur_nid'),
                   'donatur_nama'=>$request->get('donatur_nama'),
                   'donatur_tmp_lahir'=>$request->get('donatur_tmp_lahir'), 
                   'donatur_tgl_lahir'=>$request->get('donatur_tgl_lahir'), 
