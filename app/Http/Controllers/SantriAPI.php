@@ -20,8 +20,8 @@ class SantriAPI extends Controller
     #dibuat secara otomatis oleh sistem
     public function santriRegister(Request $request){
         $validator = Validator::make($request->all(), [
-            'user_email' => 'required|email|unique:users|max:100',
-            'user_name' => ['required','string','max:30'],
+            'email' => 'required|email|unique:users|max:100',
+            'name' => ['required','string','max:30'],
             'url'=>'required|string',
         ]);
 
@@ -32,8 +32,8 @@ class SantriAPI extends Controller
         #buat hash code acak untuk default yang harus langsung diganti
         #ketika email tervirifikasi
         #link verifikasi di panggil berdasarkan user dan hash code
-        $useremail=$request->get('user_email'); 
-        $username=$request->get('user_name');
+        $useremail=$request->get('email'); 
+        $username=$request->get('name');
         $url=$request->get('url');
         $referralid=$request->get('referral_id'); 
 
@@ -48,10 +48,11 @@ class SantriAPI extends Controller
 
         #buat user baru dengan alamat email yang dimasukan
         $user=new User;
-        $user->user_email=$useremail;
-        $user->user_name=$username;
-        $user->user_hash_code=$hashcode; 
-        $user->user_tipe=$usertipe;
+        $user->email=$useremail;
+        $user->name=$username;
+        $user->hash_code=$hashcode; 
+        $user->password=$hashcode;
+        $user->tipe=$usertipe;
         $exec=$user->save();
 
         if(!$exec){
@@ -77,7 +78,7 @@ class SantriAPI extends Controller
         //    $message->from('ahmad@gmail.com','AHMaD Project');
         // });
 
-        $user=User::with('santri')->where('user_email',$useremail)->first();
+        $user=User::with('santri')->where('email',$useremail)->first();
 
         //jika berasal dari referral maka cari id pemberi referral kemudian tambahkan
         //penghitung pada minimal, karena yang diberi referral telah mendaftarkan diri
@@ -89,9 +90,9 @@ class SantriAPI extends Controller
     #sepeti gmail, facebook dsb
     public function santriRegisterSosmed(Request $request){
         $validator = Validator::make($request->all(), [
-            'user_email' => 'required|email|unique:users|max:100',
-            'user_name' => 'required|string',
-            'user_password' => 'required|string',
+            'email' => 'required|email|unique:users|max:100',
+            'name' => 'required|string',
+            'password' => 'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -101,9 +102,9 @@ class SantriAPI extends Controller
         #buat password acak untuk default yang harus langsung diganti
         #ketika email tervirifikasi
         #link verifikasi di panggil berdasarkan user dan password
-        $useremail=$request->get('user_email'); 
-        $username=$request->get('user_name');
-        $password=Hash::make($request->get('user_password')); 
+        $useremail=$request->get('email'); 
+        $username=$request->get('name');
+        $password=Hash::make($request->get('password')); 
  
         $usertipe="2"; //tipe user santri
 
