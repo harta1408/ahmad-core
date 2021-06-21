@@ -10,13 +10,16 @@ class Referral extends Model
     protected $table='referral';
     protected $fillable=[
         'berita_id', //id berita
-        'referral_id_pengirim', //id pengirim (kode)
-        'referral_id_penerima', //id penerima (kode) di isi pada saat sudah register
-        'referral_entitas_pengirim',  //jenis pengirim
-        'referral_entitas_penerima', //jenis penerima
-        'referral_telepon', //nomor telepon yang di tuju
+        'referral_id', //id pengirim
+        'referral_entitas_kode', //entitas pengirim
+        'referral_jenis', //jenis referal yang dikirim
+        'referral_telepon', //nomor telepon yang di tuju        
         'referral_web_link', //link referral yang dikirim
         'referral_status', //0=tidak aktif  1=dikirimkan 2=di follow up 3-tidak di followup
     ];
+
+    public function pengirim(){
+        return $this->hasOne('App\Models\Materi','id','materi_id');
+    }
 }
 

@@ -50,12 +50,13 @@ Route::middleware(['cors'])->group(function () {
     Route::post('donasi/save','DonasiAPI@donasiSimpan');
     Route::get('donasi/byid/{id}','DonasiAPI@donasiById');
 
-    Route::post('berita/save','beritaAPI@beritaSimpan');
-    Route::put('berita/update/{id}','beritaAPI@beritaUpdate');
-    Route::get('berita/entitas/{jenis}','beritaAPI@beritaEntitas');
-    Route::get('berita/list','beritaAPI@beritaList');
+    Route::post('berita/save','BeritaAPI@beritaSimpan');
+    Route::put('berita/update/{id}','BeritaAPI@beritaUpdate');
+    Route::get('berita/kampanye/{kode}','BeritaAPI@beritaKampanye');
+    Route::get('berita/entitas/{jenis}','BeritaAPI@beritaEntitas');
+    Route::get('berita/list','BeritaAPI@beritaList');
 
-    Route::post('referral/getlink','ReferralAPI@referralWebLink');
+    Route::post('referral/send/link','ReferralAPI@referralSendLink');
     Route::put('referral/update/berita','ReferralAPI@rreferralUpdateIdBerita');
 
     Route::post('pengingat/save','pengingatAPI@pengingatSimpan');
@@ -67,6 +68,8 @@ Route::middleware(['cors'])->group(function () {
     Route::put('kuesioner/update/{id}','KuesionerAPI@kuesionerUpdate');
     Route::get('kuesioner/list','KuesionerAPI@kuesionerList');
     Route::post('kuesioner/santri/simpan','KuesionerAPI@kuesionerSantriSimpan');
+
+    Route::post('message/send/wa','MessageAPI@sendWhatsApp');
 
     Route::get('kodepos/list/provinsi/all','KodePosAPI@kodeposProvinsiAll');
     Route::get('kodepos/list/provinsi/{provinsi}','KodePosAPI@kodeposProvinsi');

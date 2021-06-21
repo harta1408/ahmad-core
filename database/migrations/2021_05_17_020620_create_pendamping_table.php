@@ -22,8 +22,10 @@ class CreatePendampingTable extends Migration
             $table->string('pendamping_telepon',100)->nullable();
             $table->string('pendamping_tmp_lahir',50)->nullable();
             $table->date('pendamping_tgl_lahir')->nullable();
-            $table->string('pendamping_gender',10)->default('PRIA');
+            $table->string('pendamping_gender',10)->default('PRIA'); 
+            $table->string('pendamping_agama',10)->default('ISLAM');
             $table->text('pendamping_alamat')->nullable();
+            $table->string('pendamping_kerja',100)->nullable();
             $table->string('pendamping_kode_pos',10)->nullable();
             $table->string('pendamping_kelurahan',50)->nullable();
             $table->string('pendamping_kecamatan',50)->nullable();

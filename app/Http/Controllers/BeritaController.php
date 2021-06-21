@@ -43,6 +43,7 @@ class BeritaController extends Controller
     {
         $berita=Berita::where('berita_status','1')->get();
         foreach ($berita as $key => $pngt) {
+            //deskripsi jenis berita
             if($pngt->berita_jenis=='1'){
                 $pngt->berita_jenis="Berita";
             }
@@ -52,6 +53,8 @@ class BeritaController extends Controller
             if($pngt->berita_jenis=='3'){
                 $pngt->berita_jenis="Broadcast";
             }
+
+            //deskripsi entitas
             if($pngt->berita_entitas=='0'){
                 $pngt->berita_entitas="Semua";
             }

@@ -229,4 +229,10 @@ class DonaturController extends Controller
 
     }
 
+    #------------utility
+    public function donaturSimpleList(){
+        $donatur=Donatur::where('donatur_status','1')->get();
+        return $donatur;
+    }
+
 }

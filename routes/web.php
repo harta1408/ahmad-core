@@ -21,6 +21,7 @@ Auth::routes(['verify' => true]);
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/register/{hashcode}');
+
 Route::group(['prefix' => 'superadmin', 'middleware' => ['role:super-admin']], function() {
     Route::resource('users','UserController'); //crud route
 
@@ -30,8 +31,8 @@ Route::group(['prefix' => 'superadmin', 'middleware' => ['role:super-admin']], f
     Route::get('users/approve/index','UserController@userApproveIndex')->name('users.approve.index');
     Route::get('users/approve/load','UserController@userApprovalLoad')->name('users.approve.load');
     Route::put('users/approve/update/{id}','UserController@userApprovalUpdate');
-
 }); 
+
 Route::group(['prefix' => 'dashboard', 'middleware' => ['role:manajer|helpdesk']], function() {
     Route::resource('lembaga', 'LembagaController');
     Route::resource('faq', 'FAQController');
@@ -40,6 +41,7 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['role:manajer|helpdesk']
     Route::resource('donatur', 'DonaturController');
     Route::get('donatur/pembaharuan/index','DonaturController@donaturRenewIndex')->name('donatur.pembaharuan.index');
     Route::post('donatur/pembaharuan/main','DonaturController@donaturRenewMain')->name('donatur.pembaharuan.main');
+    Route::get('donatur/simple/list','DonaturController@donaturSimpleList')->name('donatur.simple.list');
 
     Route::resource('santri', 'SantriController');
     Route::get('santri/pembaharuan/index','SantriController@santriRenewIndex')->name('santri.pembaharuan.index');
@@ -66,6 +68,11 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['role:manajer|helpdesk']
 
     Route::resource('pesan', 'PesanController');
     Route::post('pesan/main','PesanController@main')->name('pesan.main');
+
+    Route::resource('referral', 'ReferralController');
+    Route::get('referral/new/menu/index','ReferralController@newmenuindex')->name('referral.new.menu.index');
+    Route::post('referral/new/menu/','ReferralController@newmenu')->name('referral.new.menu');
+    Route::post('referral/main','ReferralController@main')->name('referral.main');
 
     Route::resource('materi','MateriController');
     Route::resource('kuesioner', 'KuesionerController');
