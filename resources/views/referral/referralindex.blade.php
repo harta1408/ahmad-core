@@ -1,7 +1,7 @@
 @extends('layouts.menus')
 @section('content')
     <div class="long-title"><h3>Daftar Referral</h3></div>
-    {!! Form::open(['id' => 'frm','route' => 'referral.main', 'class' => 'form-horizontal']) !!}
+    {!! Form::open(['id' => 'frm','route' => 'referral.new.menu.index', 'class' => 'form-horizontal']) !!}
         <div id="toolbar"></div>
         <div class="second-group">
             <div id="gridData"></div>
@@ -42,14 +42,14 @@ $(function(){
         },
         columns: [
             {
-              dataField: "referral_id_pengirim",
-              caption: "Jenis",
+              dataField: "referral_entitas_kode",
+              caption: "Pengirim",
             },{
-              dataField: "berita_judul",
-              caption: "Judul",
+              dataField: "referral_telepon",
+              caption: "No Tujuan",
             },{
-              dataField: "berita_entitas",
-              caption: "Entitas",
+              dataField: "referral_web_link",
+              caption: "Web Link",
             },
             
         ],
@@ -63,7 +63,7 @@ $(function(){
         location: 'center',
         locateInMenu: 'never',
         template: function() {
-            return $("<div class='toolbar-label'><b>Pembaharuan Data Berita</b></div>");
+            return $("<div class='toolbar-label'><b>Pembaharuan Referral</b></div>");
         }
     },{
         location: 'after',
@@ -71,43 +71,20 @@ $(function(){
         locateInMenu: 'auto',
         options: {
             icon: "plus",
-            hint: 'Tambah Pengingat Baru',
+            hint: 'Tambah Referral Baru',
             useSubmitBehavior: true,
             onClick: function(e) {      
                 $("#txtBeritaState").val("NEW"); //kirim perintah tambah ke server
             }
         }
-    },{
-        location: 'after',
-        widget: 'dxButton',
-        locateInMenu: 'auto',
-        options: {
-            icon: "edit",
-            hint: 'Update Data Pengingat',
-            useSubmitBehavior: true,
-            onClick: function(e) {      
-            var txtBeritaId=document.getElementById("txtBeritaId").value;
-            if(txtBeritaId==""){
-                DevExpress.ui.notify({
-                    message: "Silakan Pilih Pengingat",
-                    position: {
-                        my: "center top",
-                        at: "center top"
-                    }
-                }, "warning", 3000);
-                e.preventDefault();
-                return false;
-            }
-            $("#txtBeritaState").val("UPDATE"); //kirim perintah update ke server
-            }
-        }
+   
     },{
         location: 'after',
         widget: 'dxButton',
         locateInMenu: 'auto',
         options: {
             icon: "trash",
-            hint: 'Hapus Data pendamping',
+            hint: 'Hapus Data Referral',
             useSubmitBehavior: true,
             onClick: function(e) {      
             var txtBeritaId=document.getElementById("txtBeritaId").value;

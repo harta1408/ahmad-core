@@ -260,4 +260,10 @@ class PendampingController extends Controller
     public function pendampingOtorisasiIndex(){
         return view('pendamping/pendampingotorisasi',compact('pendamping'));
     }
+
+    #------------utility
+    public function pendampingSimpleList(){
+        $pendamping=Pendamping::where('pendamping_status','1')->get();
+        return $pendamping;
+    }
 }

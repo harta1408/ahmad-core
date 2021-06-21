@@ -18,8 +18,5 @@ class Referral extends Model
         'referral_status', //0=tidak aktif  1=dikirimkan 2=di follow up 3-tidak di followup
     ];
 
-    public function pengirim(){
-        return $this->hasOne('App\Models\Materi','id','materi_id');
-    }
 }
 

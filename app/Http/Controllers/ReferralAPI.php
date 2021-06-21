@@ -16,15 +16,13 @@ class ReferralAPI extends Controller
     #page yang di share sama, oleh karena itu pake metode post, yang mengirimkan
     #id pengirim untuk di catat sistem sebagai pemberi referral
     public function referralSendLink(Request $request){
-
         $kode_entitas=$request->get('referral_entitas_kode'); //kode pengirim
         $jenisentitas=substr($kode_entitas,0,1); 
         $nomor_tujuan=$request->get('referral_telepon'); //telepon tujuan
         $berita=Berita::where([['berita_jenis','3'],['berita_entitas',$jenisentitas]])->first();
 
-
         $refpone=$request->get('referral_telepon');
-        $refid=$request->get('referral_entitas_kode');
+        $refenkode=$request->get('referral_entitas_kode');
         $berita_id=$request->get('berita_id');
         if($jenisentitas=='1'){
             $url=' http://kidswa.web.id/ahmad/gabung/donatur/'.$kode_entitas;
@@ -43,7 +41,15 @@ class ReferralAPI extends Controller
         );
         $messageapi=new MessageAPI;
         $status=$messageapi->processWhatsappMessage($refpone,$pesan);
-
+        if($status='Success'){
+            $referral=new Referral;
+            $referral->referral_entitas_kode=$refenkode;
+            $referral->referral_telepon=$refpone;
+            $referral->berita_id=$berita->id;
+            $referral->referral_web_link=$url;
+            $referral->referral_status='1';
+            $referral->save();
+        }
         return response()->json($status,200);    
     }
 

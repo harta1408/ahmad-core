@@ -258,5 +258,10 @@ class SantriController extends Controller
     public function santriOtorisasiIndex(){
         return view('santri/santriotorisasi',compact('santri'));
     }
-
+    
+    #------------utility
+    public function santriSimpleList(){
+        $santri=Santri::where('santri_status','1')->get();
+        return $santri;
+    }
 }

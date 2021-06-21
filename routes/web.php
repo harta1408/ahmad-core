@@ -49,6 +49,7 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['role:manajer|helpdesk']
     Route::get('santri/otorisasi/load','SantriController@SantriOtorisasiLoad')->name('santri.otorisasi.load');
     Route::put('santri/otorisasi/update/{id}','SantriController@santriOtorisasiUpdate')->name('santri.otorisasi.update');
     Route::get('santri/otoriasasi/index','SantriController@santriOtorisasiIndex')->name('santri.otorisasi.index');
+    Route::get('santri/simple/list','SantriController@santriSimpleList')->name('santri.simple.list');
 
     Route::resource('pendamping', 'PendampingController');
     Route::get('pendamping/pembaharuan/index','PendampingController@pendampingRenewIndex')->name('pendamping.pembaharuan.index');
@@ -56,6 +57,8 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['role:manajer|helpdesk']
     Route::get('pendamping/otorisasi/load','PendampingController@pendampingOtorisasiLoad')->name('pendamping.otorisasi.load');
     Route::put('pendamping/otorisasi/update/{id}','PendampingController@pendampingOtorisasiUpdate')->name('pendamping.otorisasi.update');
     Route::get('pendamping/otoriasasi/index','PendampingController@pendampingOtorisasiIndex')->name('pendamping.otorisasi.index');
+    Route::get('pendamping/simple/list','PendampingController@pendampingSimpleList')->name('pendamping.simple.list');
+
     
     Route::resource('produk', 'ProdukController');
     Route::resource('kirimproduk', 'KirimProdukController');
@@ -70,7 +73,7 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['role:manajer|helpdesk']
     Route::post('pesan/main','PesanController@main')->name('pesan.main');
 
     Route::resource('referral', 'ReferralController');
-    Route::get('referral/new/menu/index','ReferralController@newmenuindex')->name('referral.new.menu.index');
+    Route::post('referral/new/menu/index','ReferralController@newmenuindex')->name('referral.new.menu.index');
     Route::post('referral/new/menu/','ReferralController@newmenu')->name('referral.new.menu');
     Route::post('referral/main','ReferralController@main')->name('referral.main');
 

@@ -17,7 +17,6 @@ class CreateReferralTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('berita_id')->unsigned();
             $table->foreign('berita_id')->references('id')->on('berita');
-            $table->bigInteger('referral_id')->unsigned();
             $table->char('referral_entitas_kode',9)->default(0);
             $table->string('referral_telepon',20)->nullable();
             $table->string('referral_web_link',200)->nullable();

@@ -72,7 +72,9 @@ class MessageAPI extends Controller
         );
         $res=curl_exec($ch);
         curl_close($ch);
-        return  response()->json(['STATUS' => 'SUCCESS', 'MSG' => $res]);
+
+        // json_decode($res)
+        return  $res;
     }
 
 

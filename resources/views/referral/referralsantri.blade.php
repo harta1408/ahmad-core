@@ -3,16 +3,16 @@
 <div class="row justify-content-center">
     <div class="col-md-6">
         <div class="card">
-            <div class="card-header">Pilih Donatur</div>
+            <div class="card-header">Pilih Santri</div>
             <div class="card-body">
                 {!! Form::open(['id' => 'frm','route' => 'referral.main','class' => 'form-horizontal']) !!}
-                    <label>Pilih Donatur dari Daftar</label>
+                    <label>Pilih Santri dari Daftar</label>
                     <div id="simpleList"></div>
                     <div id="btnLanjut"></div>
                     <!-- <div id="selectedStores"></div> -->
                     <input id="txtID" type="text" name="id_entitas"
                             class="form-control" placeholder="ID" hidden>
-                    <input id="txtTipe" type="text" name="jenis_entitas" value="DONATUR"
+                    <input id="txtTipe" type="text" name="jenis_entitas" value="SANTRI"
                             class="form-control" placeholder="Jenis Entitas" hidden>
                 {!! Form::close()!!}
             </div>
@@ -35,7 +35,7 @@ $(function(){
         key: "id",
         load: function (key) {
           return $.ajax({
-              url: "{{route('donatur.simple.list')}}"
+              url: "{{route('santri.simple.list')}}"
           })
       },
     });
@@ -44,11 +44,11 @@ $(function(){
     var listWidget = $("#simpleList").dxList({
         dataSource: listDataSource, 
         itemTemplate: function(data, index) {
-            return data.donatur_nama;
+            return data.santri_nama;
         },
         editEnabled: true,
         height: 300,
-        searchExpr: "donatur_nama",
+        searchExpr: "santri_nama",
         allowItemDeleting: false,
         itemDeleteMode: "toggle",
         showSelectionControls: true,

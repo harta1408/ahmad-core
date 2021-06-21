@@ -1,15 +1,12 @@
 @extends('layouts.menus')
 @section('content')
 <div class="long-title"><h3>Buat Referral</h3></div>
-{!! Form::open(['id' => 'frm','route' => 'referral.store','class' => 'form-horizontal']) !!}
 <div class="second-group">
-    <div id="form"></div>
-    <input id="txtID" type="text" name="referral_entitas_kode" value="{!!$referral->referral_entitas_kode!!}"
-        class="form-control" placeholder="Entitas Kode" hidden>
-    <input id="txtBeritaId" type="text" name="berita_id" value="{!!$referral->berita_id!!}"
-        class="form-control" placeholder="Jenis Entitas" hidden>
+    <form id="form-container" class="first-group">
+        <div id="form"></div>
+        <div id="btnSave"></div>
+    </form>
 </div>
-{!! Form::close()!!}
 @endsection
 
 @section('script')
@@ -37,7 +34,6 @@ $(function() {
       }
   });
   var referral={!!$referral!!}
-    console.log(referral);
   $("#form").dxForm({
       colCount: 1,
       formData:referral,
@@ -79,17 +75,74 @@ $(function() {
                 //     maskRules: {"X": /[02-9A-F]/}
                 // },           
             },],
-      },{
-          itemType: "button",
-          horizontalAlignment: "left",
-          buttonOptions: {
-              text: "Kirim Pesan",
-              type: "success",
-              useSubmitBehavior: true
-          }
+    //   },{
+    //       itemType: "button",
+    //       horizontalAlignment: "left",
+    //       buttonOptions: {
+    //           text: "Kirim Pesan",
+    //           type: "success",
+    //           useSubmitBehavior: true
+    //       }
       },]
   }).dxForm("instance"); 
-
+// save penerimaan
+$("#btnSave").dxButton({
+      text: "Kirim Referral",
+      type: "success",
+      width: 125,
+      onClick: function(e) {
+        $("#btnSave").dxButton("instance").option("disabled",true);
+        var form =$('#form-container').serializeObject();
+        $.ajax({
+              type: "POST",
+              url: "{{route('referral.store')}}",
+              data: JSON.stringify({referral:referral}),
+              contentType: "application/json; charset=utf-8",
+              dataType: "json",
+              success: function (data) {
+                if(data.code != 200) {
+                    swal({
+                        title: "Validation Error",
+                        icon: data.status,
+                        text: data.message,
+                        value: true,
+                        visible: true,
+                        className: "",
+                        closeModal: true,
+                    });
+                }else{
+                    swal({
+                        title: "OK",
+                        icon: data.status,
+                        text: data.message,
+                        value: true,
+                        visible: true,
+                        className: "",
+                        closeModal: true,
+                    })
+                    .then((value) => {
+                        window.location = '{{route('referral.index')}}';
+                    });
+                }
+                return false;
+              },    
+              error: function(jqXHR, textStatus, errorThrown) {
+                swal({
+                    title: "Validation Error",
+                    icon: "error",
+                    text: "Error",
+                    value: true,
+                    visible: true,
+                    className: "",
+                    closeModal: true,
+                });
+                return false;
+              }            
+          });
+          
+          return false;
+      }
+  });
 });
 </script>
 @endsection
