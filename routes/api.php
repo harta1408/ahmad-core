@@ -18,7 +18,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 Route::middleware(['cors'])->group(function () {
     Route::post('user/login','userAPI@userLogin');
-    Route::put('user/change/password/{id}','userAPI@userChangePassword');
+    Route::put('user/change/password/{id}','UserAPI@userChangePassword');
+    Route::get('user/byhascode/{hashcode}','UserAPI@userByHashCode');
 
     Route::get('lembaga','LembagaAPI@getLembaga');
     Route::get('lembaga/rekening/bank','LembagaAPI@getRekeningBankList');

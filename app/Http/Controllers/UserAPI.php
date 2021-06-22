@@ -98,5 +98,8 @@ class UserAPI extends Controller
         return response()->json($user,200);
     }
    
-   
+   public function userByHashCode($hashcode){
+       $user=User::where([['hash_code',$hashcode],['approve',"0"]])->first();
+       return response()->json($user,200);
+   }
 }
