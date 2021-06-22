@@ -12,6 +12,7 @@ use App\Models\Produk;
 use App\Models\Bayar;
 use App\Http\Controllers\DonasiAPI;
 use App\Http\Controllers\ReferralAPI;
+use Config;
 use Validator;
 
 
@@ -24,10 +25,10 @@ class DonaturAPI extends Controller
     #register donatur dengan email pribadi hanya menanyakan alamat email
     #sistem mengirimkan email verifikasi untuk penggantian password
     public function donaturRegister(Request $request){
+        $url=Config::get('ahmad.register.development');
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|unique:users|max:100',
             'name' => ['required','string','max:30'],
-            'url'=>'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -39,7 +40,7 @@ class DonaturAPI extends Controller
         #link verifikasi di panggil berdasarkan user, nama dan hash code
         $useremail=$request->get('email'); 
         $username=$request->get('name');
-        $url=$request->get('url');
+        // $url=$request->get('url');
         $temp_donasi_no=$request->get('nomor_donasi');
         $referralid=$request->get('referral_id'); 
 
@@ -84,13 +85,13 @@ class DonaturAPI extends Controller
 
 
         // kirim email registrasi
-        // $url=$url.'register?'."idreg=".$hashcode;
-        // $data = array('name'=>$username,'url'=>$url);
-        // Mail::send('emailregister', $data, function($message) use($useremail, $username) {
-        //    $message->to($useremail, $username)->subject
-        //       ('no-reply : Pendaftaran AHMaD Project');
-        //    $message->from('ahmad@gmail.com','AHMaD Project');
-        // });
+        $url=$url."/".$hashcode;
+        $data = array('name'=>$username,'url'=>$url);
+        Mail::send('emailregister', $data, function($message) use($useremail, $username) {
+           $message->to($useremail, $username)->subject
+              ('no-reply : Pendaftaran AHMaD Project');
+           $message->from('ahmad@gmail.com','AHMaD Project');
+        });
         // echo "HTML Email Sent. Check your inbox.";
 
         //jika sudah ada pemesanan produk
@@ -252,36 +253,6 @@ class DonaturAPI extends Controller
         $donatur=Donatur::where('id',$id)->first();
         return response()->json($donatur,200);
     }
-   
-    public function donaturKode()
-    {
-      //otomatis pengaturan kode santri dengan format 
-      //tahun[2]+bulan[2]+nomor urut[4]
-      $bulan=date("m");
-      $tahun=date("y");
-      $usertipe="1"; //tipe user donatur
-      $strNewId = $usertipe.$tahun.$bulan."0001";
-
-      while ($this->findDonaturKode($strNewId)) { 
-        $intNewId=substr($strNewId,-4)+1; 
-        switch (strlen($intNewId)) {
-            case 1:
-                $strNewId=$usertipe.$tahun.$bulan.'000'.$intNewId;
-                break;
-            case 2:
-                $strNewId=$usertipe.$tahun.$bulan.'00'.$intNewId;
-                break;
-            case 3:
-                $strNewId=$usertipe.$tahun.$bulan.'0'.$intNewId;
-                break;
-            case 4:
-                $strNewId=$usertipe.$tahun.$bulan.$intNewId;
-                break;  
-        }
-
-      }
-      return $strNewId;
-    }
     public function donaturUploadImage(Request $request){
 
         //ambil id donatur, kemudian cari di database kodenya
@@ -311,6 +282,36 @@ class DonaturAPI extends Controller
         $donatur=Donatur::where('id',$id)->first();
         return response()->json($donatur,200);
     }
+    public function donaturKode()
+    {
+      //otomatis pengaturan kode santri dengan format 
+      //tahun[2]+bulan[2]+nomor urut[4]
+      $bulan=date("m");
+      $tahun=date("y");
+      $usertipe="1"; //tipe user donatur
+      $strNewId = $usertipe.$tahun.$bulan."0001";
+
+      while ($this->findDonaturKode($strNewId)) { 
+        $intNewId=substr($strNewId,-4)+1; 
+        switch (strlen($intNewId)) {
+            case 1:
+                $strNewId=$usertipe.$tahun.$bulan.'000'.$intNewId;
+                break;
+            case 2:
+                $strNewId=$usertipe.$tahun.$bulan.'00'.$intNewId;
+                break;
+            case 3:
+                $strNewId=$usertipe.$tahun.$bulan.'0'.$intNewId;
+                break;
+            case 4:
+                $strNewId=$usertipe.$tahun.$bulan.$intNewId;
+                break;  
+        }
+
+      }
+      return $strNewId;
+    }
+    
     private function findDonaturKode($donaturKode){
         $donatur=Donatur::where('donatur_kode',$donaturKode)->first();
         if($donatur){

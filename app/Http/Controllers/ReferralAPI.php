@@ -16,6 +16,10 @@ class ReferralAPI extends Controller
     #page yang di share sama, oleh karena itu pake metode post, yang mengirimkan
     #id pengirim untuk di catat sistem sebagai pemberi referral
     public function referralSendLink(Request $request){
+        $urldonatur = Config::get('ahmad.referral.development.donatur');
+        $urlsantri = Config::get('ahmad.referral.development.santri');
+        $urlpendamping = Config::get('ahmad.referral.development.pendamping');
+
         $kode_entitas=$request->get('referral_entitas_kode'); //kode pengirim
         $jenisentitas=substr($kode_entitas,0,1); 
         $nomor_tujuan=$request->get('referral_telepon'); //telepon tujuan
@@ -25,16 +29,16 @@ class ReferralAPI extends Controller
         $refenkode=$request->get('referral_entitas_kode');
         $berita_id=$request->get('berita_id');
         if($jenisentitas=='1'){
-            $url=' http://kidswa.web.id/ahmad/gabung/donatur/'.$kode_entitas;
+            $url=$urldonatur.$kode_entitas;
         }
         if($jenisentitas=='2'){
-            $url=' http://kidswa.web.id/ahmad/gabung/santri/'.$kode_entitas;
+            $url=$urlsantri.$kode_entitas;
         }
         if($jenisentitas=='3'){
-            $url=' http://kidswa.web.id/ahmad/gabung/pendamping/'.$kode_entitas;
+            $url=$urlsantri.$kode_entitas;
         }
         
-        $pesan=$berita->berita_judul.$url;
+        $pesan=$berita->berita_judul." ".$url;
         $requestsendmessage=array();
         $requestsendmessage[]= array('NOMOR_TUJUAN' => $nomor_tujuan,
             'PESAN'=>$pesan

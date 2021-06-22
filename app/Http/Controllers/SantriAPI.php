@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\Santri;
 use App\Models\User;
 use App\Http\Controllers\ReferralAPI;
+use Config;
 use Validator;
 
 class SantriAPI extends Controller
@@ -19,10 +20,10 @@ class SantriAPI extends Controller
     #pendaftaran pertama hanya memasukan alamat email, password sementara akan
     #dibuat secara otomatis oleh sistem
     public function santriRegister(Request $request){
+        $url=Config::get('ahmad.register.development');
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|unique:users|max:100',
             'name' => ['required','string','max:30'],
-            'url'=>'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -34,7 +35,7 @@ class SantriAPI extends Controller
         #link verifikasi di panggil berdasarkan user dan hash code
         $useremail=$request->get('email'); 
         $username=$request->get('name');
-        $url=$request->get('url');
+        // $url=$request->get('url');
         $referralid=$request->get('referral_id'); 
 
         $usertipe="2"; //tipe user santri
@@ -70,13 +71,13 @@ class SantriAPI extends Controller
 
 
         //kirim email registrasi
-        // $url=$url.'register?'."hashcode=".$hashcode;
-        // $data = array('name'=>$username,'url'=>$url);
-        // Mail::send('emailregister', $data, function($message) use($useremail, $username) {
-        //    $message->to($useremail, $username)->subject
-        //       ('no-reply : Pendaftaran AHMaD Project');
-        //    $message->from('ahmad@gmail.com','AHMaD Project');
-        // });
+        $url=$url."/".$hashcode;
+        $data = array('name'=>$username,'url'=>$url);
+        Mail::send('emailregister', $data, function($message) use($useremail, $username) {
+           $message->to($useremail, $username)->subject
+              ('no-reply : Pendaftaran AHMaD Project');
+           $message->from('ahmad@gmail.com','AHMaD Project');
+        });
 
         $user=User::with('santri')->where('email',$useremail)->first();
 
@@ -184,6 +185,35 @@ class SantriAPI extends Controller
   
     public function randomSantri(){
 
+    }
+    public function santriUploadImage(Request $request){
+
+        //ambil id donatur, kemudian cari di database kodenya
+        $id=$request->get('id');  
+        $santri_kode=Santri::where('id',$id)->first()->santri_kode;
+
+        $this->validate($request, [
+          'santri_photo' => 'required | image | mimes:jpeg,png,jpg,gif | max:256'
+        ]);
+    
+      
+        // menyimpan data file yang diupload ke variabel $file
+        $images = $request->file('santri_photo');
+        $new_name=$santri_kode.'.'.$images->getClientOriginalExtension();
+
+        //tujuan penyimpanan file
+        $tujuan_upload = base_path("images");
+        $images->move($tujuan_upload,$new_name); 
+
+        // dd($request->root());
+
+        // $fileloc=substr($request->root(),0,strlen($request->root())-6) ."images/".$new_name;
+        $fileloc=$request->root()."/"."images/".$new_name;
+
+        Santri::where('santri_kode','=',$santri_kode)->update(['santri_lokasi_photo'=>$fileloc]);
+
+        $santri=Santri::where('id',$id)->first();
+        return response()->json($santri,200);
     }
     public function santriKode()
     {

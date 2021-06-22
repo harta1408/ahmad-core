@@ -55,6 +55,7 @@ class KuesionerAPI extends Controller
                     'kuesioner_nilai'=>$nilai,
                 ]);
         }
+        Santri::where('id',$santriid)->update(['santri_status','2']); //update sudah jawab kuesioner
         $santri=Santri::with('kuesioner')->where('id',$santriid)->first();
         return response()->json($santri,200);
     }

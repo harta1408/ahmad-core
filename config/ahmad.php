@@ -1,6 +1,25 @@
 <?php
 
 return [
+    #url base untuk referral
+    'referral' =>[
+        'development'=> 'http://kidswa.web.id/ahmad/daftar/',
+        'production'=> 'http://ahmadproject.org/daftar/',
+    ],
+  #url base untuk registrasi
+  'register' =>[
+    'development'=>[
+        'donatur' => 'http://kidswa.web.id/ahmad/gabung/donatur/',
+        'santri' => 'http://kidswa.web.id/ahmad/gabung/santri/',
+        'pedamping' => 'http://kidswa.web.id/ahmad/gabung/pedamping/',
+    ],
+    'production'=>[
+        'donatur' => 'http://ahmadproject.org/gabung/donatur/',
+        'santri' => 'http://ahmadproject.org/gabung/santri/',
+        'pedamping' => 'http://ahmadproject.org/gabung/pedamping/',
+    ],
+],
+    #konfiguasi woola messanger
     'woowa' => [
         'whatsapp' => [
             'url' => 'http://116.203.191.58/api/',
@@ -38,7 +57,5 @@ return [
                 'group_produk' => "rajabiller.group_produk",
             ]
         ],
-
-
     ]
 ];

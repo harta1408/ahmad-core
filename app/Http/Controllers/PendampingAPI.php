@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Pendamping;
 use App\Models\User;
+use Config;
 use Validator;
 
 
@@ -15,8 +16,10 @@ class PendampingAPI extends Controller
         $this->middleware('cors');
 	}
     public function pendampingRegister(Request $request){
+        $url=Config::get('ahmad.register.development');
         $validator = Validator::make($request->all(), [
-            'user_email' => 'required|email|unique:users|max:100',
+            'email' => 'required|email|unique:users|max:100',
+            'name' => ['required','string','max:30'],
         ]);
 
         if ($validator->fails()) {
@@ -27,14 +30,18 @@ class PendampingAPI extends Controller
         #ketika email tervirifikasi
         #link verifikasi di panggil berdasarkan user dan password
         $useremail=$request->get('user_email'); 
-        $hashcode=Hash::make(rand(0,1000)); 
+        $username=$request->get('name');
+        $hashcode=md5(rand(100000,999999)); 
 
         $usertipe="3"; //tipe user pendamping
 
         #buat user baru dengan alamat email yang dimasukan
         $user=new User;
-        $user->user_email=$useremail;
-        $user->user_hash_code=$hashcode; 
+        $user->email=$useremail;
+        $user->name=$username;
+        $user->hash_code=$hashcode; 
+        $user->password=$hashcode;
+        $user->tipe=$usertipe;
         $exec=$user->save();
 
         if(!$exec){
@@ -42,11 +49,22 @@ class PendampingAPI extends Controller
         }
 
         #simpan data registrasi pendamping
+        $pendampingkode=$this->pendampingKode();
         $pendamping=new Pendamping;
-        $pendamping->pendamping_kode=$this->pendampingKode();
+        $pendamping->pendamping_kode=$pendampingkode;
         $pendamping->pendamping_email=$useremail; 
+        $pendamping->pendamping_nama=$username;
         $pendamping->pendamping_status='1'; //aktif belum terpilih 
         $pendamping->save();
+
+         // kirim email registrasi
+        $url=$url."/".$hashcode;
+        $data = array('name'=>$username,'url'=>$url);
+        Mail::send('emailregister', $data, function($message) use($useremail, $username) {
+           $message->to($useremail, $username)->subject
+              ('no-reply : Pendaftaran AHMaD Project');
+           $message->from('ahmad@gmail.com','AHMaD Project');
+        });
 
         $user=User::with('pendamping')->where('user_email',$useremail)->first();
         return response()->json($user,200);
@@ -94,6 +112,35 @@ class PendampingAPI extends Controller
         $user=User::with('pendamping')->where('user_email',$useremail)->first();
         return response()->json($user,200);
     }
+    public function pendampingUploadImage(Request $request){
+
+        //ambil id donatur, kemudian cari di database kodenya
+        $id=$request->get('id');  
+        $pendamping_kode=Pendamping::where('id',$id)->first()->pendamping_kode;
+
+        $this->validate($request, [
+          'pendamping_photo' => 'required | image | mimes:jpeg,png,jpg,gif | max:256'
+        ]);
+    
+      
+        // menyimpan data file yang diupload ke variabel $file
+        $images = $request->file('pendamping_photo');
+        $new_name=$pendamping_kode.'.'.$images->getClientOriginalExtension();
+
+        //tujuan penyimpanan file
+        $tujuan_upload = base_path("images");
+        $images->move($tujuan_upload,$new_name); 
+
+        // dd($request->root());
+
+        // $fileloc=substr($request->root(),0,strlen($request->root())-6) ."images/".$new_name;
+        $fileloc=$request->root()."/"."images/".$new_name;
+
+        Pendamping::where('pendamping_kode','=',$pendamping_kode)->update(['pendamping_lokasi_photo'=>$fileloc]);
+
+        $pendamping=Pendamping::where('id',$id)->first();
+        return response()->json($pendamping,200);
+    }
     public function pendampingKode()
     {
       //otomatis pengaturan kode pendamping dengan format 
@@ -124,7 +171,7 @@ class PendampingAPI extends Controller
       return $strNewId;
     }
     private function findpendampingKode($pendampingkode){
-        $pendamping=pendamping::where('pendamping_kode',$pendampingkode)->first();
+        $pendamping=Pendamping::where('pendamping_kode',$pendampingkode)->first();
         if($pendamping){
           return true;
         }
