@@ -66,7 +66,7 @@ $(function(){
         location: 'center',
         locateInMenu: 'never',
         template: function() {
-            return $("<div class='toolbar-label'><b>Pembaharuan Data pendamping</b></div>");
+            return $("<div class='toolbar-label'><b>Pembaharuan Data Soal</b></div>");
         }
     },{
         location: 'after',

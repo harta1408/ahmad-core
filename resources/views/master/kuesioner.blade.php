@@ -145,7 +145,7 @@ $(function(){
                     colCount: 1,
                     colSpan: 2,
                     items: [{
-                        dataField: "kuesioner_tujuan",
+                        dataField: "kuesioner_entitas",
                         label:{
                             text:"Tujuan Kuesioner",
                         },
@@ -195,22 +195,22 @@ $(function(){
         },
         columns: [
             {
-              dataField: "kuesioner_tujuan",
+              dataField: "kuesioner_entitas",
               caption: "Tujuan Kuesioner",
             //   editorType: "dxRadioGroup",
               lookup: {
-                    dataSource: [{"kuesioner_tujuan":"2","kuesioner_tujuan_desc":"SANTRI"},
-                            {"kuesioner_tujuan":"3","kuesioner_tujuan_desc":"PENDAMPING"}],
-                    valueExpr: "kuesioner_tujuan",
-                    displayExpr: "kuesioner_tujuan_desc",
+                    dataSource: [{"kuesioner_entitas":"2","kuesioner_entitas_desc":"SANTRI"},
+                            {"kuesioner_entitas":"3","kuesioner_entitas_desc":"PENDAMPING"}],
+                    valueExpr: "kuesioner_entitas",
+                    displayExpr: "kuesioner_entitas_desc",
                 },
 
             //   editorOptions: {
-            //         items: [{"kuesioner_tujuan_pegawai":"TETAP","kuesioner_tujuan_pegawai_desc":"TETAP"},
-            //                 {"kuesioner_tujuan_pegawai":"KONTRAK","kuesioner_tujuan_pegawai_desc":"KONTRAK"},],
+            //         items: [{"kuesioner_entitas_pegawai":"TETAP","kuesioner_entitas_pegawai_desc":"TETAP"},
+            //                 {"kuesioner_entitas_pegawai":"KONTRAK","kuesioner_entitas_pegawai_desc":"KONTRAK"},],
             //         value:"KONTRAK",
-            //         displayExpr: "kuesioner_tujuan_pegawai_desc",
-            //         valueExpr: "kuesioner_tujuan_pegawai",
+            //         displayExpr: "kuesioner_entitas_pegawai_desc",
+            //         valueExpr: "kuesioner_entitas_pegawai",
             //         layout: "horizontal",
             //   }
             },{

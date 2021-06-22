@@ -46,7 +46,7 @@ $(function() {
         items: [{
                 dataField: "pengingat_jenis",
                 label:{
-                    text:"Jenis Pengingat",
+                    text:"Jenis",
                 },
                 editorType: "dxSelectBox",
                 editorOptions: {
@@ -62,7 +62,7 @@ $(function() {
             },{
                 dataField: "pengingat_judul",
                 label:{
-                    text:"Judul Pengingat",
+                    text:"Judul",
                 }, 
                 editorOptions:{
                 },
@@ -73,10 +73,26 @@ $(function() {
             },{
                 dataField: "pengingat_isi",
                 label:{
-                    text:"Isi Pengingat",
+                    text:"Isi",
                 },
+                editorType: "dxHtmlEditor",
                 editorOptions:{
-                    height: 100,
+                    height: 200,
+                    toolbar: {
+                        items: [
+                            "undo", "redo", "separator",
+                            {
+                                name: "size",
+                                acceptedValues: ["8pt", "10pt", "12pt", "14pt", "18pt", "24pt", "36pt"] },
+                            "separator", "bold", "italic", "underline", "separator",
+                            "alignLeft", "alignCenter", "alignRight", "alignJustify", "separator",
+                            "link", "image", "separator",
+                        ],
+                        multiline:true,
+                    },
+                    mediaResizing: {
+                        enabled: true
+                    }
                 },
                 validationRules: [{
                     type: "required",

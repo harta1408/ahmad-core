@@ -11,7 +11,8 @@ class SoalSantri extends Pivot
     protected $fillable=[
         'soal_id', //idsoal 
         'santri_id', //id santri
-        'soal_jawaban', //jawaban
+        'soal_jawaban_essay', //jawaban essay
+        'soal_jawaban_pilihan', //jawaban pilihan
         'soal_nilai',//nilai
     ];
 }

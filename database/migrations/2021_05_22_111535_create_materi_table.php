@@ -15,6 +15,8 @@ class CreateMateriTable extends Migration
     {
         Schema::create('materi', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('produk_id')->unsigned();
+            $table->foreign('produk_id')->references('id')->on('produk');
             $table->string('materi_nama')->nullable();
             $table->text('materi_deskripsi')->nullable();
             $table->string('materi_lokasi_gambar')->nullable();

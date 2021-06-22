@@ -14,7 +14,7 @@ class Soal extends Model
         'materi_id', //id materi
         'soal_no', //nomor soal 
         'soal_deskripsi', //pertanyaan 
-        'soal_jenis', //1=pilihan 2=esay
+        'soal_jenis', //1=esay 2=pilihan 
         'soal_pilihan_a', //pilihan a
         'soal_pilihan_b', //pilihan b
         'soal_pilihan_c', //pilihan c

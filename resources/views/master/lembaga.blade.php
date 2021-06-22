@@ -55,126 +55,244 @@ $(function() {
         itemType:"group",
         colCount:1,
         items: [{
-            dataField: "lembaga_nama",
-            label:{
-                text:"Nama Lembaga",
-            },
-            editorOptions: { 
-            },
-            validationRules: [{
-              type: "required",
-              message: "Nomor Handphone harus di isi"
-            }]
-        },{
-            dataField: "lembaga_email",
-            label:{
-                text:"Alamat Email",
-            },
-            validationRules: [{
-                    type: "required",
-                    message: "Alamat Email Harus Di isi"
-                }, {
-                    type: "email",
-                    message: "Alamat Email tidak valid"
+            itemType: "group",
+            caption: "Informasi Lembaga",
+            items:[{
+                dataField: "lembaga_nama",
+                label:{
+                    text:"Nama Lembaga",
+                },
+                editorOptions: { 
+                },
+                validationRules: [{
+                  type: "required",
+                  message: "Nomor Handphone harus di isi"
                 }]
+            },{
+              dataField: "lembaga_email",
+              label:{
+                  text:"Alamat Email",
+              },
+              validationRules: [{
+                      type: "required",
+                      message: "Alamat Email Harus Di isi"
+                  }, {
+                      type: "email",
+                      message: "Alamat Email tidak valid"
+                  }],
+            },{
+              dataField: "lembaga_telepon",
+              label:{
+                text:"Nomor Telepon",
+              },
+              validationRules: [{
+                  type: "required",
+                  message: "Nomor Handphone harus di isi"
+              }]
+            },{
+              dataField: "lembaga_alamat",
+              label:{
+                text:"Alamat",
+              },
+            }],
+      },{
+        itemType: "group",
+        caption: "Tentang AHMaD Project",
+        items:[{
+              dataField: "lembaga_tentang_ahmad_judul",
+              label:{
+                text:"Judul",
+              },
+            },{
+              dataField: "lembaga_tentang_ahmad_isi",
+              label:{
+                  text:"Isi",
+              },
+              editorType: "dxHtmlEditor",
+              editorOptions:{
+                  height: 200,
+                  toolbar: {
+                      items: [
+                          "undo", "redo", "separator",
+                          {
+                              name: "size",
+                              acceptedValues: ["8pt", "10pt", "12pt", "14pt", "18pt", "24pt", "36pt"] },
+                          "separator", "bold", "italic", "underline", "separator",
+                          "alignLeft", "alignCenter", "alignRight", "alignJustify", "separator",
+                          "link", "image", "separator",
+                      ],
+                      multiline:true,
+                  },
+                  mediaResizing: {
+                      enabled: true
+                  }
+              },
+            }],
         },{
-          dataField: "lembaga_telepon",
-          label:{
-            text:"Nomor Telepon",
-          },
-          validationRules: [{
-              type: "required",
-              message: "Nomor Handphone harus di isi"
-          }]
+          itemType: "group",
+          caption: "Program Donatur",
+          items:[{
+              dataField: "lembaga_landing_donatur_judul",
+              label:{
+                text:"Judul",
+              },
+            },{
+              dataField: "lembaga_landing_donatur_isi",
+              label:{
+                  text:"Isi",
+              },
+              editorType: "dxHtmlEditor",
+              editorOptions:{
+                  height: 200,
+                  toolbar: {
+                      items: [
+                          "undo", "redo", "separator",
+                          {
+                              name: "size",
+                              acceptedValues: ["8pt", "10pt", "12pt", "14pt", "18pt", "24pt", "36pt"] },
+                          "separator", "bold", "italic", "underline", "separator",
+                          "alignLeft", "alignCenter", "alignRight", "alignJustify", "separator",
+                          "link", "image", "separator",
+                      ],
+                      multiline:true,
+                  },
+                  mediaResizing: {
+                      enabled: true
+                  }
+              },
+            }],
         },{
-          dataField: "lembaga_alamat",
-          label:{
-            text:"Alamat",
-          },
+          itemType: "group",
+          caption: "Program Santri",
+          items:[{
+              dataField: "lembaga_landing_santri_judul",
+              label:{
+                text:"Judul",
+              },
+            },{
+              dataField: "lembaga_landing_santri_isi",
+              label:{
+                  text:"Isi",
+              },
+              editorType: "dxHtmlEditor",
+              editorOptions:{
+                  height: 200,
+                  toolbar: {
+                      items: [
+                          "undo", "redo", "separator",
+                          {
+                              name: "size",
+                              acceptedValues: ["8pt", "10pt", "12pt", "14pt", "18pt", "24pt", "36pt"] },
+                          "separator", "bold", "italic", "underline", "separator",
+                          "alignLeft", "alignCenter", "alignRight", "alignJustify", "separator",
+                          "link", "image", "separator",
+                      ],
+                      multiline:true,
+                  },
+                  mediaResizing: {
+                      enabled: true
+                  }
+              },
+            }],
         },{
-          dataField: "lembaga_tentang_ahmad_judul",
-          label:{
-            text:"Judul Tentang Ahmad",
-          },
+          itemType: "group",
+          caption: "Program Pendamping",
+          items:[{
+              dataField: "lembaga_landing_pendamping_judul",
+              label:{
+                text:"Judul",
+              },
+            },{
+              dataField: "lembaga_landing_pendamping_isi",
+              label:{
+                  text:"Isi",
+              },
+              editorType: "dxHtmlEditor",
+              editorOptions:{
+                  height: 200,
+                  toolbar: {
+                      items: [
+                          "undo", "redo", "separator",
+                          {
+                              name: "size",
+                              acceptedValues: ["8pt", "10pt", "12pt", "14pt", "18pt", "24pt", "36pt"] },
+                          "separator", "bold", "italic", "underline", "separator",
+                          "alignLeft", "alignCenter", "alignRight", "alignJustify", "separator",
+                          "link", "image", "separator",
+                      ],
+                      multiline:true,
+                  },
+                  mediaResizing: {
+                      enabled: true
+                  }
+              },
+            }],
         },{
-            dataField: "lembaga_tentang_ahmad_isi",
-            label:{
-                text:"Isi Tetang Ahmad",
-            },
-            editorType: "dxTextArea",
-            editorOptions: {
-                height: 100,
-            },
+          itemType: "group",
+          caption: "Program Kemitraan",
+          items:[{
+              dataField: "lembaga_landing_mitra_judul",
+              label:{
+                text:"Judul",
+              },
+            },{
+              dataField: "lembaga_landing_mitra_isi",
+              label:{
+                  text:"Isi",
+              },
+              editorType: "dxHtmlEditor",
+              editorOptions:{
+                  height: 200,
+                  toolbar: {
+                      items: [
+                          "undo", "redo", "separator",
+                          {
+                              name: "size",
+                              acceptedValues: ["8pt", "10pt", "12pt", "14pt", "18pt", "24pt", "36pt"] },
+                          "separator", "bold", "italic", "underline", "separator",
+                          "alignLeft", "alignCenter", "alignRight", "alignJustify", "separator",
+                          "link", "image", "separator",
+                      ],
+                      multiline:true,
+                  },
+                  mediaResizing: {
+                      enabled: true
+                  }
+              },
+            }],
         },{
-          dataField: "lembaga_landing_donatur_judul",
-          label:{
-            text:"Judul Donatur ",
-          },
-        },{
-            dataField: "lembaga_landing_donatur_isi",
-            label:{
-                text:"Isi Donatur",
-            },
-            editorType: "dxTextArea",
-            editorOptions: {
-                height: 100,
-            },      
-        },{
-          dataField: "lembaga_landing_santri_judul",
-          label:{
-            text:"Judul Santri",
-          },
-        },{
-            dataField: "lembaga_landing_santri_isi",
-            label:{
-                text:"Isi Santri",
-            },
-            editorType: "dxTextArea",
-            editorOptions: {
-                height: 100,
-            },       
-        },{
-          dataField: "lembaga_landing_pendamping_judul",
-          label:{
-            text:"Judul Pendamping",
-          },
-        },{
-            dataField: "lembaga_landing_pendamping_isi",
-            label:{
-                text:"Isi Pendamping",
-            },
-            editorType: "dxTextArea",
-            editorOptions: {
-                height: 100,
-            }, 
-        },{
-          dataField: "lembaga_landing_mitra_judul",
-          label:{
-            text:"Judul Mitra",
-          },
-        },{
-            dataField: "lembaga_landing_mitra_isi",
-            label:{
-                text:"Isi Mitra",
-            },
-            editorType: "dxTextArea",
-            editorOptions: {
-                height: 100,
-            }, 
-        },{
-          dataField: "lembaga_landing_produk_judul",
-          label:{
-            text:"Judul Produk",
-          },
-        },{
-            dataField: "lembaga_landing_produk_isi",
-            label:{
-                text:"Isi Produk",
-            },
-            editorType: "dxTextArea",
-            editorOptions: {
-                height: 100,
-            }, 
+          itemType: "group",
+          caption: "Produk Pelatihan",
+          items:[{
+              dataField: "lembaga_landing_produk_judul",
+              label:{
+                text:"Judul",
+              },
+            },{
+              dataField: "lembaga_landing_produk_isi",
+              label:{
+                  text:"Isi",
+              },
+              editorType: "dxHtmlEditor",
+              editorOptions:{
+                  height: 200,
+                  toolbar: {
+                      items: [
+                          "undo", "redo", "separator",
+                          {
+                              name: "size",
+                              acceptedValues: ["8pt", "10pt", "12pt", "14pt", "18pt", "24pt", "36pt"] },
+                          "separator", "bold", "italic", "underline", "separator",
+                          "alignLeft", "alignCenter", "alignRight", "alignJustify", "separator",
+                          "link", "image", "separator",
+                      ],
+                      multiline:true,
+                  },
+                  mediaResizing: {
+                      enabled: true
+                  }
+              },
+            }],
         },]
       },{
           itemType: "button",

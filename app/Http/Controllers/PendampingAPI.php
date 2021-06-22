@@ -59,12 +59,12 @@ class PendampingAPI extends Controller
 
          // kirim email registrasi
         $url=$url."/".$hashcode;
-        $data = array('name'=>$username,'url'=>$url);
-        Mail::send('emailregister', $data, function($message) use($useremail, $username) {
-           $message->to($useremail, $username)->subject
-              ('no-reply : Pendaftaran AHMaD Project');
-           $message->from('ahmad@gmail.com','AHMaD Project');
-        });
+        // $data = array('name'=>$username,'url'=>$url);
+        // Mail::send('emailregister', $data, function($message) use($useremail, $username) {
+        //    $message->to($useremail, $username)->subject
+        //       ('no-reply : Pendaftaran AHMaD Project');
+        //    $message->from('ahmad@gmail.com','AHMaD Project');
+        // });
 
         $user=User::with('pendamping')->where('user_email',$useremail)->first();
         return response()->json($user,200);

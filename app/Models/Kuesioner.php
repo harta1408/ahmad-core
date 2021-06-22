@@ -10,7 +10,7 @@ class Kuesioner extends Model
     #calon pendamping dan sebagai bahan pada proses otorisasi
     protected $table='kuesioner';
     protected $fillable=[
-        'kuesioner_tujuan', //2=santri 3=pendamping (supaya konsisten)
+        'kuesioner_entitas', //2=santri 3=pendamping (supaya konsisten)
         'kuesioner_tanya', //pertanyaan
         'kuesioner_bobot_yes', //bobot jawaban YA
         'kuesioner_bobot_no', //bobot jawaban TIDAK

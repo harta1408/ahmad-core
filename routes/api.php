@@ -68,6 +68,7 @@ Route::middleware(['cors'])->group(function () {
     Route::post('kuesioner/simpan','KuesionerAPI@kuesionerSimpan');
     Route::put('kuesioner/update/{id}','KuesionerAPI@kuesionerUpdate');
     Route::get('kuesioner/list','KuesionerAPI@kuesionerList');
+    Route::get('kuesioner/entitas/{entitas}','KuesionerAPI@kuesionerByEntitas');
     Route::post('kuesioner/santri/simpan','KuesionerAPI@kuesionerSantriSimpan');
 
     Route::post('message/send/wa','MessageAPI@sendWhatsApp');

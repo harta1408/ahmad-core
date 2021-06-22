@@ -53,9 +53,9 @@ class MateriController extends Controller
             return response()->json(['status' => 'error', 'message' => $validator->messages()->first(), 'code' => 404]);
         }
         try {
-
+            $produkid='1'; //sementara hanya satu project
             $materi=new Materi;
-
+            $materi->produk_id=$produkid;
             $materi->materi_nama=$request->get('materi_nama'); 
             $materi->materi_deskripsi=$request->get('materi_deskripsi'); 
             // $materi->materi_lokasi_gambar=$request->get('materi_lokasi_gambar'); 

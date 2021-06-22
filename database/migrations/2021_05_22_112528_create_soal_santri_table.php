@@ -18,7 +18,8 @@ class CreateSoalSantriTable extends Migration
             $table->foreign('soal_id')->references('id')->on('soal');
             $table->bigInteger('santri_id')->unsigned();
             $table->foreign('santri_id')->references('id')->on('santri');
-            $table->text('soal_jawaban')->nullable();
+            $table->text('soal_jawaban_essay')->nullable();
+            $table->string('soal_jawaban_pilihan',50)->nullable();
             $table->integer('soal_nilai')->default(0);
             $table->timestamps();
         });

@@ -34,6 +34,10 @@ class KuesionerAPI extends Controller
         $kuesioner=Kuesioner::where('kuesioner_status','1')->get();
         return response()->json($kuesioner,200);
     }
+    public function kuesionerByEntitas($entitas){
+        $kuesioner=Kuesioner::where([['kuesioner_status','1'],['kuesioner_entitas',$entitas]])->get();
+        return response()->json($kuesioner,200);
+    }
     public function kuesionerSantriSimpan(Request $request){
         $santriid=$request->get('santri_id');
         $santri=Santri::where('id',$santriid)->first();

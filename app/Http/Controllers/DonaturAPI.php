@@ -86,12 +86,12 @@ class DonaturAPI extends Controller
 
         // kirim email registrasi
         $url=$url."/".$hashcode;
-        $data = array('name'=>$username,'url'=>$url);
-        Mail::send('emailregister', $data, function($message) use($useremail, $username) {
-           $message->to($useremail, $username)->subject
-              ('no-reply : Pendaftaran AHMaD Project');
-           $message->from('ahmad@gmail.com','AHMaD Project');
-        });
+        // $data = array('name'=>$username,'url'=>$url);
+        // Mail::send('emailregister', $data, function($message) use($useremail, $username) {
+        //    $message->to($useremail, $username)->subject
+        //       ('no-reply : Pendaftaran AHMaD Project');
+        //    $message->from('ahmad@gmail.com','AHMaD Project');
+        // });
         // echo "HTML Email Sent. Check your inbox.";
 
         //jika sudah ada pemesanan produk

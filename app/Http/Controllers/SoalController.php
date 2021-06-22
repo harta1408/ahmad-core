@@ -27,9 +27,11 @@ class SoalController extends Controller
         $soalid=$request->get('soal_id');
 
         $soal=Soal::where('id',$soalid)->first();
+        if($soal){
+            $pilihan=$soal->soal_jenis;
+        }
 
         $materi=Materi::where('materi_status','1')->get();
-        $pilihan=$soal->soal_jenis;
 
         if($soalstatus=='NEW'){ //baru
             return view('soal/soalnewmenu');
@@ -89,7 +91,7 @@ class SoalController extends Controller
             $soal=new Soal;
             $soal->materi_id=$request->get('materi_id'); 
             $soal->soal_no=$request->get('soal_no'); 
-            $soal->soal_bab=$request->get('soal_bab'); 
+            // $soal->soal_bab=$request->get('soal_bab'); 
             $soal->soal_deskripsi=$request->get('soal_deskripsi'); 
             $soal->soal_jenis=$request->get('soal_jenis'); 
             $soal->soal_nilai_maksimum=$request->get('soal_nilai_maksimum'); 

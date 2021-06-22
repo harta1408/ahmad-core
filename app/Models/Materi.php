@@ -11,6 +11,7 @@ class Materi extends Model
     #di bagi dengan bobot materi yang telah di capai
     protected $table='materi';
     protected $fillable=[
+        'produk_id', //id produk
         'materi_nama', //nama materi
         'materi_deskripsi', //penjelasan singkat terkait materi
         'materi_lokasi_gambar', //lokasi gambar materi

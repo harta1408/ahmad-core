@@ -92,9 +92,24 @@ $(function() {
                 label:{
                     text:"Isi Berita",
                 },
-                editorType: "dxTextArea",
+                editorType: "dxHtmlEditor",
                 editorOptions:{
-                    height: 100,
+                    height: 200,
+                    toolbar: {
+                        items: [
+                            "undo", "redo", "separator",
+                            {
+                                name: "size",
+                                acceptedValues: ["8pt", "10pt", "12pt", "14pt", "18pt", "24pt", "36pt"] },
+                            "separator", "bold", "italic", "underline", "separator",
+                            "alignLeft", "alignCenter", "alignRight", "alignJustify", "separator",
+                            "link", "image", "separator",
+                        ],
+                        multiline:true,
+                    },
+                    mediaResizing: {
+                        enabled: true
+                    }
                 },
                 validationRules: [{
                     type: "required",

@@ -43,10 +43,13 @@
     <script src="{{ asset('js/datepicker/bootstrap-datepicker.js')}}" type="text/javascript"></script>
     <script src="{{ asset('js/jquery.dataTables.js')}}" type="text/javascript" charset="utf8"></script>
     <script src="{{ asset('js/jszip/dist/jszip.min.js')}}" type="text/javascript"></script>
-    <script src="{{ asset('js/dx.all.js')}}" type="text/javascript"></script>
+    <script src="https://unpkg.com/devextreme-quill/dist/dx-quill.min.js"></script>
+    <script src="https://cdn3.devexpress.com/jslib/21.1.3/js/dx.all.js"></script>
+ 
+
     <script>window.jQuery || document.write(decodeURIComponent('%3Cscript src="js/jquery.min.js"%3E%3C/script%3E'))</script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-
+    
 
     <style>
       .long-title h3 {

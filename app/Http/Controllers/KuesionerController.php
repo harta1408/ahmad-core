@@ -45,7 +45,7 @@ class KuesionerController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'kuesioner_tujuan' => 'required|string',
+            'kuesioner_entitas' => 'required|string',
             'kuesioner_tanya' => 'required|string',
             'kuesioner_bobot_yes' => 'required|integer',
             'kuesioner_bobot_no' => 'required|integer',
@@ -56,7 +56,7 @@ class KuesionerController extends Controller
         }
         try {
             $kuesioner=new Kuesioner;
-            $kuesioner->kuesioner_tujuan=$request->get('kuesioner_tujuan'); 
+            $kuesioner->kuesioner_entitas=$request->get('kuesioner_entitas'); 
             $kuesioner->kuesioner_tanya=$request->get('kuesioner_tanya'); 
             $kuesioner->kuesioner_bobot_yes=$request->get('kuesioner_bobot_yes' ); 
             $kuesioner->kuesioner_bobot_no=$request->get('kuesioner_bobot_no'); 
