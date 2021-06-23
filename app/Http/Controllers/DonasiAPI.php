@@ -84,11 +84,12 @@ class DonasiAPI extends Controller
         $kodeunik=rand(0,200);
         $bayar=new Bayar;
         $bayar->donasi_id=$donasiid;
-        $bayar->bayar_total=$donasi->donasi_total_harga;
+        $bayar->bayar_total=$donasi->donasi_total_harga+$kodeunik;
         $bayar->bayar_kode_unik=$kodeunik;
         $bayar->bayar_disc=0;
         $bayar->bayar_onkir=0;
         $bayar->bayar_status=1;
+        $bayar->save();
         $donasi=Donasi::with('produk','bayar')->where('donasi_no',$donasino)->first();
         return response()->json($donasi,200);
     }

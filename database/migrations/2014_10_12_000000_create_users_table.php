@@ -22,6 +22,7 @@ class CreateUsersTable extends Migration
             $table->string('tipe',2)->nullable();
             $table->string('password');
             $table->char('approve',1)->default(0);
+            $table->char('gmail_state',1)->default(0);
             $table->rememberToken();
             $table->timestamps();
         });

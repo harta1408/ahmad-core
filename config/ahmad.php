@@ -6,8 +6,8 @@ return [
         'development'=> 'http://kidswa.web.id/ahmad/daftar/',
         'production'=> 'http://ahmadproject.org/daftar/',
     ],
-  #url base untuk registrasi
-  'register' =>[
+    #url base untuk registrasi
+    'register' =>[
     'development'=>[
         'donatur' => 'http://kidswa.web.id/ahmad/gabung/donatur/',
         'santri' => 'http://kidswa.web.id/ahmad/gabung/santri/',

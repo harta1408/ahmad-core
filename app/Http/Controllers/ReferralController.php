@@ -8,6 +8,7 @@ use App\Models\Donatur;
 use App\Models\Santri;
 use App\Models\Pendamping;
 use App\Http\Controllers\MessageAPI;
+use Config;
 use Validator;
 
 class ReferralController extends Controller
@@ -80,6 +81,10 @@ class ReferralController extends Controller
      */
     public function store(Request $request)
     {
+        $urldonatur = Config::get('ahmad.referral.development.donatur');
+        $urlsantri = Config::get('ahmad.referral.development.santri');
+        $urlpendamping = Config::get('ahmad.referral.development.pendamping');
+
         if (!isset($request->get('referral')['referral_telepon'])) {
             return response()->json(['status' => 'error', 'message' => 'Telepon Harus di Isi', 'code' => 404]);
         }
@@ -88,17 +93,18 @@ class ReferralController extends Controller
         $berita_id=$request->get('referral')['berita_id'];
         $jenisentitas=substr($refenkode,0,1); 
         if($jenisentitas=='1'){
-            $url=' http://kidswa.web.id/ahmad/gabung/donatur/'.$refenkode;
+            
+            $url=$urldonatur.$refenkode;
         }
         if($jenisentitas=='2'){
-            $url=' http://kidswa.web.id/ahmad/gabung/santri/'.$refenkode;
+            $url=$urlsantri.$refenkode;
         }
         if($jenisentitas=='3'){
-            $url=' http://kidswa.web.id/ahmad/gabung/pendamping/'.$refenkode;
+            $url=$urlpendamping.$refenkode;
         }
 
         $berita=Berita::where('id',$berita_id)->first();
-        $pesan=$berita->berita_judul.$url;
+        $pesan=$berita->berita_judul." ".$url;
 
         $requestsendmessage=array();
         $requestsendmessage[]= array('NOMOR_TUJUAN' => $refpone,

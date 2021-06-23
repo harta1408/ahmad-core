@@ -26,7 +26,8 @@ class HomeController extends Controller
         $approve=Auth::user()->approve;
         if($approve=='1' ){ //approved
             // return redirect()->action('HomeController@saDashboardIndex'); 
-            return view('layouts.menus');
+            return redirect()->action('DashboardController@dashHelpDeskIndex');
+            // return view('layouts.menus');
         }else{
             return view('home');
         }

@@ -34,6 +34,8 @@ Route::group(['prefix' => 'superadmin', 'middleware' => ['role:super-admin']], f
 }); 
 
 Route::group(['prefix' => 'dashboard', 'middleware' => ['role:manajer|helpdesk']], function() {
+    Route::get('helpdesk/index', "DashboardController@dashHelpDeskIndex")->name('dashboard.helpdesk.index');
+    
     Route::resource('lembaga', 'LembagaController');
     Route::resource('faq', 'FAQController');
     Route::resource('rekeningbank', 'RekeningBankController');

@@ -22,9 +22,10 @@ class User extends Authenticatable implements MustVerifyEmail
         'email', 
         'password',
         'hash_code', //untuk link verifikasi email
-        'email_verified_at',
+        'email_verified_at', //waktu verifikasi email
         'tipe', // 1=donatur 2=santri, 3=pendamping 4=manager, 5=helpdesk, 9=superadmin
         'approve', //0:belum disetujui 1:setujui
+        'gmail_state', //status user gmail, 0=not gmail, 1=user gmail
     ];
 
  
@@ -51,9 +52,9 @@ class User extends Authenticatable implements MustVerifyEmail
         $this->notify(new VerifyEmail); // my notification
     }
     public function santri(){
-        return $this->hasOne('App\Models\Santri','santri_email','user_email');
+        return $this->hasOne('App\Models\Santri','santri_email','email');
     }
     public function donatur(){
-        return $this->hasOne('App\Models\Donatur','donatur_email','user_email');
+        return $this->hasOne('App\Models\Donatur','donatur_email','email');
     }
 }

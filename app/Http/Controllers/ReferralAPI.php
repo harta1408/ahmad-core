@@ -77,10 +77,10 @@ class ReferralAPI extends Controller
             $minref=$pendamping->pendamping_min_referral+1;
             Pendamping::where('pendamping_kode',$referralid)->update(['pendamping_min_referral'=>$minref]);
         }
-        Referral::where('referral_id_pengirim',$referralid)
-            ->update(['referral_entitas_penerima'=>$entitas,
-                      'referral_id_penerima' => $kode,
-                ]);
+        // Referral::where('referral_id',$referralid)
+        //     ->update(['referral_entitas_penerima'=>$entitas,
+        //               'referral_id_penerima' => $kode,
+        //         ]);
     }
     #memberbaharui berita yang ingin di kirimkan kepada calon entitas
     private function referralUpdateIdBerita($id, Request $request){

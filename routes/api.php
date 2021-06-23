@@ -17,15 +17,21 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::middleware(['cors'])->group(function () {
-    Route::post('user/login','userAPI@userLogin');
+    Route::post('user/login','UserAPI@userLogin');
+    Route::post('user/login/gmail','UserAPI@userLoginGMail');
     Route::put('user/change/password/{id}','UserAPI@userChangePassword');
-    Route::get('user/byhascode/{hashcode}','UserAPI@userByHashCode');
+    Route::put('user/verification/{id}','UserAPI@userVerification');
+    Route::get('user/byhashcode/{hashcode}','UserAPI@userByHashCode');
 
     Route::get('lembaga','LembagaAPI@getLembaga');
     Route::get('lembaga/rekening/bank','LembagaAPI@getRekeningBankList');
     
     Route::post('donatur/register','DonaturAPI@donaturRegister');
-    Route::post('donatur/register/sosmed','DonaturAPI@donaturRegisterSosmed');
+    Route::post('donatur/register/donasi','DonaturAPI@donaturRegisterDonasi');
+    Route::post('donatur/register/referral','DonaturAPI@donaturRegisterReferral');
+    Route::post('donatur/register/donasi/referral','DonaturAPI@donaturRegisterDonasiReferral');
+    Route::post('donatur/register/gmail','DonaturAPI@donaturRegisterGMail');
+
     Route::put('donatur/update/profile/{id}','DonaturAPI@donaturUpdateProfile');
     Route::get('donatur/byemail/{email}','DonaturAPI@donaturByEmail');
     Route::get('donatur/list','DonaturAPI@donaturList');

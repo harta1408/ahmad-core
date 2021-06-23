@@ -24,11 +24,14 @@ class DonaturAPI extends Controller
 	}
     #register donatur dengan email pribadi hanya menanyakan alamat email
     #sistem mengirimkan email verifikasi untuk penggantian password
+
+    #registrasi donatur normal
     public function donaturRegister(Request $request){
-        $url=Config::get('ahmad.register.development');
+    
+        #validasi
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|unique:users|max:100',
-            'name' => ['required','string','max:30'],
+            'name' => ['required','string','max:50'],
         ]);
 
         if ($validator->fails()) {
@@ -40,26 +43,8 @@ class DonaturAPI extends Controller
         #link verifikasi di panggil berdasarkan user, nama dan hash code
         $useremail=$request->get('email'); 
         $username=$request->get('name');
-        // $url=$request->get('url');
-        $temp_donasi_no=$request->get('nomor_donasi');
-        $referralid=$request->get('referral_id'); 
-
-
         $usertipe="1"; //tipe user donatur
-        $hashcode=md5(rand(100000,999999)); 
-        $sudahorder=true; //defaulnya donatur sudah order
-        $darireferral=true; //defaultnya berasal dari referral
-
-
-        // periksa apakah pendaftaran ini berdasarkan id referral
-        if(!$referralid){
-            $darireferral=false;
-        }
-        
-        // periksa apakah sebelum pendaftaran, calon donatur sempat melakukan donasi
-        if(!$temp_donasi_no){
-            $sudahorder=false;
-        }
+        $hashcode=md5(rand(100000,999999));  
 
         #buat user baru dengan alamat email yang dimasukan
         $user=new User;
@@ -83,40 +68,195 @@ class DonaturAPI extends Controller
         $donatur->donatur_status='1'; //aktif belum melengkapi data
         $donatur->save();
 
+        #kirim email verifikasi
+        // $this->kirimEmailVerifikasi($useremail,$username,$hashcode);
 
-        // kirim email registrasi
-        $url=$url."/".$hashcode;
-        // $data = array('name'=>$username,'url'=>$url);
-        // Mail::send('emailregister', $data, function($message) use($useremail, $username) {
-        //    $message->to($useremail, $username)->subject
-        //       ('no-reply : Pendaftaran AHMaD Project');
-        //    $message->from('ahmad@gmail.com','AHMaD Project');
-        // });
-        // echo "HTML Email Sent. Check your inbox.";
+        $user=User::with('donatur')->where('email',$useremail)->first();
+        return response()->json($user,200);        
+    }
+
+    #registrasi donatur dengan donasi
+    public function donaturRegisterDonasi(Request $request){
+        
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|unique:users|max:100',
+            'name' => ['required','string','max:50'],
+            'nomor_donasi' =>['required','string'],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 'error', 'message' => $validator->messages()->first(), 'code' => 404]);
+        }
+
+        #buat hash code acak untuk default yang harus langsung diganti
+        #ketika email terverifikasi
+        #link verifikasi di panggil berdasarkan user, nama dan hash code
+        $useremail=$request->get('email'); 
+        $username=$request->get('name');
+        $temp_donasi_no=$request->get('nomor_donasi');
+
+
+        $usertipe="1"; //tipe user donatur
+        $hashcode=md5(rand(100000,999999)); 
+
+        #buat user baru dengan alamat email yang dimasukan
+        $user=new User;
+        $user->email=$useremail;
+        $user->name=$username;
+        $user->hash_code=$hashcode; 
+        $user->password=$hashcode;
+        $user->tipe=$usertipe;
+        $exec=$user->save();
+
+        if(!$exec){
+            return response()->json(['status' => 'error', 'message' => "Data Cannot be Save", 'code' => 404]);
+        }
+
+        #simpan data registrasi donatur
+        $donaturkode=$this->donaturKode();
+        $donatur=new Donatur;
+        $donatur->donatur_kode=$donaturkode;
+        $donatur->donatur_email=$useremail; 
+        $donatur->donatur_nama=$username;
+        $donatur->donatur_status='1'; //aktif belum melengkapi data
+        $donatur->save();
 
         //jika sudah ada pemesanan produk
         $donaturid=Donatur::where('donatur_email',$useremail)->first()->id;
 
-        if($sudahorder){
-            $this->pindahkanDonasi($temp_donasi_no,$donaturid);
-            $user=User::with('donatur.donasi')->where('email',$useremail)->first();
-        }else{
-            $user=User::with('donatur')->where('email',$useremail)->first();
+        $this->pindahkanDonasi($temp_donasi_no,$donaturid);
+        $user=User::with('donatur.donasi')->where('email',$useremail)->first();
+
+        #kirim email verifikasi
+        // $this->kirimEmailVerifikasi($useremail,$username,$hashcode);
+
+        return response()->json($user,200);        
+    }
+
+    #registrasi donatur dengan referral
+    public function donaturRegisterReferral(Request $request){
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|unique:users|max:100',
+            'name' => ['required','string','max:50'],
+            'referral_id'=> ['required','string'],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 'error', 'message' => $validator->messages()->first(), 'code' => 404]);
         }
+
+        #buat hash code acak untuk default yang harus langsung diganti
+        #ketika email terverifikasi
+        #link verifikasi di panggil berdasarkan user, nama dan hash code
+        $useremail=$request->get('email'); 
+        $username=$request->get('name');
+        $referralid=$request->get('referral_id'); 
+
+        $usertipe="1"; //tipe user donatur
+        $hashcode=md5(rand(100000,999999)); 
+
+        #buat user baru dengan alamat email yang dimasukan
+        $user=new User;
+        $user->email=$useremail;
+        $user->name=$username;
+        $user->hash_code=$hashcode; 
+        $user->password=$hashcode;
+        $user->tipe=$usertipe;
+        $exec=$user->save();
+
+        if(!$exec){
+            return response()->json(['status' => 'error', 'message' => "Data Cannot be Save", 'code' => 404]);
+        }
+
+        #simpan data registrasi donatur
+        $donaturkode=$this->donaturKode();
+        $donatur=new Donatur;
+        $donatur->donatur_kode=$donaturkode;
+        $donatur->donatur_email=$useremail; 
+        $donatur->donatur_nama=$username;
+        $donatur->donatur_status='1'; //aktif belum melengkapi data
+        $donatur->save();
+
+        $refAPI=new ReferralAPI;
+        $refAPI->referralUpdateMinimal($referralid,$donaturkode);
+
+        #kirim email verifikasi
+        // $this->kirimEmailVerifikasi($useremail,$username,$hashcode);
+
+        $user=User::with('donatur')->where('email',$useremail)->first();
+        return response()->json($user,200);       
+    }
+
+    #registrasi donatur dengan donasi dan referral
+    public function donaturRegisterDonasiReferral(Request $request){
+        
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|unique:users|max:100',
+            'name' => ['required','string','max:50'],
+            'nomor_donasi' =>['required','string'],
+            'referral_id'=> ['required','string'],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 'error', 'message' => $validator->messages()->first(), 'code' => 404]);
+        }
+
+        #buat hash code acak untuk default yang harus langsung diganti
+        #ketika email terverifikasi
+        #link verifikasi di panggil berdasarkan user, nama dan hash code
+        $useremail=$request->get('email'); 
+        $username=$request->get('name');
+        $temp_donasi_no=$request->get('nomor_donasi');
+        $referralid=$request->get('referral_id'); 
+        $usertipe="1"; //tipe user donatur
+        $hashcode=md5(rand(100000,999999));  
+ 
+        #buat user baru dengan alamat email yang dimasukan
+        $user=new User;
+        $user->email=$useremail;
+        $user->name=$username;
+        $user->hash_code=$hashcode; 
+        $user->password=$hashcode;
+        $user->tipe=$usertipe;
+        $exec=$user->save();
+
+        if(!$exec){
+            return response()->json(['status' => 'error', 'message' => "Data Cannot be Save", 'code' => 404]);
+        }
+
+        #simpan data registrasi donatur
+        $donaturkode=$this->donaturKode();
+        $donatur=new Donatur;
+        $donatur->donatur_kode=$donaturkode;
+        $donatur->donatur_email=$useremail; 
+        $donatur->donatur_nama=$username;
+        $donatur->donatur_status='1'; //aktif belum melengkapi data
+        $donatur->save();
+
+        //jika sudah ada pemesanan produk
+        $donaturid=Donatur::where('donatur_email',$useremail)->first()->id;
+
+        $this->pindahkanDonasi($temp_donasi_no,$donaturid);
+        $user=User::with('donatur.donasi')->where('email',$useremail)->first();
 
         //jika berasal dari referral maka cari id pemberi referral kemudian tambahkan
         //penghitung pada minimal, karena yang diberi referral telah mendaftarkan diri
         $refAPI=new ReferralAPI;
         $refAPI->referralUpdateMinimal($referralid,$donaturkode);
+
+        #kirim email verifikasi
+        // $this->kirimEmailVerifikasi($useremail,$username,$hashcode);
+
         return response()->json($user,200);        
     }
+
+
     #register donatur melalui sosial media seperti gmail dan sejenisnya
     #menyimpan email, username, dan password 
-    public function donaturRegisterSosmed(Request $request){
+    public function donaturRegisterGMail(Request $request){
         $validator = Validator::make($request->all(), [
-            'user_email' => 'required|email|unique:users|max:100',
-            'user_name' => 'required|string',
-            'user_password' => 'required|string',
+            'email' => 'required|email|unique:users|max:100',
+            'name' => 'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -126,19 +266,21 @@ class DonaturAPI extends Controller
         #buat password acak untuk default yang harus langsung diganti
         #ketika email tervirifikasi
         #link verifikasi di panggil berdasarkan user dan password
-        $useremail=$request->get('user_email'); 
-        $username=$request->get('user_name');
-        $password=Hash::make($request->get('user_password')); 
- 
+        $useremail=$request->get('email'); 
+        $username=$request->get('name'); 
         $usertipe="1"; //tipe user donatur
+        $gmailstate='1'; //berasal dari gmail
+        $hashcode=md5(rand(100000,999999));  
 
-         #buat user baru dengan alamat email yang dimasukan
-         $user=new User;
-         $user->user_email=$useremail;
-         $user->user_password=$password;
-         $user->user_name=$username;
-         $user->user_tipe=$usertipe;
-         $exec=$user->save();
+        #buat user baru dengan alamat email yang dimasukan
+        $user=new User;
+        $user->email=$useremail;
+        $user->hash_code=$hashcode; 
+        $user->password=$hashcode;
+        $user->name=$username;
+        $user->tipe=$usertipe;
+        $user->gmail_state=$gmailstate;
+        $exec=$user->save();
 
         if(!$exec){
             return response()->json(['status' => 'error', 'message' => "Data Cannot be Save", 'code' => 404]);
@@ -152,10 +294,22 @@ class DonaturAPI extends Controller
         $donatur->donatur_status='1'; //aktif belum melengkapi data
         $donatur->save();
 
-        $user=User::with('donatur')->where('user_email',$useremail)->first();
+        $user=User::with('donatur')->where('email',$useremail)->first();
         return response()->json($user,200);    
     }
 
+    private function kirimEmailVerifikasi($useremail,$username,$hashcode){
+        // kirim email registrasi
+        $url=Config::get('ahmad.register.development.donatur');
+        $url=$url.$hashcode;
+        $data = array('name'=>$username,'url'=>$url);
+        Mail::send('emailregister', $data, function($message) use($useremail, $username) {
+           $message->to($useremail, $username)->subject
+              ('no-reply : Pendaftaran AHMaD Project');
+           $message->from('ahmad@gmail.com','AHMaD Project');
+        });
+        // echo "HTML Email Sent. Check your inbox.";
+    }
     private function pindahkanDonasi($temp_donasi_no,$donaturid){
         $donasiTemp=DonasiTemp::with('produk')->where('temp_donasi_no',$temp_donasi_no)->first();
         $donasiapi=new DonasiAPI;

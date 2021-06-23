@@ -43,7 +43,38 @@ class UserAPI extends Controller
         $validator = Validator::make($request->all(), [ 
             'email' => 'required|email', 
             'password' => 'required', 
-            'tipe' => 'required', 
+        ]);
+        if ($validator->fails()) { 
+            return response()->json(['status' => 'error', 'message' => $validator->messages()->first(), 'code' => 404]);
+        }
+        
+        $email=$request->email;
+        $password=$request->password;
+        $user= User::where('email',$email)->first();
+        if(!$user){
+            return response()->json(['status' => 'error', 'message' => 'User not found', 'code' => 404]);
+        }
+        if($user->gmail_state=='1'){
+            return response()->json(['status' => 'error', 'message' => 'User Already Registerd with GMail', 'code' => 404]);
+        }
+        if(!Hash::check($request->password, $user->password)){
+            return response()->json(['status' => 'error', 'message' => 'Password didnt match', 'code' => 404]);
+        }
+        $tipe=$user->tipe; // 1=donatur 2=santri, 3=pendamping 
+        if($tipe=='1'){ //donatur
+            $user= User::with('donatur')->where('email',$email)->first();
+        }
+        if($tipe=='2'){ //santri
+            $user= User::with('santri')->where('email',$email)->first();
+        }
+        if($tipe=='3'){ //pendamping
+            $user= User::with('pendamping')->where('email',$email)->first();
+        }
+        return response()->json($user,200); 
+    }
+    public function userLoginGMail(Request $request){
+        $validator = Validator::make($request->all(), [ 
+            'email' => 'required|email', 
         ]);
         if ($validator->fails()) { 
             return response()->json(['status' => 'error', 'message' => $validator->messages()->first(), 'code' => 404]);
@@ -51,31 +82,32 @@ class UserAPI extends Controller
 
         $email=$request->email;
         $password=$request->password;
-        $tipe=$request->get('tipe'); // 1=donatur 2=santri, 3=pendamping 4=manager, 5=finance, 6=helpdesk, 7=superadmin
-        if($tipe=='1'){
-            $user= User::with('donatur')->where('email',$email)->first();
-        }else if($tipe=='2'){
-            $user= User::with('santri')->where('email',$email)->first();
-        }else{
-            $user= User::where('email',$email)->first();
-        }
-    	if(!$user){
+        $user= User::where('email',$email)->first();
+        
+        if(!$user){
             return response()->json(['status' => 'error', 'message' => 'User not found', 'code' => 404]);
         }
-
-        $user= User::where('email',$email)->first();
-        if(Hash::check($request->password, $user->password)){
-            return response()->json($user,200); 
-		}else{
-            return response()->json(['status' => 'error', 'message' => 'Password didnt match', 'code' => 404]);
+        if($user->gmail_state=='0'){
+            return response()->json(['status' => 'error', 'message' => 'User Already Registerd', 'code' => 404]);
         }
+
+        $tipe=$user->tipe; // 1=donatur 2=santri, 3=pendamping 
+        if($tipe=='1'){ //donatur
+            $user= User::with('donatur')->where('email',$email)->first();
+        }
+        if($tipe=='2'){ //santri
+            $user= User::with('santri')->where('email',$email)->first();
+        }
+        if($tipe=='3'){ //pendamping
+            $user= User::with('pendamping')->where('email',$email)->first();
+        }
+        return response()->json($user,200); 
     }
-  
+
     public function userChangePassword($id,Request $request){
         $validator = Validator::make($request->all(), [ 
             'email' => 'required|email', 
             'password' => 'required', 
-            'tipe' => 'required', 
         ]);
         if ($validator->fails()) { 
             return response()->json(['status' => 'error', 'message' => $validator->messages()->first(), 'code' => 404]);
@@ -83,23 +115,52 @@ class UserAPI extends Controller
 
         $password=Hash::make($request->get('password')); 
         $email=$request->email;
-        $tipe=$request->get('tipe'); // 1=donatur 2=santri, 3=pendamping 4=manager, 5=finance, 6=helpdesk, 7=superadmin
+        User::where('id','=' ,$id)->update(['password'=>$password]);
 
-        $exec=User::where('id','=' ,$id)
-        ->update(['password'=>$password]);
-
-        // if($tipe=='1'){
-        //     $user= User::with('donatur')->where('email',$email)->first();
-        // }else if($tipe=='2'){
-        //     $user= User::with('santri')->where('email',$email)->first();
-        // }else{
-            $user= User::where('email',$email)->first();
-        // }        
+        $user= User::where('email',$email)->first();
+        $tipe=$user->tipe; // 1=donatur 2=santri, 3=pendamping 
+        if($tipe=='1'){ //donatur
+            $user= User::with('donatur')->where('email',$email)->first();
+        }
+        if($tipe=='2'){ //santri
+            $user= User::with('santri')->where('email',$email)->first();
+        }
+        if($tipe=='3'){ //pendamping
+            $user= User::with('pendamping')->where('email',$email)->first();
+        }       
         return response()->json($user,200);
     }
    
    public function userByHashCode($hashcode){
        $user=User::where([['hash_code',$hashcode],['approve',"0"]])->first();
        return response()->json($user,200);
+   }
+
+   public function userVerification($id, Request $request){
+        $validator = Validator::make($request->all(), [ 
+            'email' => 'required|email', 
+            'password' => 'required', 
+        ]);
+        if ($validator->fails()) { 
+            return response()->json(['status' => 'error', 'message' => $validator->messages()->first(), 'code' => 404]);
+        }
+
+        $password=Hash::make($request->get('password')); 
+        $email=$request->email;
+        $emailverification=date("Y-m-d H:i:s");
+        User::where('id','=' ,$id)->update(['password'=>$password,'email_verified_at'=>$emailverification]);
+
+        $user= User::where('email',$email)->first();
+        $tipe=$user->tipe; // 1=donatur 2=santri, 3=pendamping 
+        if($tipe=='1'){ //donatur
+            $user= User::with('donatur')->where('email',$email)->first();
+        }
+        if($tipe=='2'){ //santri
+            $user= User::with('santri')->where('email',$email)->first();
+        }
+        if($tipe=='3'){ //pendamping
+            $user= User::with('pendamping')->where('email',$email)->first();
+        }       
+        return response()->json($user,200);   
    }
 }
