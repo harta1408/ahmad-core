@@ -50,9 +50,8 @@ class BeritaAPI extends Controller
         $berita=Berita::where('id',$id)->first();
         return response()->json($berita,200);              
     }
-    public function beritaKampanye($kode_entitas){
-        $jenisentitas=substr($kode_entitas,0,1);   
-        $berita=Berita::where([['berita_entitas',$jenisentitas],['berita_jenis','2']])->first();
+    public function beritaKampanye(){
+        $berita=Berita::where('berita_jenis','2')->first();
         return response()->json($berita,200); 
     }
     public function beritaEntitas($entitas){

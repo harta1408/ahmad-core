@@ -59,7 +59,7 @@ Route::middleware(['cors'])->group(function () {
 
     Route::post('berita/save','BeritaAPI@beritaSimpan');
     Route::put('berita/update/{id}','BeritaAPI@beritaUpdate');
-    Route::get('berita/kampanye/{kode}','BeritaAPI@beritaKampanye');
+    Route::get('berita/kampanye','BeritaAPI@beritaKampanye');
     Route::get('berita/entitas/{jenis}','BeritaAPI@beritaEntitas');
     Route::get('berita/list','BeritaAPI@beritaList');
 
