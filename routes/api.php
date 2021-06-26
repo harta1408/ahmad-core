@@ -39,12 +39,17 @@ Route::middleware(['cors'])->group(function () {
     Route::post('donatur/upload/photo','DonaturAPI@donaturUploadImage');
     
     Route::post('santri/register','SantriAPI@santriRegister');
-    Route::post('santri/register/sosmed','SantriAPI@santriRegisterSosmed');
+    Route::post('santri/register/referral','SantriAPI@santriRegisterReferral');
+    Route::post('santri/register/gmail','SantriAPI@santriRegisterGMail');
     Route::put('santri/update/profile/{id}','SantriAPI@santriUpdateProfile');
     Route::get('santri/byemail/{email}','SantriAPI@santriByEmail');
     Route::get('santri/list','SantriAPI@santriList');
     Route::get('santri/byid/{id}','SantriAPI@santriById');
-    
+
+    Route::post('pendamping/register','PendampingAPI@pendampingRegister');
+    Route::post('pendamping/register/referral','PendampingAPI@pendampingRegisterReferral');
+    Route::post('pendamping/register/gmail','PendampingAPI@pendampingRegisterGMail');
+
     Route::post('produk/save','ProdukAPI@produkSimpan');
     Route::get('produk/byid/{id}','ProdukAPI@produkById');
 
@@ -56,6 +61,9 @@ Route::middleware(['cors'])->group(function () {
     Route::post('donasi/temp/save','DonasiAPI@donasiTempSimpan');
     Route::post('donasi/save','DonasiAPI@donasiSimpan');
     Route::get('donasi/byid/{id}','DonasiAPI@donasiById');
+    Route::get('donasi/donasiid/{donasiid}/donaturid/{donaturid}','DonasiAPI@donasiDonaturById');
+    Route::put('donasi/update/rekening/{id}','DonasiAPI@donasiUpdateRekening');
+
 
     Route::post('berita/save','BeritaAPI@beritaSimpan');
     Route::put('berita/update/{id}','BeritaAPI@beritaUpdate');
@@ -70,6 +78,12 @@ Route::middleware(['cors'])->group(function () {
     Route::put('pengingat/update/{id}','pengingatAPI@pengingatUpdate');
     Route::get('pengingat/jenis/{jenis}','pengingatAPI@pengingatJenis');
     Route::get('pengingat/list','pengingatAPI@pengingatList');
+
+    Route::get('pesan/aktif/byuser/{userid}','PesanAPI@pesanAktifByUserId');
+    Route::get('pesan/unread/byuser/{userid}','PesanAPI@pesanBelumTerbacaByUserId');
+    Route::get('pesan/read/byuser/{userid}','PesanAPI@pesanSudahTerbacaByUserId');
+    Route::get('pesan/update/read/{idpesan}','PesanAPI@pesanUpdateStatusTerbaca');
+    Route::get('pesan/update/delete/{idpesan}','PesanAPI@pesanUpdateStatusHapus');
 
     Route::post('kuesioner/simpan','KuesionerAPI@kuesionerSimpan');
     Route::put('kuesioner/update/{id}','KuesionerAPI@kuesionerUpdate');

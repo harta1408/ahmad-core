@@ -97,8 +97,16 @@ class DonasiAPI extends Controller
         $donasi=Donasi::with('donatur','produk','bayar')->where('id',$id)->first();
         return response()->json($donasi,200);
     }
-    public function donasiBayar(){
-
+    public function donasiDonaturById($donasiid,$donaturid){
+        $donasi=Donasi::with('donatur','produk','bayar')
+            ->where([['id',$donasiid],['donatur_id',$donaturid]])->first();
+        return response()->json($donasi,200);
+    }
+    public function donasiUpdateRekening(Request $request,$id){
+        $rekeningid=$request->get('rekening_id');
+        Donasi::where('id',$id)->update(['rekening_id'=>$rekeningid]);
+        $donasi=Donasi::with('donatur','produk','bayar')->where('id',$id)->first();
+        return response()->json($donasi,200);
     }
     public function donasiPengingat($id,Request $request){
         Donasi::where('id','=' ,$id)

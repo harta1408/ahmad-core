@@ -13,6 +13,7 @@ class Donasi extends Model
     protected $fillable=[
         'donasi_no', //no bukti/ referensi donasi untuk pelacakan oleh donatur
         'donatur_id', //id donatur
+        'rekening_id', //kode rekening
         'donasi_tanggal', //tanggal donasi(mulai donasi)
         'donasi_catatan', //jika ada catatan
         'donasi_jumlah_santri', //jumlah santri penerima manfaat
