@@ -135,7 +135,7 @@ class UserAPI extends Controller
        $user=User::where([['hash_code',$hashcode],['approve',"0"]])->first();
        $userid=$user->id;
        if($user->tipe=='1'){ //donatur, bisa jadi sudah berdonasi
-            $user=User::with('donatur.donasi.produk')->where('id',$userid)->first();
+            $user=User::with('donatur.donasi.produk','donatur.donasi.rekeningbank')->where('id',$userid)->first();
        }
        return response()->json($user,200);
    }
