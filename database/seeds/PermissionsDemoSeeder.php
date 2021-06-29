@@ -78,9 +78,9 @@ class PermissionsDemoSeeder extends Seeder
         // $user->assignRole($role2);
 
         $user = \App\Models\User::create([
-            'name' => 'Wawan Hartawan',
-            'email' => 'harta@gimanamas.com',
-            'password' => Hash::make('admin127'),
+            'name' => 'Admin',
+            'email' => 'admin@ahmadproject.org',
+            'password' => Hash::make('admin4hm4d'),
             'approve' => '1',
             'email_verified_at' =>date("Y-m-d H:i:s"),
         ]);

@@ -21,9 +21,9 @@ class CreateDonasiTable extends Migration
             $table->foreign('rekening_id')->references('id')->on('rekening_bank');
             $table->string('donasi_no',10)->nullable();
             $table->dateTime('donasi_tanggal')->nullable();
-            $table->double('donasi_tagih',12,2)->default(0);
             $table->integer('donasi_jumlah_santri')->default(0);
             $table->double('donasi_total_harga',12,2)->default(0);
+            $table->double('donasi_nominal',12,2)->default(0);
             $table->char('donasi_pengingat_harian',1)->default(0);
             $table->char('donasi_pengingat_mingguan',1)->default(0);
             $table->char('donasi_pengingat_bulanan',1)->default(0);
