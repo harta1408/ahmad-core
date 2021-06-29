@@ -1,6 +1,7 @@
 @extends('layouts.menus')
 
 @section('content')
+<div class="long-title"><h3>{!!$tanggal!!}</h3></div>
 <div class="row">
     <div class="col-lg-3 col-6">
       <!-- small box -->
@@ -65,7 +66,7 @@
     <div class="card-header">
         <h3 class="card-title">
         <i class="fas fa-chart-bar mr-1"></i>
-        Total Sales Bulan 
+        Total Donasi Bulanan 
         </h3>
         <div class="card-tools">
         {{-- <ul class="nav nav-pills ml-auto"> --}}
@@ -101,7 +102,7 @@
               <span class="description-percentage text-danger"><i class="fas fa-caret-down"></i> </span> 
             @endif --}}
             <h5 class="description-header">Rp. </h5>  
-            <span class="description-text">TOTAL REVENUE</span>
+            <span class="description-text">TOTAL DONASI</span>
           </div>
           <!-- /.description-block -->
         </div>
@@ -115,8 +116,8 @@
             @else
               <span class="description-percentage text-danger"><i class="fas fa-caret-down"></i> </span> 
             @endif             --}}
-            <h5 class="description-header">Rp. </h5>
-            <span class="description-text">TOTAL BIAYA</span>
+            <h5 class="description-header"> </h5>
+            <span class="description-text">TOTAL PRODUK</span>
           </div>
           <!-- /.description-block -->
         </div>
@@ -130,8 +131,8 @@
             @else
               <span class="description-percentage text-danger"><i class="fas fa-caret-down"></i> </span> 
             @endif             --}}
-            <h5 class="description-header">Rp. </h5>
-            <span class="description-text">TOTAL PROFIT</span>
+            <h5 class="description-header"> </h5>
+            <span class="description-text">TOTAL BIMBINGAN</span>
           </div>
           <!-- /.description-block -->
         </div>
@@ -146,7 +147,7 @@
               <span class="description-percentage text-danger"><i class="fas fa-caret-down"></i> {!!number_format($dashboard->dash_cust_last-$dashboard->dash_cust_month)!!}</span> 
             @endif            --}}
              <h5 class="description-header"></h5>
-            <span class="description-text">TOTAL TAMU</span>
+            <span class="description-text">TOTAL SANTRI</span>
           </div>
           <!-- /.description-block -->
         </div>
