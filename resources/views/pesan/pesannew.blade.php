@@ -4,6 +4,8 @@
 {!! Form::open(['id' => 'frm','route' => 'pesan.store','class' => 'form-horizontal']) !!}
 <div class="second-group">
     <div id="form"></div>
+    <input id="txtID" type="text" name="selectedentitas" value={!!$selectedentitas!!}
+    class="form-control" placeholder="ID" hidden>
 </div>
 {!! Form::close()!!}
 @endsection
@@ -32,7 +34,7 @@ $(function() {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       }
   });
-
+  var jenisentitas='{!!$jenisentitas!!}';
   $("#form").dxForm({
       colCount: 1,
       showColonAfterLabel: true,
@@ -42,33 +44,16 @@ $(function() {
         itemType:"group",
         colCount:1,
         items: [{
-                dataField: "pesan_entitas",
+                dataField: "pesan_tujuan",
                 label:{
-                    text:"Tujuan Pesan",
-                },
-                editorType: "dxSelectBox",
-                editorOptions: {
-                    items: [{"pesan_entitas":"0","pesan_entitas_desc":"SEMUA"},
-                            {"pesan_entitas":"1","pesan_entitas_desc":"DONATUR"},
-                            {"pesan_entitas":"2","pesan_entitas_desc":"SANTRI"},
-                            {"pesan_entitas":"3","pesan_entitas_desc":"PENDAMPING"}],
-                    displayExpr: "pesan_entitas_desc",
-                    valueExpr: "pesan_entitas",
-                    value:"0",
-                },
-                validationRules: [{
-                            type: "required",
-                            message: "Pilih Entitas Tujuan Pesan"}]
-            },{
-                dataField: "pesan_judul",
-                label:{
-                    text:"Judul Pesan",
+                    text:"Tujuan",
                 }, 
                 editorOptions:{
+                    value:jenisentitas,
                 },
                 validationRules: [{
                         type: "required",
-                        message: "Judul Pesan harus di isi",
+                        message: "User ID Tujuan Pesan Harus Di Isi",
                 }],
             },{
                 dataField: "pesan_isi",

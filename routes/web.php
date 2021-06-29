@@ -70,9 +70,17 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['role:manajer|helpdesk']
 
     Route::resource('berita','BeritaController');
     Route::post('berita/main','BeritaController@main')->name('berita.main');
+    Route::post('berita/send','BeritaController@send')->name('berita.send');
+
+    Route::resource('hadist', 'HadistController');
+    Route::post('hadist/main','HadistController@main')->name('hadist.main');
+    Route::post('hadist/send/main','HadistController@mainsend')->name('hadist.send.main');
+    Route::post('hadist/send','HadistController@send')->name('hadist.send');
 
     Route::resource('pesan', 'PesanController');
     Route::post('pesan/main','PesanController@main')->name('pesan.main');
+    Route::post('pesan/new/menu','PesanController@newmenu')->name('pesan.new.menu');
+    Route::post('pesan/new','PesanController@newpesan')->name('pesan.new');
 
     Route::resource('referral', 'ReferralController');
     Route::post('referral/new/menu/index','ReferralController@newmenuindex')->name('referral.new.menu.index');

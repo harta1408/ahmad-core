@@ -44,34 +44,34 @@ $(function() {
         itemType:"group",
         colCount:1,
         items: [{
-                dataField: "pesan_entitas",
+                dataField: "pesan_tujuan_entitas",
                 label:{
                     text:"Tujuan Pesan",
                 },
                 editorType: "dxSelectBox",
                 editorOptions: {
-                    items: [{"pesan_entitas":"0","pesan_entitas_desc":"SEMUA"},
-                            {"pesan_entitas":"1","pesan_entitas_desc":"DONATUR"},
-                            {"pesan_entitas":"2","pesan_entitas_desc":"SANTRI"},
-                            {"pesan_entitas":"3","pesan_entitas_desc":"PENDAMPING"}],
-                    displayExpr: "pesan_entitas_desc",
-                    valueExpr: "pesan_entitas",
+                    items: [{"pesan_tujuan_entitas":"0","pesan_tujuan_entitas_desc":"SEMUA"},
+                            {"pesan_tujuan_entitas":"1","pesan_tujuan_entitas_desc":"DONATUR"},
+                            {"pesan_tujuan_entitas":"2","pesan_tujuan_entitas_desc":"SANTRI"},
+                            {"pesan_tujuan_entitas":"3","pesan_tujuan_entitas_desc":"PENDAMPING"}],
+                    displayExpr: "pesan_tujuan_entitas_desc",
+                    valueExpr: "pesan_tujuan_entitas",
                     value:"0",
                 },
                 validationRules: [{
                             type: "required",
                             message: "Pilih Entitas Tujuan Pesan"}]
-            },{
-                dataField: "pesan_judul",
-                label:{
-                    text:"Judul Pesan",
-                }, 
-                editorOptions:{
-                },
-                validationRules: [{
-                        type: "required",
-                        message: "Judul Pesan harus di isi",
-                }],
+            // },{
+            //     dataField: "pesan_judul",
+            //     label:{
+            //         text:"Judul Pesan",
+            //     }, 
+            //     editorOptions:{
+            //     },
+            //     validationRules: [{
+            //             type: "required",
+            //             message: "Judul Pesan harus di isi",
+            //     }],
             },{
                 dataField: "pesan_isi",
                 label:{

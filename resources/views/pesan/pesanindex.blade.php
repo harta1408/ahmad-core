@@ -42,11 +42,20 @@ $(function(){
         },
         columns: [
             {
-              dataField: "pesan_entitas",
+              dataField: "pesan_tujuan_entitas",
               caption: "Entitas Tujuan",
             },{
-              dataField: "pesan_judul",
-              caption: "Judul",
+              dataField: "pembuat.name",
+              caption: "Pembuat",
+            },{
+              dataField: "tujuan.name",
+              caption: "Tujuan",
+            },{
+              dataField: "pesan_isi",
+              caption: "Isi",
+            },{
+              dataField: "pesan_status",
+              caption: "Status",
             },{
               dataField: "pesan_waktu_kirim",
               caption: "Waktu Kirim",
@@ -63,7 +72,7 @@ $(function(){
         location: 'center',
         locateInMenu: 'never',
         template: function() {
-            return $("<div class='toolbar-label'><b>Pembaharuan Data Berita</b></div>");
+            return $("<div class='toolbar-label'><b>Data Pesan Terkirim</b></div>");
         }
     },{
         location: 'after',
@@ -71,7 +80,7 @@ $(function(){
         locateInMenu: 'auto',
         options: {
             icon: "plus",
-            hint: 'Tambah Pengingat Baru',
+            hint: 'Tambah Pesan Baru',
             useSubmitBehavior: true,
             onClick: function(e) {      
                 $("#txtPesanState").val("NEW"); //kirim perintah tambah ke server
@@ -83,13 +92,13 @@ $(function(){
         locateInMenu: 'auto',
         options: {
             icon: "edit",
-            hint: 'Update Data Pengingat',
+            hint: 'Update Data Pesan',
             useSubmitBehavior: true,
             onClick: function(e) {      
             var txtPesanId=document.getElementById("txtPesanId").value;
             if(txtPesanId==""){
                 DevExpress.ui.notify({
-                    message: "Silakan Pilih Pengingat",
+                    message: "Silakan Pilih Pesan",
                     position: {
                         my: "center top",
                         at: "center top"
@@ -107,7 +116,7 @@ $(function(){
         locateInMenu: 'auto',
         options: {
             icon: "trash",
-            hint: 'Hapus Data pendamping',
+            hint: 'Hapus Data Pesan',
             useSubmitBehavior: true,
             onClick: function(e) {      
             var txtPesanId=document.getElementById("txtPesanId").value;
