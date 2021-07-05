@@ -132,12 +132,19 @@ class UserAPI extends Controller
     }
    
    public function userByHashCode($hashcode){
-       $user=User::where([['hash_code',$hashcode],['approve',"0"]])->first();
-       $userid=$user->id;
-       if($user->tipe=='1'){ //donatur, bisa jadi sudah berdonasi
-            $user=User::with('donatur.donasi.produk','donatur.donasi.rekeningbank')->where('id',$userid)->first();
-       }
-       return response()->json($user,200);
+        $user=User::where([['hash_code',$hashcode],['approve',"0"]])->first();
+        $userid=$user->id;
+        $tipe=$user->tipe; // 1=donatur 2=santri, 3=pendamping 
+        if($tipe=='1'){ //donatur, bisa jadi sudah berdonasi
+                $user=User::with('donatur.donasi.produk','donatur.donasi.rekeningbank')->where('id',$userid)->first();
+        }
+        if($tipe=='2'){ //santri
+            $user= User::with('santri')->where('email',$email)->first();
+        }
+        if($tipe=='3'){ //pendamping
+            $user= User::with('pendamping')->where('email',$email)->first();
+        } 
+        return response()->json($user,200);
    }
 
    public function userVerification($id, Request $request){

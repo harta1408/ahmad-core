@@ -13,4 +13,5 @@ class RekeningBank extends Model
      'rekening_no', //nomor rekening bank
      'rekening_nama_bank', //nama bank
      'rekening_status', //0=tidak aktif, 1=aktif
- ];}
+ ];
+}

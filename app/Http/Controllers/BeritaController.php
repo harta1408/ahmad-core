@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Berita;
+use App\Models\Donatur;
+use App\Models\Santri;
+use App\Models\Pendamping;
 use Validator;
 
 class BeritaController extends Controller
@@ -31,6 +34,26 @@ class BeritaController extends Controller
         $berita=Berita::where('id',$beritaid)->first();
         if($beritastatus=="UPDATE"){
             return view("berita/beritaupdate",compact('berita'));
+        }
+        $entitas=$berita->berita_entitas;
+        if($beritastatus=="SEND"){
+            if($entitas=='0'){
+                $arrentitas=json_encode($this->processSendBerita('SEMUA',$beritaid,$entitas));
+                // dd($arrentitas);
+                return view('berita/beritasendlist',compact('arrentitas'));
+            }
+            if($entitas=='1'){
+                $donatur=Donatur::where('donatur_status','1')->get();
+                return view('berita/beritadonatur',compact('beritaid'));
+            }
+            if($entitas=='2'){
+                $santri=Santri::where('santri_status','1')->get();
+                return view('berita/beritasantri',compact('beritaid'));
+            }
+            if($entitas=='3'){
+                $pendamping=Pendamping::where('pendamping_status')->get(); 
+                return view('berita/beritapendamping',compact('beritaid'));
+            }
         }
     }
 
@@ -154,5 +177,117 @@ class BeritaController extends Controller
     public function destroy($id)
     {
         //
+    }
+   
+    public function send(Request $request){
+        $selectedentitas=explode(",",$request->get('id_entitas'));
+        $jenisentitas=$request->get('jenis_entitas');
+        $beritaid=$request->get('beritaid');
+        $arrentitas=json_encode($this->processSendBerita($jenisentitas,$beritaid,$selectedentitas));
+        return view('berita/beritasendlist',compact('arrentitas'));
+    }
+    private function processSendBerita($jenisentitas,$beritaid,$selectedentitas){
+        #proses pengiriman berita dan doa untuk masing masing entitas
+        #setelah penyimpanan kedalam tabel hadis entitas, dilanjutkan dengan memasukan 
+        #kedalam array, proses ini dilakukan untuk menampilkan data yang tersimpan dalam
+        #daftar, karena setiap entitas beda tabel, maka ada proses penggabungan dalam 
+        #array entitas
+        $arrentitas=array();
+        $berita=Berita::where('id',$beritaid)->first();
+        #pilihan berdasarkan semua entitas 
+        if($jenisentitas=='SEMUA'){
+            $donatur=Donatur::where('donatur_status','!=','0')->get();
+            foreach ($donatur as $key => $don) {
+                $donaturid=$don->id;
+                $donaturUpdate=Donatur::where('id',$donaturid)->first();
+                #hapus memastikan data tidak ganda
+                $donaturUpdate->berita()->detach($beritaid);
+                $donaturUpdate->berita()->attach(['donatur_id'=>$donaturid],[
+                    'berita_id' =>$beritaid,
+                    'berita_donatur_status' =>'0',
+                ]);
+                $arrentitas[]= array('entitas_id' => $donaturid, 'entitas_kode' =>$don->donatur_kode,
+                    'entitas_jenis'=>'Donatur', 'entitas_nama'=>$don->donatur_nama);
+            }
+
+            $santri=Santri::where('santri_status','!=','0')->get();
+            foreach ($santri as $key => $san) {
+                $santriid=$san->id;
+                $santriUpdate=Santri::where('id',$santriid)->first();
+                #hapus memastikan data tidak ganda
+                $santriUpdate->berita()->detach($beritaid);
+                $santriUpdate->berita()->attach(['santri_id'=>$santriid],[
+                    'berita_id' =>$beritaid,
+                    'berita_santri_status' =>'0',
+                ]);
+                $arrentitas[]= array('entitas_id' => $santriid, 'entitas_kode' =>$san->santri_kode,
+                    'entitas_jenis'=>'Santri', 'entitas_nama'=>$san->santri_nama);
+            }
+
+            $pendamping=Pendamping::where('pendamping_status','!=','0')->get();
+            foreach ($pendamping as $key => $pend) {
+                $pendampingid=$pend->id;
+                $pendampingUpdate=Pendamping::where('id',$pendampingid)->first();
+                #hapus memastikan data tidak ganda
+                $pendampingUpdate->berita()->detach($beritaid);
+                $pendampingUpdate->berita()->attach(['pendamping_id'=>$pendampingid],[
+                    'berita_id' =>$beritaid,
+                    'berita_pendamping_status' =>'0',
+                ]);
+                $arrentitas[]= array('entitas_id' => $pend->id,  'entitas_kode' => $pend->pendamping_kode,
+                'entitas_jenis'=>'Pendamping', 'entitas_nama'=>$pend->pendamping_nama);
+            }
+        }
+
+        #pilihan berdasarkan entitas donatur
+        if($jenisentitas=='DONATUR'){
+            $donatur=Donatur::whereIn('id',$selectedentitas)->get();
+            foreach ($donatur as $key => $don) {
+                $donaturid=$don->id;
+                $donaturUpdate=Donatur::where('id',$donaturid)->first();
+                #hapus memastikan data tidak ganda
+                $donaturUpdate->berita()->detach($beritaid);
+                $donaturUpdate->berita()->attach(['donatur_id'=>$donaturid],[
+                    'berita_id' =>$beritaid,
+                    'berita_donatur_status' =>'0',
+                ]);
+                $arrentitas[]= array('entitas_id' => $donaturid, 'entitas_kode' =>$don->donatur_kode,
+                    'entitas_jenis'=>'Donatur', 'entitas_nama'=>$don->donatur_nama);
+            }
+        }
+         #pilihan berdasarkan entitas santri
+        if($jenisentitas=='SANTRI'){
+            $santri=Santri::whereIn('id',$selectedentitas)->get();
+            foreach ($santri as $key => $san) {
+                $santriid=$san->id;
+                $santriUpdate=Santri::where('id',$santriid)->first();
+                #hapus memastikan data tidak ganda
+                $santriUpdate->berita()->detach($beritaid);
+                $santriUpdate->berita()->attach(['santri_id'=>$santriid],[
+                    'berita_id' =>$beritaid,
+                    'berita_santri_status' =>'0',
+                ]);
+                $arrentitas[]= array('entitas_id' => $santriid, 'entitas_kode' =>$san->santri_kode,
+                    'entitas_jenis'=>'Santri', 'entitas_nama'=>$san->santri_nama);
+            }
+        }
+         #pilihan berdasarkan entitas pendamping
+        if($jenisentitas=='PENDAMPING'){
+            $pendamping=Pendamping::whereIn('id',$selectedentitas)->get();
+            foreach ($pendamping as $key => $pend) {
+                $pendampingid=$pend->id;
+                $pendampingUpdate=Pendamping::where('id',$pendampingid)->first();
+                #hapus memastikan data tidak ganda
+                $pendampingUpdate->berita()->detach($beritaid);
+                $pendampingUpdate->berita()->attach(['pendamping_id'=>$pendampingid],[
+                    'berita_id' =>$beritaid,
+                    'berita_pendamping_status' =>'0',
+                ]);
+                $arrentitas[]= array('entitas_id' => $pend->id,  'entitas_kode' => $pend->pendamping_kode,
+                'entitas_jenis'=>'Pendamping', 'entitas_nama'=>$pend->pendamping_nama);
+            }
+        }
+
+        return $arrentitas;
     }
 }

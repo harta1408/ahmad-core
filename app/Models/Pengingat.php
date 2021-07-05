@@ -10,7 +10,7 @@ class Pengingat extends Model
     #mendalam dilengkapi gambar dan video, yang dikirimkan pada saat tertentu
     protected $table='pengingat';
     protected $fillable=[
-        'pengingat_jenis', //1=sedekah subuh, 2=sedekah jumat 3=sedekah yaumul bidh 
+        'pengingat_jenis', //1=sedekah subuh, 2=sedekah jumat 3=sedekah yaumul bidh 4=hadist 5=doa harian
         'pengingat_judul', //judul pengingat
         'pengingat_isi', //isi pengingat
         'pengingat_lokasi_gambar', //lokasi gambar

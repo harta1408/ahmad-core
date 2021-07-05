@@ -20,10 +20,9 @@ class SantriAPI extends Controller
     #pendaftaran pertama hanya memasukan alamat email, password sementara akan
     #dibuat secara otomatis oleh sistem
     public function santriRegister(Request $request){
-        $url=Config::get('ahmad.register.development');
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|unique:users|max:100',
-            'name' => ['required','string','max:30'],
+            'name' => ['required','string','max:50'],
         ]);
 
         if ($validator->fails()) {
@@ -35,17 +34,8 @@ class SantriAPI extends Controller
         #link verifikasi di panggil berdasarkan user dan hash code
         $useremail=$request->get('email'); 
         $username=$request->get('name');
-        // $url=$request->get('url');
-        $referralid=$request->get('referral_id'); 
-
         $usertipe="2"; //tipe user santri
         $hashcode=md5(rand(100000,999999)); 
-        $darireferral=true; //defaultnya berasal dari referral
-
-        // periksa apakah pendaftaran ini berdasarkan id referral
-        if(!$referralid){
-            $darireferral=false;
-        }
 
         #buat user baru dengan alamat email yang dimasukan
         $user=new User;
@@ -66,34 +56,85 @@ class SantriAPI extends Controller
         $santri->santri_kode=$santrikode;
         $santri->santri_email=$useremail; 
         $santri->santri_nama=$username;
-        $santri->santri_status='1'; //aktif belum terpilih 
+        $santri->santri_status='1'; //aktif belum di otorisasi
         $santri->save();
 
-
-        //kirim email registrasi
-        $url=$url."/".$hashcode;
-        // $data = array('name'=>$username,'url'=>$url);
-        // Mail::send('emailregister', $data, function($message) use($useremail, $username) {
-        //    $message->to($useremail, $username)->subject
-        //       ('no-reply : Pendaftaran AHMaD Project');
-        //    $message->from('ahmad@gmail.com','AHMaD Project');
-        // });
-
+        #ambil user berdasarkan email
         $user=User::with('santri')->where('email',$useremail)->first();
 
-        //jika berasal dari referral maka cari id pemberi referral kemudian tambahkan
-        //penghitung pada minimal, karena yang diberi referral telah mendaftarkan diri
+        $msg=new MessageService;
+
+        #kirim email verifikasi
+        $msg->kirimEmailVerifikasi($useremail,$username,$hashcode);
+        #simpan/kirim pesan
+        $msg->simpanNotifikasiSelamatBergabung('0',$user->id);
+        return response()->json($user,200);  
+    }
+
+    public function santriRegisterReferral(Request $request){
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|unique:users|max:100',
+            'name' => ['required','string','max:50'],
+            'referral_id'=> ['required','string'],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 'error', 'message' => $validator->messages()->first(), 'code' => 404]);
+        }
+
+        #buat hash code acak untuk default yang harus langsung diganti
+        #ketika email tervirifikasi
+        #link verifikasi di panggil berdasarkan user dan hash code
+        $useremail=$request->get('email'); 
+        $username=$request->get('name');
+        $referralid=$request->get('referral_id'); 
+        $usertipe="2"; //tipe user santri
+        $hashcode=md5(rand(100000,999999)); 
+
+        #buat user baru dengan alamat email yang dimasukan
+        $user=new User;
+        $user->email=$useremail;
+        $user->name=$username;
+        $user->hash_code=$hashcode; 
+        $user->password=$hashcode;
+        $user->tipe=$usertipe;
+        $exec=$user->save();
+
+        if(!$exec){
+            return response()->json(['status' => 'error', 'message' => "Data Cannot be Save", 'code' => 404]);
+        }
+
+        #simpan data registrasi santri
+        $santrikode=$this->santriKode();
+        $santri=new Santri;
+        $santri->santri_kode=$santrikode;
+        $santri->santri_email=$useremail; 
+        $santri->santri_nama=$username;
+        $santri->santri_status='1'; //aktif belum di otorisasi
+        $santri->save();
+
         $refAPI=new ReferralAPI;
         $refAPI->referralUpdateMinimal($referralid,$santrikode);
-        return response()->json($user,200);
+
+        #ambil user berdasarkan email
+        $user=User::with('santri')->where('email',$useremail)->first();
+
+        $msg=new MessageService;
+
+        #kirim email verifikasi
+        $msg->kirimEmailVerifikasi($useremail,$username,$hashcode);
+        #simpan/kirim pesan
+        $msg->simpanNotifikasiSelamatBergabung('0',$user->id);
+        return response()->json($user,200);  
     }
+
+
     #modul pendaftaran santri melalui account media sosial
     #sepeti gmail, facebook dsb
-    public function santriRegisterSosmed(Request $request){
+    public function santriRegisterGMail(Request $request){
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|unique:users|max:100',
             'name' => 'required|string',
-            'password' => 'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -105,16 +146,18 @@ class SantriAPI extends Controller
         #link verifikasi di panggil berdasarkan user dan password
         $useremail=$request->get('email'); 
         $username=$request->get('name');
-        $password=Hash::make($request->get('password')); 
- 
-        $usertipe="2"; //tipe user santri
+        $usertipe="2"; //tipe user santri        
+        $gmailstate='1'; //berasal dari gmail
+        $hashcode=md5(rand(100000,999999));  
 
         #buat user baru dengan alamat email yang dimasukan
         $user=new User;
-        $user->user_email=$useremail;
-        $user->user_password=$password;
-        $user->user_nama=$username;
-        $user->user_tipe=$usertipe;
+        $user->email=$useremail;
+        $user->hash_code=$hashcode; 
+        $user->password=$hashcode;
+        $user->name=$username;
+        $user->tipe=$usertipe;
+        $user->gmail_state=$gmailstate;
         $exec=$user->save();
 
         if(!$exec){
@@ -129,10 +172,19 @@ class SantriAPI extends Controller
         $santri->santri_status='1'; //aktif belum data belum lengkap 
         $santri->save();
 
-        $user=User::with('santri')->where('user_email',$useremail)->first();
-        return response()->json($user,200);
+        #ambil user berdasarkan email
+        $user=User::with('santri')->where('email',$useremail)->first();
+
+        $msg=new MessageService;
+
+        #kirim email verifikasi
+        $msg->kirimEmailVerifikasi($useremail,$username,$hashcode);
+        #simpan/kirim pesan
+        $msg->simpanNotifikasiSelamatBergabung('0',$user->id);
+        return response()->json($user,200);  
     }
-  
+    
+
     public function santriUpdateProfile($id,Request $request){
         $validator = Validator::make($request->all(), [
             'santri_nama' => 'required|string',
@@ -207,14 +259,15 @@ class SantriAPI extends Controller
 
         // dd($request->root());
 
-        // $fileloc=substr($request->root(),0,strlen($request->root())-6) ."images/".$new_name;
-        $fileloc=$request->root()."/"."images/".$new_name;
+        $fileloc=substr($request->root(),0,strlen($request->root())-6) ."images/".$new_name;
+        // $fileloc=$request->root()."/"."images/".$new_name;
 
         Santri::where('santri_kode','=',$santri_kode)->update(['santri_lokasi_photo'=>$fileloc]);
 
         $santri=Santri::where('id',$id)->first();
         return response()->json($santri,200);
     }
+    
     public function santriKode()
     {
       //otomatis pengaturan kode santri dengan format 

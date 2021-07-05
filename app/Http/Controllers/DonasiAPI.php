@@ -5,9 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Donasi;
 use App\Models\DonasiTemp;
+use App\Models\DonasiCicilan;
 use App\Models\Produk;
 use App\Models\Bayar;
+use App\Models\Donatur;
 use Validator;
+use GeniusTS\HijriDate\Date;
+use GeniusTS\HijriDate\Hijri;
+use GeniusTS\HijriDate\Translations\Indonesian;
 class DonasiAPI extends Controller
 {
     public function __construct()
@@ -24,7 +29,7 @@ class DonasiAPI extends Controller
         $donasitemp->rekening_id=$request->get('rekening_id');
         $donasitemp->temp_donasi_tanggal=$request->get('donasi_tanggal');  
         $donasitemp->temp_donasi_jumlah_santri=$request->get('donasi_jumlah_santri');
-        $donasitemp->temp_donasi_tagih=$request->get('temp_donasi_tagih'); 
+        $donasitemp->temp_donasi_nominal=$request->get('temp_donasi_nominal'); 
         $donasitemp->temp_donasi_total_harga=$request->get('donasi_total_harga');
         $donasitemp->temp_donasi_cara_bayar=$request->get('donasi_cara_bayar'); 
         $donasitemp->save();
@@ -44,24 +49,33 @@ class DonasiAPI extends Controller
         $donasi=DonasiTemp::with('produk')->where('temp_donasi_no',$tempdonasino)->first();
         return response()->json($donasi,200);
     }
-
+    #simpan donasi
     public function donasiSimpan(Request $request){
-        // $validator = Validator::make($request->all(), [
-        //     'donatur_id' => 'required|string',
-        // ]);
+        $validator = Validator::make($request->all(), [
+            'donasi_jumlah_santri' => 'required|integer',
+            'donasi_total_harga' => 'required|integer',
+            'donasi_cara_bayar' => 'required|integer',
+            'donasi_nominal' => 'required|integer',
+        ]);
 
-        // if ($validator->fails()) {
-        //     return response()->json(['status' => 'error', 'message' => $validator->messages()->first(), 'code' => 404]);
-        // }
+        if ($validator->fails()) {
+            return response()->json(['status' => 'error', 'message' => $validator->messages()->first(), 'code' => 404]);
+        }
         $donasino=$this->donasino();
+        $jumlah=$request->get('donasi_jumlah_santri');
+        $totalharga=$request->get('donasi_total_harga');
+        $carabayar=$request->get('donasi_cara_bayar'); 
+        $nominal=$request->get('donasi_nominal');
+
         $donasi=new Donasi();
         $donasi->donasi_no=$donasino;
         $donasi->donatur_id=$request->get('donatur_id');
         $donasi->rekening_id=$request->get('rekening_id');
         $donasi->donasi_tanggal=$request->get('donasi_tanggal');  
-        $donasi->donasi_jumlah_santri=$request->get('donasi_jumlah_santri');
-        $donasi->donasi_total_harga=$request->get('donasi_total_harga');
-        $donasi->donasi_cara_bayar=$request->get('donasi_cara_bayar'); //cara pembayaran 1=harian, 2=mingguan, 3=bulanan 4=tunai
+        $donasi->donasi_nominal=$nominal;
+        $donasi->donasi_jumlah_santri=$jumlah;
+        $donasi->donasi_total_harga=$totalharga;
+        $donasi->donasi_cara_bayar=$carabayar;//cara pembayaran 1=harian, 2=mingguan, 3=bulanan 4=tunai
         $donasi->donasi_status='1'; //donasi disimpan, belum di bayar
         $donasi->save();
 
@@ -90,32 +104,96 @@ class DonasiAPI extends Controller
         $bayar->bayar_onkir=0;
         $bayar->bayar_status=1;
         $bayar->save();
-        $donasi=Donasi::with('produk','bayar')->where('donasi_no',$donasino)->first();
+
+
+        #proses jadwal cicilan
+        $jumlahcicilan=$totalharga/$nominal;
+        $datehijr = 0;
+        $blnhijr=0;
+        $thnhijr=1;
+        $todaydate=date("Y-m-d");
+        $datehijr = Hijri::convertToHijri($todaydate);
+        $blnhijr=$datehijr->format('m');
+        $thnhijr=$datehijr->format('Y');
+        for ($i=1; $i <= $jumlahcicilan; $i++) { 
+            if($carabayar=='1'){
+                $dayno=$i." days";
+                $date=date("Y-m-d",strtotime($dayno));
+                $yaumilbidh=Hijri::convertToHijri($date)->format('d-m-Y');
+            }
+            if($carabayar=='2'){
+                #jika tanggal bukan jumat, maka geser dulu ke hari jumat
+                $todaydate=date("Y-m-d");
+                if(date('w', strtotime($todaydate))!=5){ //5:friday
+                    $interval=5-date('w', strtotime($todaydate)); 
+                    $weekno=$i." weeks ".$interval." days";
+                }else{
+                    $weekno=$i." weeks";
+                }
+                $date=date("Y-m-d",strtotime($weekno));
+                $yaumilbidh=Hijri::convertToHijri($date)->format('d-m-Y');
+            }
+            if($carabayar=='3'){
+                #generate tanggal yaumil bidh (hijriah) secara acak
+                $blnhijr=$blnhijr+1;
+                if($blnhijr>=12){
+                    $thnhijr=$thnhijr+1;
+                    $blnhijr=1;
+                }
+
+                if(strlen($blnhijr)==1){
+                    $blnhijr='0'.$blnhijr;
+                }
+                $randhijrdate=rand(13,15); //pilih tanggal yaumil bidh secara acak
+        
+                $yaumilbidh=$randhijrdate.'-'.$blnhijr.'-'.$thnhijr;
+                $date=Hijri::convertToGregorian(13,$blnhijr,$thnhijr);
+            }
+            $cicilan=new DonasiCicilan;
+            $cicilan->donasi_id=$donasiid;
+            $cicilan->cicilan_ke=$i;
+            $cicilan->cicilan_jatuh_tempo=$date;
+            $cicilan->cicilan_hijr=$yaumilbidh;
+            $cicilan->cicilan_nominal=$nominal;
+            $cicilan->cicilan_status='1';
+            $cicilan->save();
+        }
+
+        $donasi=Donasi::with('produk','bayar','cicilan')->where('donasi_no',$donasino)->first();
         return response()->json($donasi,200);
     }
+ 
+    #mengambil data donasi berdasarkan id donasi
     public function donasiById($id){
         $donasi=Donasi::with('donatur','produk','bayar')->where('id',$id)->first();
         return response()->json($donasi,200);
     }
+    #mengambil data donasi berdasarkan id donasi dan id donatur
     public function donasiDonaturById($donasiid,$donaturid){
         $donasi=Donasi::with('donatur','produk','bayar')
             ->where([['id',$donasiid],['donatur_id',$donaturid]])->first();
         return response()->json($donasi,200);
     }
+    #untuk melakukan update rekening ketika proses donasi
     public function donasiUpdateRekening(Request $request,$id){
         $rekeningid=$request->get('rekening_id');
         Donasi::where('id',$id)->update(['rekening_id'=>$rekeningid]);
         $donasi=Donasi::with('donatur','produk','bayar')->where('id',$id)->first();
         return response()->json($donasi,200);
     }
-    public function donasiPengingat($id,Request $request){
-        Donasi::where('id','=' ,$id)
-        ->update(['donasi_pengingat_harian'=>$request->get('donasi_pengingat_harian'),
-                  'donasi_pengingat_mingguan'=>$request->get('donasi_pengingat_mingguan'),
-                  'donasi_pengingat_bulanan'=>$request->get('donasi_pengingat_bulanan'), 
-                  ]);
-        $donasi=Donasi::with('produk','bayar')->where('id',$id)->first();
+    public function donasiCicilanByDonaturId($id){
+        $donatur=function ($query) use ($id){
+            $query->where('id',$id);
+        };
+        $donasi=Donasi::with(['donatur'=>$donatur, 'cicilan'])->whereHas('donatur',$donatur)->get();
         return response()->json($donasi,200);
+    }
+    public function donasiSantriPenerimaByDonaturId($donaturid){
+        $donatur=Donatur::with('santri')->where('id',$donaturid)->get();
+        return response()->json($donatur,200);
+
+        dd($donatur);
+        $donasi=Donasi::where('donasi_id',$donaturid)->get();
     }
     
     public function donasino()
@@ -156,5 +234,8 @@ class DonasiAPI extends Controller
           return true;
         }
         return false;
+    }
+    private function prosesCicilan(){
+
     }
 }

@@ -3,20 +3,20 @@
 return [
     #url base untuk referral
     'referral' =>[
-        'development'=> 'http://kidswa.web.id/ahmad/daftar/',
-        'production'=> 'http://ahmadproject.org/daftar/',
+        'development'=> 'http://dev.ahmadproject.org/gabung/',
+        'production'=> 'http://ahmadproject.org/gabung/',
     ],
     #url base untuk registrasi
     'register' =>[
     'development'=>[
-        'donatur' => 'http://kidswa.web.id/ahmad/gabung/donatur/',
-        'santri' => 'http://kidswa.web.id/ahmad/gabung/santri/',
-        'pedamping' => 'http://kidswa.web.id/ahmad/gabung/pedamping/',
+        'donatur' => 'http://dev.ahmadproject.org/daftar/donatur/',
+        'santri' => 'http://dev.ahmadproject.org/daftar/santri/',
+        'pedamping' => 'http://dev.ahmadproject.org/daftar/pedamping/',
     ],
     'production'=>[
-        'donatur' => 'http://ahmadproject.org/gabung/donatur/',
-        'santri' => 'http://ahmadproject.org/gabung/santri/',
-        'pedamping' => 'http://ahmadproject.org/gabung/pedamping/',
+        'donatur' => 'http://ahmadproject.org/daftar/donatur/',
+        'santri' => 'http://ahmadproject.org/daftar/santri/',
+        'pedamping' => 'http://ahmadproject.org/daftar/pedamping/',
     ],
 ],
     #konfiguasi woola messanger

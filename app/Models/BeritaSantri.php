@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class BeritaSantri extends Model
+class BeritaSantri extends Pivot
 {
     #berfungsi untuk mengetahui, apakah berita yang dikirim ke donatur sudah
     #dibaca atau belum
@@ -12,6 +12,6 @@ class BeritaSantri extends Model
     protected $fillable=[
         'berita_id', //id berita
         'santri_id', //id santri
-        'berita_santri_status',  //0:belum di baca 1:sudah di baca
+        'berita_santri_status',  //0:belum di baca 1:sudah di baca 2:dihapus
     ];
 } 

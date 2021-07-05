@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class DonaturSantri extends Pivot
 {
@@ -13,6 +14,7 @@ class DonaturSantri extends Pivot
     protected $fillable=[
         'donatur_id', // id donatur
         'santri_id',  //id santri
+        'donasi_id', //id donasi
         'donatur_santri_status', //status donatur dan santri
     ];
 }

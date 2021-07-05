@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use GuzzleHttp\Client;
 use App\Models\Pesan;
 use App\Models\User;
@@ -13,9 +14,35 @@ class MessageService extends Controller
     {
         $this->middleware('cors');
 	}
+    public function kirimEmailVerifikasi($useremail,$username,$hashcode){
+
+        return; //sementara program dibuat agar tidak mengirim email
+
+        // kirim email registrasi
+        $tipe=User::where('email',$useremail)->first()->tipe;
+        $url="";
+        if($tipe=='1'){
+            $url=Config::get('ahmad.register.development.donatur');
+        }
+        if($tipe=='2'){
+            $url=Config::get('ahmad.register.development.santri');
+        }
+        if($tipe=='3'){
+            $url=Config::get('ahmad.register.development.pendamping');
+        }
+        $url=$url.$hashcode;
+        $data = array('name'=>$username,'url'=>$url);
+        Mail::send('emailregister', $data, function($message) use($useremail, $username) {
+           $message->to($useremail, $username)->subject
+              ('no-reply : Pendaftaran AHMaD Project');
+           $message->from('noreply@ahmadproject.org','AHMaD Project');
+        });
+        // echo "HTML Email Sent. Check your inbox.";
+        return;
+    }
 
     public function simpanNotifikasiSelamatBergabung($pengirim,$tujuan){
-        $isi="Selamat data, selamat bergabung di AHMaD Project sebagai ";
+        $isi="Selamat datang, selamat bergabung di AHMaD Project sebagai ";
         $tipe=User::where('id',$tujuan)->first()->tipe;
         if($tipe=='1'){
             $isi=$isi."Donatur";

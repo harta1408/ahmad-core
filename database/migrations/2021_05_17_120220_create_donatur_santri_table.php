@@ -18,9 +18,10 @@ class CreateDonaturSantriTable extends Migration
             $table->foreign('donatur_id')->references('id')->on('donatur');
             $table->bigInteger('santri_id')->unsigned();
             $table->foreign('santri_id')->references('id')->on('santri');
-            $table->integer('produk_id')->unsigned();
-            $table->foreign('produk_id')->references('id')->on('produk');
             $table->char('donatur_santri_status',1)->default(0);
+            $table->bigInteger('donasi_id')->unsigned();
+            $table->foreign('donasi_id')->references('id')->on('donasi');
+            $table->timestamps();
             $table->timestamps();
         });
     }

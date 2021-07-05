@@ -33,7 +33,7 @@ Route::group(['prefix' => 'superadmin', 'middleware' => ['role:super-admin']], f
     Route::put('users/approve/update/{id}','UserController@userApprovalUpdate');
 }); 
 
-Route::group(['prefix' => 'dashboard', 'middleware' => ['role:manajer|helpdesk']], function() {
+Route::group(['prefix' => 'dashboard', 'middleware' => ['role:manajer|helpdesk|super-admin']], function() {
     Route::get('helpdesk/index', "DashboardController@dashHelpDeskIndex")->name('dashboard.helpdesk.index');
     
     Route::resource('lembaga', 'LembagaController');
@@ -92,6 +92,9 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['role:manajer|helpdesk']
     Route::resource('soal','SoalController');
     Route::post('soal/main','SoalController@main')->name('soal.main');
     Route::post('soal/new/menu','SoalController@soalNewMenu')->name('soal.new.menu');
+
+    Route::resource('donasi', 'DonasiController');
+    Route::post('donasi/main','DonasiController@main')->name('donasi.main');
 
     Route::get('kodepos/provinsi/all','KodePosController@kodeposProvinsiAll');
     Route::get('kodepos/kota/{provinsi}','KodePosController@kodeposKotaByProvinsi');

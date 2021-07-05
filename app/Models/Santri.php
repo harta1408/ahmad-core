@@ -28,7 +28,7 @@ class Santri extends Model
         'santri_rangkap', // untuk memeriksa apakah santri merangkap entitas lain (donatur/pendamping)
         'santri_min_referral', //hitungan minimal refferal untuk selalu mengingatkan
         'santri_status', //0=tidak aktif 1=aktif data belum lengkap 2=sudah jawab kuisioner, belum otorisasi 3=sudah otorisasi, data belum lengkap 
-        //4=aktif data sudah lengkap  5=menunggu produk 6=sudah dapat produk 7=dalam bimbingan 8=sudah selesai
+        //4=aktif data sudah lengkap  5=terpiilih, menunggu produk 6=sudah dapat produk 7=dalam bimbingan 8=sudah selesai
     ];
 
     public function donatur(){
@@ -37,6 +37,18 @@ class Santri extends Model
                     ->withPivot('donatur_santri_status')
                     ->withTimestamps();
     }
+    public function hadist(){
+        return $this->belongsToMany('App\Models\Hadist','hadist_santri','santri_id','hadist_id','id','id')
+                    ->as('santrihadist')
+                    ->withPivot('hadist_santri_status')
+                    ->withTimestamps();
+    }
+    public function berita(){
+        return $this->belongsToMany('App\Models\Berita','berita_santri','santri_id','berita_id','id','id')
+                    ->as('santriberita')
+                    ->withPivot('berita_santri_status')
+                    ->withTimestamps();
+    }    
     public function kuesioner(){
         return $this->belongsToMany('App\Models\Kuesioner','kuesioner_santri','santri_id','kuesioner_id','id','id')
                     ->as('santrikuesioner')

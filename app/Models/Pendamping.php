@@ -35,6 +35,18 @@ class Pendamping extends Model
     public function user(){
         return $this->hasOne('App\Models\User','email','pendamping_email');
     }
+    public function hadist(){
+        return $this->belongsToMany('App\Models\Hadist','hadist_pendamping','pendamping_id','hadist_id','id','id')
+                    ->as('pendampinghadist')
+                    ->withPivot('hadist_pendamping_status')
+                    ->withTimestamps();
+    }
+    public function berita(){
+        return $this->belongsToMany('App\Models\Berita','berita_pendamping','pendamping_id','berita_id','id','id')
+                    ->as('pendampingberita')
+                    ->withPivot('berita_pendamping_status')
+                    ->withTimestamps();
+    }
 }
 
     

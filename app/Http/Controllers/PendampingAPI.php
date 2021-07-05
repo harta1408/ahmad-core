@@ -5,10 +5,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Pendamping;
 use App\Models\User;
+use App\Http\Controllers\ReferralAPI;
 use Config;
 use Validator;
-
-
 class PendampingAPI extends Controller
 {
     public function __construct()
@@ -16,10 +15,9 @@ class PendampingAPI extends Controller
         $this->middleware('cors');
 	}
     public function pendampingRegister(Request $request){
-        $url=Config::get('ahmad.register.development');
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|unique:users|max:100',
-            'name' => ['required','string','max:30'],
+            'name' => ['required','string','max:50'],
         ]);
 
         if ($validator->fails()) {
@@ -29,10 +27,9 @@ class PendampingAPI extends Controller
         #buat password acak untuk default yang harus langsung diganti
         #ketika email tervirifikasi
         #link verifikasi di panggil berdasarkan user dan password
-        $useremail=$request->get('user_email'); 
+        $useremail=$request->get('email'); 
         $username=$request->get('name');
         $hashcode=md5(rand(100000,999999)); 
-
         $usertipe="3"; //tipe user pendamping
 
         #buat user baru dengan alamat email yang dimasukan
@@ -54,26 +51,80 @@ class PendampingAPI extends Controller
         $pendamping->pendamping_kode=$pendampingkode;
         $pendamping->pendamping_email=$useremail; 
         $pendamping->pendamping_nama=$username;
-        $pendamping->pendamping_status='1'; //aktif belum terpilih 
+        $pendamping->pendamping_status='1'; //aktif belum lengkap 
         $pendamping->save();
 
-         // kirim email registrasi
-        $url=$url."/".$hashcode;
-        // $data = array('name'=>$username,'url'=>$url);
-        // Mail::send('emailregister', $data, function($message) use($useremail, $username) {
-        //    $message->to($useremail, $username)->subject
-        //       ('no-reply : Pendaftaran AHMaD Project');
-        //    $message->from('ahmad@gmail.com','AHMaD Project');
-        // });
+        #ambil user berdasarkan email
+        $user=User::with('pendamping')->where('email',$useremail)->first();
 
-        $user=User::with('pendamping')->where('user_email',$useremail)->first();
-        return response()->json($user,200);
+        $msg=new MessageService;
+
+        #kirim email verifikasi
+        $msg->kirimEmailVerifikasi($useremail,$username,$hashcode);
+        #simpan/kirim pesan
+        $msg->simpanNotifikasiSelamatBergabung('0',$user->id);
+        return response()->json($user,200);   
     }
-    public function pendampingRegisterSosmed(Request $request){
+    public function pendampingRegisterReferral(Request $request){
         $validator = Validator::make($request->all(), [
-            'user_email' => 'required|email|unique:users|max:100',
-            'user_name' => 'required|string',
-            'user_password' => 'required|string',
+            'email' => 'required|email|unique:users|max:100',
+            'name' => ['required','string','max:50'],
+            'referral_id'=> ['required','string'],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 'error', 'message' => $validator->messages()->first(), 'code' => 404]);
+        }
+
+        #buat password acak untuk default yang harus langsung diganti
+        #ketika email tervirifikasi
+        #link verifikasi di panggil berdasarkan user dan password
+        $useremail=$request->get('email'); 
+        $username=$request->get('name');
+        $referralid=$request->get('referral_id'); 
+        $hashcode=md5(rand(100000,999999)); 
+        $usertipe="3"; //tipe user pendamping
+
+        #buat user baru dengan alamat email yang dimasukan
+        $user=new User;
+        $user->email=$useremail;
+        $user->name=$username;
+        $user->hash_code=$hashcode; 
+        $user->password=$hashcode;
+        $user->tipe=$usertipe;
+        $exec=$user->save();
+
+        if(!$exec){
+            return response()->json(['status' => 'error', 'message' => "Data Cannot be Save", 'code' => 404]);
+        }
+
+        #simpan data registrasi pendamping
+        $pendampingkode=$this->pendampingKode();
+        $pendamping=new Pendamping;
+        $pendamping->pendamping_kode=$pendampingkode;
+        $pendamping->pendamping_email=$useremail; 
+        $pendamping->pendamping_nama=$username;
+        $pendamping->pendamping_status='1'; //aktif data belum lengkap 
+        $pendamping->save();
+
+        $refAPI=new ReferralAPI;
+        $refAPI->referralUpdateMinimal($referralid,$santrikode);
+
+        #ambil user berdasarkan email
+        $user=User::with('pendamping')->where('email',$useremail)->first();
+
+        $msg=new MessageService;
+
+        #kirim email verifikasi
+        $msg->kirimEmailVerifikasi($useremail,$username,$hashcode);
+        #simpan/kirim pesan
+        $msg->simpanNotifikasiSelamatBergabung('0',$user->id);
+        return response()->json($user,200);  
+    }
+    public function pendampingRegisterGMail(Request $request){
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|unique:users|max:100',
+            'name' => 'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -85,16 +136,18 @@ class PendampingAPI extends Controller
         #link verifikasi di panggil berdasarkan user dan password
         $useremail=$request->get('user_email'); 
         $username=$request->get('user_name');
-        $password=Hash::make($request->get('user_password')); 
-
         $usertipe="3"; //tipe user pendamping
+        $gmailstate='1'; //berasal dari gmail
+        $hashcode=md5(rand(100000,999999)); 
 
         #buat user baru dengan alamat email yang dimasukan
         $user=new User;
-        $user->user_email=$useremail;
-        $user->user_password=$password;
-        $user->user_name=$username;
-        $user->user_tipe=$usertipe;
+        $user->email=$useremail;
+        $user->hash_code=$hashcode; 
+        $user->password=$hashcode;
+        $user->name=$username;
+        $user->tipe=$usertipe;
+        $user->gmail_state=$gmailstate;
         $exec=$user->save();
 
         if(!$exec){
@@ -109,8 +162,16 @@ class PendampingAPI extends Controller
         $pendamping->pendamping_status='1'; //aktif belum terpilih 
         $pendamping->save();
 
-        $user=User::with('pendamping')->where('user_email',$useremail)->first();
-        return response()->json($user,200);
+        #ambil user berdasarkan email
+        $user=User::with('pendamping')->where('email',$useremail)->first();
+
+        $msg=new MessageService;
+
+        #kirim email verifikasi
+        $msg->kirimEmailVerifikasi($useremail,$username,$hashcode);
+        #simpan/kirim pesan
+        $msg->simpanNotifikasiSelamatBergabung('0',$user->id);
+        return response()->json($user,200);  
     }
     public function pendampingUploadImage(Request $request){
 
@@ -133,8 +194,8 @@ class PendampingAPI extends Controller
 
         // dd($request->root());
 
-        // $fileloc=substr($request->root(),0,strlen($request->root())-6) ."images/".$new_name;
-        $fileloc=$request->root()."/"."images/".$new_name;
+        $fileloc=substr($request->root(),0,strlen($request->root())-6) ."images/".$new_name;
+        // $fileloc=$request->root()."/"."images/".$new_name;
 
         Pendamping::where('pendamping_kode','=',$pendamping_kode)->update(['pendamping_lokasi_photo'=>$fileloc]);
 

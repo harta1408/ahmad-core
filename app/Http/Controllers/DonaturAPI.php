@@ -10,12 +10,14 @@ use App\Models\Donasi;
 use App\Models\DonasiTemp;
 use App\Models\Produk;
 use App\Models\Bayar;
+use App\Models\DonasiCicilan;
 use App\Http\Controllers\DonasiAPI;
 use App\Http\Controllers\ReferralAPI;
+use App\Http\Controllers\MessageService;
+use GeniusTS\HijriDate\Date;
+use GeniusTS\HijriDate\Hijri;
 use Config;
 use Validator;
-
-
 class DonaturAPI extends Controller
 {
     public function __construct()
@@ -27,7 +29,6 @@ class DonaturAPI extends Controller
 
     #registrasi donatur normal
     public function donaturRegister(Request $request){
-    
         #validasi
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|unique:users|max:100',
@@ -68,10 +69,15 @@ class DonaturAPI extends Controller
         $donatur->donatur_status='1'; //aktif belum melengkapi data
         $donatur->save();
 
-        #kirim email verifikasi
-        // $this->kirimEmailVerifikasi($useremail,$username,$hashcode);
-
+        #ambil user berdasarkan email
         $user=User::with('donatur')->where('email',$useremail)->first();
+
+        $msg=new MessageService;
+
+        #kirim email verifikasi
+        $msg->kirimEmailVerifikasi($useremail,$username,$hashcode);
+        #simpan/kirim pesan
+        $msg->simpanNotifikasiSelamatBergabung('0',$user->id);
         return response()->json($user,200);        
     }
 
@@ -125,13 +131,19 @@ class DonaturAPI extends Controller
         $donaturid=Donatur::where('donatur_email',$useremail)->first()->id;
 
         $this->pindahkanDonasi($temp_donasi_no,$donaturid);
+        
+        #ambil user berdasarkan email
         $user=User::with('donatur.donasi')->where('email',$useremail)->first();
 
-        #kirim email verifikasi
-        // $this->kirimEmailVerifikasi($useremail,$username,$hashcode);
+        $msg=new MessageService;
 
-        return response()->json($user,200);        
+        #kirim email verifikasi
+        $msg->kirimEmailVerifikasi($useremail,$username,$hashcode);
+        #simpan/kirim pesan
+        $msg->simpanNotifikasiSelamatBergabung('0',$user->id);
+        return response()->json($user,200);                
     }
+
 
     #registrasi donatur dengan referral
     public function donaturRegisterReferral(Request $request){
@@ -151,7 +163,6 @@ class DonaturAPI extends Controller
         $useremail=$request->get('email'); 
         $username=$request->get('name');
         $referralid=$request->get('referral_id'); 
-
         $usertipe="1"; //tipe user donatur
         $hashcode=md5(rand(100000,999999)); 
 
@@ -180,11 +191,16 @@ class DonaturAPI extends Controller
         $refAPI=new ReferralAPI;
         $refAPI->referralUpdateMinimal($referralid,$donaturkode);
 
-        #kirim email verifikasi
-        // $this->kirimEmailVerifikasi($useremail,$username,$hashcode);
-
+        #ambil user berdasarkan email
         $user=User::with('donatur')->where('email',$useremail)->first();
-        return response()->json($user,200);       
+
+        $msg=new MessageService;
+
+        #kirim email verifikasi
+        $msg->kirimEmailVerifikasi($useremail,$username,$hashcode);
+        #simpan/kirim pesan
+        $msg->simpanNotifikasiSelamatBergabung('0',$user->id);
+        return response()->json($user,200);        
     }
 
     #registrasi donatur dengan donasi dan referral
@@ -244,10 +260,16 @@ class DonaturAPI extends Controller
         $refAPI=new ReferralAPI;
         $refAPI->referralUpdateMinimal($referralid,$donaturkode);
 
-        #kirim email verifikasi
-        // $this->kirimEmailVerifikasi($useremail,$username,$hashcode);
+        #ambil user berdasarkan email
+        $user=User::with('donatur')->where('email',$useremail)->first();
 
-        return response()->json($user,200);        
+        $msg=new MessageService;
+
+        #kirim email verifikasi
+        $msg->kirimEmailVerifikasi($useremail,$username,$hashcode);
+        #simpan/kirim pesan
+        $msg->simpanNotifikasiSelamatBergabung('0',$user->id);
+        return response()->json($user,200);         
     }
 
 
@@ -294,36 +316,38 @@ class DonaturAPI extends Controller
         $donatur->donatur_status='1'; //aktif belum melengkapi data
         $donatur->save();
 
+        #ambil user berdasarkan email
         $user=User::with('donatur')->where('email',$useremail)->first();
+
+        $msg=new MessageService;
+
+        #kirim email verifikasi
+        $msg->kirimEmailVerifikasi($useremail,$username,$hashcode);
+        #simpan/kirim pesan
+        $msg->simpanNotifikasiSelamatBergabung('0',$user->id);
         return response()->json($user,200);    
     }
 
-    private function kirimEmailVerifikasi($useremail,$username,$hashcode){
-        // kirim email registrasi
-        $url=Config::get('ahmad.register.development.donatur');
-        $url=$url.$hashcode;
-        $data = array('name'=>$username,'url'=>$url);
-        Mail::send('emailregister', $data, function($message) use($useremail, $username) {
-           $message->to($useremail, $username)->subject
-              ('no-reply : Pendaftaran AHMaD Project');
-           $message->from('ahmad@gmail.com','AHMaD Project');
-        });
-        // echo "HTML Email Sent. Check your inbox.";
-    }
+
     private function pindahkanDonasi($temp_donasi_no,$donaturid){
         $donasiTemp=DonasiTemp::with('produk')->where('temp_donasi_no',$temp_donasi_no)->first();
         $donasiapi=new DonasiAPI;
 
-        $donasi=new Donasi;
         $donasino=$donasiapi->donasino();
+        $jumlah=$donasiTemp->temp_donasi_jumlah_santri;
+        $totalharga=$donasiTemp->temp_donasi_total_harga;
+        $carabayar=$donasiTemp->temp_donasi_cara_bayar; 
+        $nominal=$donasiTemp->temp_donasi_nominal;
+
+        $donasi=new Donasi;
         $donasi->donasi_no=$donasino;
         $donasi->donatur_id=$donaturid;
         $donasi->donasi_tanggal=$donasiTemp->temp_donasi_tanggal;  
         $donasi->rekening_id=$donasiTemp->rekening_id;
-        $donasi->donasi_tagih=$donasiTemp->temp_donasi_tagih;
-        $donasi->donasi_jumlah_santri=$donasiTemp->temp_donasi_jumlah_santri;
-        $donasi->donasi_total_harga=$donasiTemp->temp_donasi_total_harga;
-        $donasi->donasi_cara_bayar=$donasiTemp->temp_donasi_cara_bayar; //cara pembayaran 1=harian, 2=mingguan, 3=bulanan 4=tunai
+        $donasi->donasi_nominal=$nominal;
+        $donasi->donasi_jumlah_santri=$jumlah;
+        $donasi->donasi_total_harga=$totalharga;
+        $donasi->donasi_cara_bayar=$carabayar; //cara pembayaran 1=harian, 2=mingguan, 3=bulanan 4=tunai
         $donasi->donasi_status='1'; //donasi disimpan, belum di bayar
         $donasi->save();
 
@@ -355,6 +379,62 @@ class DonaturAPI extends Controller
         $bayar->bayar_onkir=0;
         $bayar->bayar_status=1;
         $bayar->save();
+
+         #proses jadwal cicilan
+         $jumlahcicilan=$totalharga/$nominal;
+         $datehijr = 0;
+         $blnhijr=0;
+         $thnhijr=1;
+         $todaydate=date("Y-m-d");
+         $datehijr = Hijri::convertToHijri($todaydate);
+         $blnhijr=$datehijr->format('m');
+         $thnhijr=$datehijr->format('Y');
+         for ($i=1; $i <= $jumlahcicilan; $i++) { 
+             if($carabayar=='1'){
+                 $dayno=$i." days";
+                 $date=date("Y-m-d",strtotime($dayno));
+                 $yaumilbidh=Hijri::convertToHijri($date)->format('d-m-Y');
+             }
+             if($carabayar=='2'){
+                 #jika tanggal bukan jumat, maka geser dulu ke hari jumat
+                 $todaydate=date("Y-m-d");
+                 if(date('w', strtotime($todaydate))!=5){ //5:friday
+                     $interval=5-date('w', strtotime($todaydate)); 
+                     $weekno=$i." weeks ".$interval." days";
+                 }else{
+                     $weekno=$i." weeks";
+                 }
+                 $date=date("Y-m-d",strtotime($weekno));
+                 $yaumilbidh=Hijri::convertToHijri($date)->format('d-m-Y');
+             }
+             if($carabayar=='3'){
+                 #generate tanggal yaumil bidh (hijriah) secara acak
+                 $blnhijr=$blnhijr+1;
+                 if($blnhijr>=12){
+                     $thnhijr=$thnhijr+1;
+                     $blnhijr=1;
+                 }
+ 
+                 if(strlen($blnhijr)==1){
+                     $blnhijr='0'.$blnhijr;
+                 }
+                 $randhijrdate=rand(13,15); //pilih tanggal yaumil bidh secara acak
+         
+                 $yaumilbidh=$randhijrdate.'-'.$blnhijr.'-'.$thnhijr;
+                 $date=Hijri::convertToGregorian(13,$blnhijr,$thnhijr);
+             }
+             $cicilan=new DonasiCicilan;
+             $cicilan->donasi_id=$donasiid;
+             $cicilan->cicilan_ke=$i;
+             $cicilan->cicilan_jatuh_tempo=$date;
+             $cicilan->cicilan_hijr=$yaumilbidh;
+             $cicilan->cicilan_nominal=$nominal;
+             $cicilan->cicilan_status='1';
+             $cicilan->save();
+         }
+ 
+         $donasi=Donasi::with('produk','bayar','cicilan')->where('donasi_no',$donasino)->first();
+
         //hapus pemesanan sementara sebelum register
         $donasitemp=DonasiTemp::where('temp_donasi_no',$temp_donasi_no)->first()->produk()->detach();
         $donasitemp=DonasiTemp::where('temp_donasi_no',$temp_donasi_no)->delete();
@@ -408,7 +488,6 @@ class DonaturAPI extends Controller
         return response()->json($donatur,200);
     }
     public function donaturUploadImage(Request $request){
-
         //ambil id donatur, kemudian cari di database kodenya
         $id=$request->get('id');  
         $donatur_kode=Donatur::where('id',$id)->first()->donatur_kode;
@@ -426,11 +505,10 @@ class DonaturAPI extends Controller
         $tujuan_upload = base_path("images");
         $images->move($tujuan_upload,$new_name); 
 
-        // dd($request->root());
 
-        // $fileloc=substr($request->root(),0,strlen($request->root())-6) ."images/".$new_name;
-        $fileloc=$request->root()."/"."images/".$new_name;
-
+        $fileloc=substr($request->root(),0,strlen($request->root())-6) ."images/".$new_name; //upload ke server
+        // $fileloc=$request->root()."/"."images/".$new_name;
+    
         Donatur::where('donatur_kode','=',$donatur_kode)->update(['donatur_lokasi_photo'=>$fileloc]);
 
         $donatur=Donatur::where('id',$id)->first();

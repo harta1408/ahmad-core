@@ -23,7 +23,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'hash_code', //untuk link verifikasi email
         'email_verified_at', //waktu verifikasi email
-        'tipe', // 1=donatur 2=santri, 3=pendamping 4=manager, 5=helpdesk, 9=superadmin
+        'tipe', // 1=donatur 2=santri, 3=pendamping 4=manager, 5=helpdesk, 6=superadmin
         'approve', //0:belum disetujui 1:setujui
         'gmail_state', //status user gmail, 0=not gmail, 1=user gmail
     ];

@@ -33,7 +33,7 @@ class SantriController extends Controller
                         $snt->santri_status="Belum Otorisasi";
                         break;
                     case '3':
-                        $snt->santri_status="Data Lengkap";
+                        $snt->santri_status="Belum isi Kuisioner";
                         break;
                     case '4':
                         $snt->santri_status="Menunggu Produk";

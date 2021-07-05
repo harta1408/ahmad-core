@@ -36,6 +36,18 @@ class Donatur extends Model
                     ->withPivot('donatur_santri_status')
                     ->withTimestamps();
     }
+    public function hadist(){
+        return $this->belongsToMany('App\Models\Hadist','hadist_donatur','donatur_id','hadist_id','id','id')
+                    ->as('donaturhadist')
+                    ->withPivot('hadist_donatur_status')
+                    ->withTimestamps();
+    }
+    public function berita(){
+        return $this->belongsToMany('App\Models\Berita','berita_donatur','donatur_id','berita_id','id','id')
+                    ->as('donaturberita')
+                    ->withPivot('berita_donatur_status')
+                    ->withTimestamps();
+    }
     public function user(){
         return $this->hasOne('App\Models\User','email','donatur_email');
     }

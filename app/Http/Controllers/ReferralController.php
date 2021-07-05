@@ -7,7 +7,7 @@ use App\Models\Berita;
 use App\Models\Donatur;
 use App\Models\Santri;
 use App\Models\Pendamping;
-use App\Http\Controllers\MessageAPI;
+use App\Http\Controllers\MessageService;
 use Config;
 use Validator;
 
@@ -111,8 +111,8 @@ class ReferralController extends Controller
             'PESAN'=>$pesan
         );
 
-        $messageapi=new MessageAPI;
-        $status=$messageapi->processWhatsappMessage($refpone,$pesan);
+        $messageService=new MessageService;
+        $status=$messageService->processWhatsappMessage($refpone,$pesan);
 
         // dd($status);
         $pesan=$status;

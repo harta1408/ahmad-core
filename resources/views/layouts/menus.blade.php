@@ -183,7 +183,7 @@
         <img src="{{asset('images/agile_logo.png')}}" alt="Agile" class="brand-image img-circle elevation-3"
              style="opacity: .8">
              @guest
-               <span class="brand-text font-weight-light">Agile Dashboard</span>
+               <span class="brand-text font-weight-light">AHMaD Dashboard</span>
              @else
                <span class="brand-text font-weight-light">{{ Auth::user()->name}}</span>
              @endguest

@@ -62,6 +62,8 @@ Route::middleware(['cors'])->group(function () {
     Route::post('donasi/save','DonasiAPI@donasiSimpan');
     Route::get('donasi/byid/{id}','DonasiAPI@donasiById');
     Route::get('donasi/donasiid/{donasiid}/donaturid/{donaturid}','DonasiAPI@donasiDonaturById');
+    Route::get('donasi/cicilan/donatur/{donaturid}','DonasiAPI@donasiCicilanByDonaturId');
+    Route::get('donasi/list/santri/penerima/{donaturid}','DonasiAPI@donasiSantriPenerimaByDonaturId');
     Route::put('donasi/update/rekening/{id}','DonasiAPI@donasiUpdateRekening');
 
 
@@ -70,6 +72,8 @@ Route::middleware(['cors'])->group(function () {
     Route::get('berita/kampanye','BeritaAPI@beritaKampanye');
     Route::get('berita/entitas/{jenis}','BeritaAPI@beritaEntitas');
     Route::get('berita/list','BeritaAPI@beritaList');
+
+    Route::get('hadist/entitas/donatur/{id}','HadistAPI@hadistByDonaturId');
 
     Route::post('referral/send/link','ReferralAPI@referralSendLink');
     Route::put('referral/update/berita','ReferralAPI@rreferralUpdateIdBerita');

@@ -7,13 +7,13 @@
       <!-- small box -->
       <div class="small-box bg-info">
         <div class="inner">
-          <div class="long-title"><h4>0 </h4></div>
+          <div class="long-title"><h4>Rp. {!!number_format($dashboard->dash_donasi_nilai)!!}</h4></div>
             <p>Penerimaan Donasi Harian</p>
           </div>
           <div class="icon">
             <i class="ion ion-pie-graph"></i>
           </div>
-        <a href="#" class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
+        <a href="{{route('donasi.index')}}" class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
       </div>
     </div>
     <!-- ./col -->
@@ -21,13 +21,13 @@
       <!-- small box -->
       <div class="small-box bg-success">
         <div class="inner">
-          <div class="long-title"><h4>0 </h4></div>
-            <p>Penambahan Santri</p>
+          <div class="long-title"><h4>{!!number_format($dashboard->dash_donasi_jumlah)!!}</h4></div>
+            <p>Produk Dibagikan</p>
           </div>
           <div class="icon">
             <i class="ion ion-stats-bars"></i>
           </div>
-        <a href="#" class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
+        <a href="{{route('donasi.index')}}" class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
       </div>
     </div>
     <!-- ./col -->

@@ -19,7 +19,7 @@ class CreateDonasiTempTable extends Migration
             $table->dateTime('temp_donasi_tanggal')->nullable();
             $table->integer('temp_donasi_jumlah_santri')->default(0);
             $table->double('temp_donasi_total_harga',12,2)->default(0);
-            $table->double('temp_donasi_tagih',12,2)->default(0);
+            $table->double('temp_donasi_nominal',12,2)->default(0);
             $table->char('temp_donasi_cara_bayar',1)->default(0);
             $table->char('temp_donasi_status',1)->default(0);
             $table->timestamps();

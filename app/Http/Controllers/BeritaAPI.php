@@ -7,6 +7,10 @@ use Validator;
 
 class BeritaAPI extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('cors');
+	}
     public function beritaSimpan(Request $request){
         $validator = Validator::make($request->all(), [
             'berita_isi' => 'required|string|',

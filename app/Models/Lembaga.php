@@ -29,6 +29,6 @@ class Lembaga extends Model
     ];
     public function faq()
     {
-        return $this->hasMany('App\Models\FAQ','lembaga_id','lembaga_id');
+        return $this->hasMany('App\Models\Faq','lembaga_id','lembaga_id');
     }
 }

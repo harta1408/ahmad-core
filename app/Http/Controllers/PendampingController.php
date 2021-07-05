@@ -91,7 +91,7 @@ class PendampingController extends Controller
         $useremail=$request->get("pendamping_email"); ; 
         $username=$request->get("pendamping_nama");
         $url = public_path();
-        $usertipe="1"; //tipe user pendamping
+        $usertipe="3"; //tipe user pendamping
         $hashcode=md5(rand(100000,999999)); 
 
         #buat user baru dengan alamat email yang dimasukan
