@@ -7,6 +7,7 @@ use App\Models\KirimProduk;
 use App\Models\Santri;
 use App\Models\Produk;
 use App\Models\Lembaga;
+use App\Models\DonaturSantri;
 use Validator;
 
 class KirimProdukController extends Controller
@@ -45,7 +46,7 @@ class KirimProdukController extends Controller
      */
     public function create()
     {
-        $santri=Santri::where('santri_status','3')->get();
+        $santri=Santri::where('santri_status','5')->get();
         return view ('produk/kirimnew',compact('santri'));
     }
 
@@ -68,20 +69,27 @@ class KirimProdukController extends Controller
         $santri=Santri::where('id',$santriid)->first();
         $produkid=Produk::first()->id;
 
-        $lembaga=Lembaga::first();
+        $donsantri=DonaturSantri::where([['santri_id',$santriid],['donatur_santri_status','1']])->first();
+        $donaturid=$donsantri->donatur_id;
+        $donasiid=$donsantri->donasi_id;
 
+     
+        $lembaga=Lembaga::first();
+        if(!$lembaga){
+            return response()->json(['status' => 'error', 'message' => 'lembaga belum di definisikan', 'code' => 404]);
+        }
 
         $kirimproduk=new KirimProduk;
         $kirimproduk->produk_id=$produkid;
         $kirimproduk->santri_id=$santriid; 
-        $kirimproduk->kirim_produk_no_seri=$request->get("donatur_nama");
+        $kirimproduk->donatur_id=$donaturid;
+        $kirimproduk->donasi_id=$donasiid;
+        $kirimproduk->kirim_produk_no_seri=$request->get("kirim_produk_no_seri");
         $kirimproduk->kirim_nama=$lembaga->lembaga_nama;
         $kirimproduk->kirim_telepon=$lembaga->lembaga_telepon;
         $kirimproduk->kirim_no_resi=$request->get("kirim_no_resi");
         $kirimproduk->kirim_tanggal_kirim=$request->get("kirim_tanggal_kirim");
-        $kirimproduk->kirim_tanggal_terima=$request->get("kirim_tanggal_terima");
         $kirimproduk->kirim_biaya=$request->get("kirim_biaya");
-
 
         $kirimproduk->kirim_penerima_nama=$santri->santri_nama;
         $kirimproduk->kirim_penerima_telepon=$santri->santri_telepon;
@@ -93,7 +101,10 @@ class KirimProdukController extends Controller
         $kirimproduk->kirim_status='1'; //aktif belum melengkapi data
         $kirimproduk->save();
 
-        return redirect()->action('DonaturController@index');
+        #update status santri sendang menunggu produk
+        Santri::where('id',$santriid)->update(['santri_status','5']);
+
+        return redirect()->action('KirimProdukController@index');
     }
 
     /**

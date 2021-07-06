@@ -487,6 +487,13 @@ class DonaturAPI extends Controller
         $donatur=Donatur::where('id',$id)->first();
         return response()->json($donatur,200);
     }
+    public function donasiSantriById($donaturid){
+        $santri=function ($query) {
+            $query->with('kirimproduk');
+        };
+        $donatur=Donatur::with(['santri'=>$santri])->whereHas('santri',$santri)->where('id',$donaturid)->get();
+        return response()->json($donatur,200);
+    }
     public function donaturUploadImage(Request $request){
         //ambil id donatur, kemudian cari di database kodenya
         $id=$request->get('id');  

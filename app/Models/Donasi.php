@@ -39,6 +39,12 @@ class Donasi extends Model
     public function donatur(){
         return $this->hasOne('App\Models\Donatur','id','donatur_id');
     }
+    public function santri(){
+        return $this->belongsToMany('App\Models\Santri','donatur_santri','donasi_id','santri_id','id','id')
+                    ->as('donasisantri')
+                    ->withPivot('donasi_id','pendamping_id','donatur_santri_status')
+                    ->withTimestamps();
+    }
     public function bayar(){
         return $this->hasOne('App\Models\Bayar','donasi_id','id');
     }

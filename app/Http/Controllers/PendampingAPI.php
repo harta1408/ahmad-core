@@ -202,6 +202,38 @@ class PendampingAPI extends Controller
         $pendamping=Pendamping::where('id',$id)->first();
         return response()->json($pendamping,200);
     }
+    public function pendampingById($id){
+        $pendamping=Pendamping::where('id',$id)->first();
+        return response()->json($pendamping,200);
+    }
+    public function pendampingSantriById($id){
+        $santri=function ($query) {
+            $query->with('kirimproduk');
+        };
+        $pendamping=Pendamping::with(['santri'=>$santri])->whereHas('santri',$santri)->where('id',$id)->get();
+        return response()->json($pendamping,200);
+    }
+    public function pendampingNilaiSantri(Request $request){
+        $santriid=$request->get('santri_id');
+        $pendampingid=$request->get('pendamping_id');
+        $materiid=$request->get('materi_id');
+        $materinilaiangka=$request->get('materi_nilai_angka');
+        $materinilaihuruf=$request->get('materi_nilai_huruf');
+        $matericatatan=$request->get('materi_catatan_nilai');
+
+        $soal=soal::where('id',$soalid)->first();
+        $soal->santri()->attach([
+            'soal_id'=>$soalid],
+            [
+                'santri_id'=>$santriid, 
+                'soal_jawaban_essay'=>$jawaban,
+                'soal_jawaban_pilihan' =>$jawaban,
+                'soal_nilai'=>$nilai,
+        ]);
+
+ 
+        return response()->json($santri,200);
+    }
     public function pendampingKode()
     {
       //otomatis pengaturan kode pendamping dengan format 

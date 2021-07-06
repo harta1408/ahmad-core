@@ -188,12 +188,9 @@ class DonasiAPI extends Controller
         $donasi=Donasi::with(['donatur'=>$donatur, 'cicilan'])->whereHas('donatur',$donatur)->get();
         return response()->json($donasi,200);
     }
-    public function donasiSantriPenerimaByDonaturId($donaturid){
-        $donatur=Donatur::with('santri')->where('id',$donaturid)->get();
-        return response()->json($donatur,200);
-
-        dd($donatur);
-        $donasi=Donasi::where('donasi_id',$donaturid)->get();
+    public function donasiSantriById($id){
+        $donasi=Donasi::with('santri')->where('id',$id)->get();
+        return response()->json($donasi,200);
     }
     
     public function donasino()

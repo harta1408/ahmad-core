@@ -30,10 +30,16 @@ class Pendamping extends Model
         'pendamping_komisi', //komisi yang diterima
         'pendamping_rangkap', // untuk memeriksa apakah santri merangkap entitas lain (donatur/pendamping)
         'pendamping_min_referral', //hitungan minimal refferal untuk selalu mengingatkan
-        'pendamping_status',  //0=tidak aktif 1=aktif 2=sudah dapat produk 3=dalam bimbingan
+        'pendamping_status',  //0=tidak aktif 1=aktif belum lengkap 2=belum isi kuesioner 3=belum otorisasi 4=belum ada bimbingan 5=membimbing santri 6=pensiun
     ];
     public function user(){
         return $this->hasOne('App\Models\User','email','pendamping_email');
+    }
+    public function santri(){
+        return $this->belongsToMany('App\Models\Santri','donatur_santri','pendamping_id','santri_id','id','id')
+            ->as('pendampingsantri')
+            ->withPivot('donasi_id','pendamping_id','donatur_santri_status')
+            ->withTimestamps();
     }
     public function hadist(){
         return $this->belongsToMany('App\Models\Hadist','hadist_pendamping','pendamping_id','hadist_id','id','id')

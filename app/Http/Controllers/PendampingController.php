@@ -29,23 +29,23 @@ class PendampingController extends Controller
                 $pdmp->pendamping_status="Belum Konfirmasi Email";
             }else{
                 switch ($pdmp->pendamping_status) {
+                    case '1':
+                        $pdmp->pendamping_status="Belum lengkap";
+                        break;
                     case '2':
-                        $pdmp->pendamping_status="Belum Otorisasi";
+                        $pdmp->pendamping_status="Belum Isi Kuesioner";
                         break;
                     case '3':
-                        $pdmp->pendamping_status="Data Lengkap";
+                        $pdmp->pendamping_status="Belum Otorisasi";
                         break;
                     case '4':
-                        $pdmp->pendamping_status="Menunggu Produk";
+                        $pdmp->pendamping_status="Belum ada Bimbingan";
                         break;
                     case '5':
-                        $pdmp->pendamping_status="Dapat Produk";
-                        break;
-                    case '6':
-                        $pdmp->pendamping_status="Dalam bimbingan";
+                        $pdmp->pendamping_status="Membimbing Santri";
                         break;
                     default:
-                        $pdmp->pendamping_status="Lulus";
+                        $pdmp->pendamping_status="Pensiun";
                         break;
                 }
             }

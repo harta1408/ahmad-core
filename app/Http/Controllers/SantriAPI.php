@@ -197,7 +197,7 @@ class SantriAPI extends Controller
         }
 
         $exec=Santri::where('id','=' ,$id)
-        ->update(['santri_id'=>$request->get('santri_id'),
+        ->update(['santri_nid'=>$request->get('santri_nid'),
                   'santri_nama'=>$request->get('santri_nama'),
                   'santri_tmp_lahir'=>$request->get('santri_tmp_lahir'),
                   'santri_tgl_lahir'=>$request->get('santri_tgl_lahir'),
@@ -234,8 +234,15 @@ class SantriAPI extends Controller
         $santri=Santri::where('id',$id)->first();
         return response()->json($santri,200);
     }
-  
-    public function randomSantri(){
+    public function santriLacakProduk($santriid){
+        $kirimproduk=function ($query) use ($santriid){
+            $query->with('produklacak')->where('santri_id',$santriid);
+        };
+        $santri=Santri::with(['kirimproduk'=>$kirimproduk])->whereHas('kirimproduk',$kirimproduk)->first();
+        return response()->json($santri,200);
+    }
+
+    public function santriByPendampingId($id){
 
     }
     public function santriUploadImage(Request $request){

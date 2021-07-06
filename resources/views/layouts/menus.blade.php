@@ -291,42 +291,6 @@
                 </li>
               </ul>
             </li>
-            <li class="nav-item has-treeview">
-              <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-layer-group"></i>
-                <p>
-                  Artikel
-                  <i class="right fas fa-angle-left"></i>
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="{{route('pengingat.index')}}" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Pengingat</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="{{route('berita.index')}}" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Berita</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="{{route('hadist.index')}}" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Hadist & Do'a</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="{{route('pesan.index')}}" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Pesan</p>
-                  </a>
-                </li>
-              </ul>
-            </li>
-            
             @endrole
             @hasrole('helpdesk')
             <li class="nav-header">ENTITAS</li>
@@ -355,6 +319,12 @@
                   <a href="{{route('donatur.pembaharuan.index')}}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Pembaharuan</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{route('donasi.index')}}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Pemilihan Santri</p>
                   </a>
                 </li>
               </ul>
@@ -492,6 +462,110 @@
               </li>              
               </ul>
             </li> 
+            @endrole
+            @hasrole('helpdesk')
+            <li class="nav-header">HADIST, BERITA & PESAN </li>
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-layer-group"></i>
+                <p>
+                  Artikel
+                  <i class="right fas fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="{{route('pengingat.index')}}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Pengingat</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{route('berita.index')}}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Berita</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{route('hadist.index')}}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Hadist & Do'a</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{route('pesan.index')}}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Pesan</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            @endrole
+            @hasrole('helpdesk')
+            <li class="nav-header">AKUN</li>
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="nav-icon 	fas fa-gift"></i>
+                <p>
+                  Pengguna
+                  <i class="fas fa-angle-left right"></i>
+                  {{-- <span class="badge badge-info right">6</span> --}}
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="{{route('produk.index')}}" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                    <p>Buat Baru</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{route('produk.edit','1')}}" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                  <p>Perbaharui</p>
+                </a>
+              </li>
+                <li class="nav-item">
+                  <a href="{{route('kirimproduk.create')}}"  class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                  <p>Pengiriman</p>
+                </a>
+              </li>  
+              </ul>
+            </li>
+            @endrole
+            @hasrole('helpdesk')
+            <li class="nav-header">LAPORAN</li>
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="nav-icon 	fas fa-gift"></i>
+                <p>
+                  Produk
+                  <i class="fas fa-angle-left right"></i>
+                  {{-- <span class="badge badge-info right">6</span> --}}
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="{{route('produk.index')}}" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                    <p>Buat Baru</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{route('produk.edit','1')}}" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                  <p>Perbaharui</p>
+                </a>
+              </li>
+                <li class="nav-item">
+                  <a href="{{route('kirimproduk.create')}}"  class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                  <p>Pengiriman</p>
+                </a>
+              </li>  
+              </ul>
+            </li>
             @endrole
             @hasrole('manajer')            
             <li class="nav-header">TRANSAKSI</li>
@@ -677,7 +751,7 @@
       <strong>Copyright &copy; 2021 <a href="http://agile.co.id">AHMaD Project</a></strong>
       All rights reserved.
       <div class="float-right d-none d-sm-inline-block">
-        {{ Auth::user()->name}} - <b>Version</b> BETA 1.02
+        {{ Auth::user()->name}} - <b>Version</b> BETA 1.03
       </div>
     </footer>
 

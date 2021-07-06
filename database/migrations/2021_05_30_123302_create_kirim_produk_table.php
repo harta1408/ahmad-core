@@ -19,6 +19,10 @@ class CreateKirimProdukTable extends Migration
             $table->foreign('produk_id')->references('id')->on('produk');
             $table->bigInteger('santri_id')->unsigned();
             $table->foreign('santri_id')->references('id')->on('santri');
+            $table->bigInteger('donatur_id')->unsigned();
+            $table->foreign('donatur_id')->references('id')->on('donatur');
+            $table->bigInteger('donasi_id')->unsigned();
+            $table->foreign('donasi_id')->references('id')->on('donasi');
             $table->string('kirim_produk_no_seri',100)->nullable();
             $table->string('kirim_nama',30)->nullable();
             $table->string('kirim_telepon',20)->nullable();

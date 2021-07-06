@@ -27,14 +27,14 @@ class Santri extends Model
         'santri_provinsi',// propinsi
         'santri_rangkap', // untuk memeriksa apakah santri merangkap entitas lain (donatur/pendamping)
         'santri_min_referral', //hitungan minimal refferal untuk selalu mengingatkan
-        'santri_status', //0=tidak aktif 1=aktif data belum lengkap 2=sudah jawab kuisioner, belum otorisasi 3=sudah otorisasi, data belum lengkap 
-        //4=aktif data sudah lengkap  5=terpiilih, menunggu produk 6=sudah dapat produk 7=dalam bimbingan 8=sudah selesai
+        'santri_status', //0=tidak aktif 1=aktif data belum lengkap 2=belum isi kuesioner 3=belum otorisasi, data belum lengkap 
+        //4=aktif data sudah lengkap, menunggu produk  5=terpilih, menunggu produk 6=sudah dapat produk, dalam, dalam bimbingan 7=lulus
     ];
 
     public function donatur(){
         return $this->belongsToMany('App\Models\Donatur','donatur_santri','santri_id','donatur_id','id','id')
                     ->as('santridonatur')
-                    ->withPivot('donatur_santri_status')
+                    ->withPivot('donasi_id','pendamping_id','donatur_santri_status')
                     ->withTimestamps();
     }
     public function hadist(){
@@ -54,6 +54,9 @@ class Santri extends Model
                     ->as('santrikuesioner')
                     ->withPivot('kuesioner_jawab','kuesioner_nilai')
                     ->withTimestamps();
+    }
+    public function kirimproduk(){
+        return $this->belongsTo('App\Models\KirimProduk','id','santri_id');
     }
     public function user(){
         return $this->hasOne('App\Models\User','email','santri_email');

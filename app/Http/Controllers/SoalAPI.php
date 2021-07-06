@@ -7,6 +7,10 @@ use App\Models\Soal;
 
 class SoalAPI extends Controller
 {
+    public function soalList(){
+        $soal=Soal::with('materi')->where('soal_status','1')->get();
+        return response()->json($soal,200);
+    }
     public function santriJawabSoal(Request $request){
         $santriid=$request->get('santri_id');
         $santri=Santri::where('id',$santriid)->first();

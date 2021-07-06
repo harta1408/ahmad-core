@@ -29,6 +29,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('periksa:rekeningdonasi')
         // ->cron('* * * * * *');
         ->everyMinute(); 
+        // $schedule->command('periksa:kirimproduk')
+        // ->everyMinute(); 
     }
 
     /**

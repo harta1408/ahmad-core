@@ -58,6 +58,9 @@ $(function(){
               dataField: "donasi_donatur_nama",
               caption: "Donatur",
             },{
+              dataField: "donasi_pendamping_nama",
+              caption: "Pendamping",
+            },{
                 dataField: "donasi_santri_id",
                 caption: "Santri",  
                 editorType: "dxSelectBox",

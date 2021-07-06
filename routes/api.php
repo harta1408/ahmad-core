@@ -37,6 +37,7 @@ Route::middleware(['cors'])->group(function () {
     Route::get('donatur/list','DonaturAPI@donaturList');
     Route::get('donatur/byid/{id}','DonaturAPI@donaturById');
     Route::post('donatur/upload/photo','DonaturAPI@donaturUploadImage');
+    Route::get('donatur/santri/byid/{id}','DonaturAPI@donasiSantriById');
     
     Route::post('santri/register','SantriAPI@santriRegister');
     Route::post('santri/register/referral','SantriAPI@santriRegisterReferral');
@@ -45,10 +46,13 @@ Route::middleware(['cors'])->group(function () {
     Route::get('santri/byemail/{email}','SantriAPI@santriByEmail');
     Route::get('santri/list','SantriAPI@santriList');
     Route::get('santri/byid/{id}','SantriAPI@santriById');
+    Route::get('santri/lacak/produk/{id}','SantriAPI@santriLacakProduk');
 
     Route::post('pendamping/register','PendampingAPI@pendampingRegister');
     Route::post('pendamping/register/referral','PendampingAPI@pendampingRegisterReferral');
     Route::post('pendamping/register/gmail','PendampingAPI@pendampingRegisterGMail');
+    Route::get('pendamping/byid/{id}','PendampingAPI@pendampingById');
+    Route::get('pendamping/santri/byid/{id}','PendampingAPI@pendampingSantriById');
 
     Route::post('produk/save','ProdukAPI@produkSimpan');
     Route::get('produk/byid/{id}','ProdukAPI@produkById');
@@ -63,7 +67,7 @@ Route::middleware(['cors'])->group(function () {
     Route::get('donasi/byid/{id}','DonasiAPI@donasiById');
     Route::get('donasi/donasiid/{donasiid}/donaturid/{donaturid}','DonasiAPI@donasiDonaturById');
     Route::get('donasi/cicilan/donatur/{donaturid}','DonasiAPI@donasiCicilanByDonaturId');
-    Route::get('donasi/list/santri/penerima/{donaturid}','DonasiAPI@donasiSantriPenerimaByDonaturId');
+    Route::get('donasi/santri/{id}','DonasiAPI@donasiSantriById');
     Route::put('donasi/update/rekening/{id}','DonasiAPI@donasiUpdateRekening');
 
 
@@ -96,6 +100,9 @@ Route::middleware(['cors'])->group(function () {
     Route::post('kuesioner/santri/simpan','KuesionerAPI@kuesionerSantriSimpan');
 
     Route::post('message/send/wa','MessageAPI@sendWhatsApp');
+
+    Route::get('materi/list','MateriAPI@materiList');
+    Route::get('soal/list','SoalAPI@soalList');
 
     Route::get('kodepos/list/provinsi/all','KodePosAPI@kodeposProvinsiAll');
     Route::get('kodepos/list/provinsi/{provinsi}','KodePosAPI@kodeposProvinsi');

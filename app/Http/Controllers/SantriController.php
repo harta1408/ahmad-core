@@ -29,17 +29,20 @@ class SantriController extends Controller
                 $snt->santri_status="Belum Konfirmasi Email";
             }else{
                 switch ($snt->santri_status) {
+                    case '1';
+                        $snt->santri_status="Belum Lengkap";
+                        break;
                     case '2':
-                        $snt->santri_status="Belum Otorisasi";
+                        $snt->santri_status="Belum Isi Kuesioner";
                         break;
                     case '3':
-                        $snt->santri_status="Belum isi Kuisioner";
+                        $snt->santri_status="Belum Otorisasi ";
                         break;
                     case '4':
-                        $snt->santri_status="Menunggu Produk";
+                        $snt->santri_status="Belum Dapat Produk";
                         break;
                     case '5':
-                        $snt->santri_status="Dapat Produk";
+                        $snt->santri_status="Terpilih, menunggu Produk";
                         break;
                     case '6':
                         $snt->santri_status="Dalam bimbingan";

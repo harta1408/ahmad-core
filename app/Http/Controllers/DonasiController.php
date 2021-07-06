@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Models\Donasi;
 use App\Models\Donatur;
 use App\Models\Santri;
+use App\Models\Pendamping;
 
 class DonasiController extends Controller
 {
@@ -38,17 +39,24 @@ class DonasiController extends Controller
 
         #ambil santri aktif dengan data lengkap dan belum pernah
         #mengikuti bimbingan
-        $santri=Santri::where('santri_status',4)->pluck('id')->toArray();
-        
+        $santri=Santri::where('santri_status','4')->pluck('id')->toArray();
         $randomsantri=array_rand($santri,$jmlsantridonasi);
-        // dd($randomsantri);
+        
+        #ambil pendamping aktif dengan data lengkap, baik belum membimbing maupun
+        #sedang membimbing
+        $pendamping=Pendamping::whereIn('pendamping_status',['4','5'])->pluck('id')->toArray();
+        if(!$pendamping){
+            return response()->json(['status' => 'error', 'message' => 'Tidak ada Pendamping yang tersedia', 'code' => 404]);
+        }
 
         #masukan data dummy
         if($jmlsantridonasi==1){
             foreach ($donasi as $key => $dns) {    
-                //  $dns->donasi_donatur_nama=Donatur::where('id', $dns->donatur_id)->first()->donatur_nama;
-                //  $dns->donasi_santri_id=Santri::where('id',$santri[$randomsantri])->first()->id;
-                //  $dns->donasi_santri_nama=Santri::where('id',$santri[$randomsantri])->first()->santri_nama;
+                //pilih pendamping secara acak
+                $randompendamping=array_rand($pendamping,1);
+                $pendampingid=Pendamping::where('id',$pendamping[$randompendamping])->first()->id;
+                $pendampingnama=Pendamping::where('id',$pendamping[$randompendamping])->first()->pendamping_nama;
+
                 $donaturid=$dns->donatur_id;
                 $donaturnama=Donatur::where('id',$donaturid)->first()->donatur_nama;
                 $santriid=Santri::where('id',$santri[$randomsantri])->first()->id;
@@ -58,16 +66,27 @@ class DonasiController extends Controller
                     'donatur_id'=>$donaturid,
                     'donasi_donatur_nama' =>$donaturnama,
                     'donasi_santri_id' => $santriid,
-                    'santri_nama' => $santrinama,
+                    'donasi_santri_nama' => $santrinama,
+                    'donasi_pendamping_id' => $pendampingid,
+                    'donasi_pendamping_nama' => $pendampingnama,
                 );
             }
         }else{
             $j=0;
             foreach ($donasi as $key => $dns) {    
+                $randompendamping=array_rand($pendamping,1);
+                $pendampingid=Pendamping::where('id',$pendamping[$randompendamping])->first()->id;
+                $pendampingnama=Pendamping::where('id',$pendamping[$randompendamping])->first()->pendamping_nama;
+
                 $jumlahdonasi=$dns->donasi_jumlah_santri;  
                 $donaturid=$dns->donatur_id;
                 $donaturnama=Donatur::where('id',$donaturid)->first()->donatur_nama;
                 for ($i=0; $i < $jumlahdonasi; $i++) { 
+                    //pilih pendamping secara acak
+                    $randompendamping=array_rand($pendamping,1);
+                    $pendampingid=Pendamping::where('id',$pendamping[$randompendamping])->first()->id;
+                    $pendampingnama=Pendamping::where('id',$pendamping[$randompendamping])->first()->pendamping_nama;
+
                     $santriid=Santri::where('id',$santri[$randomsantri[$j]])->first()->id;
                     $santrinama=Santri::where('id',$santri[$randomsantri[$j]])->first()->santri_nama;
                     $arrDonasi[]= array('id' => $dns->id,
@@ -75,7 +94,9 @@ class DonasiController extends Controller
                         'donatur_id'=>$donaturid,
                         'donasi_donatur_nama' =>$donaturnama,
                         'donasi_santri_id' => $santriid,
-                        'santri_nama' => $santrinama,
+                        'donasi_santri_nama' => $santrinama,
+                        'donasi_pendamping_id' => $pendampingid,
+                        'donasi_pendamping_nama' => $pendampingnama,
                     );
                     $j++;
                 }
@@ -125,11 +146,13 @@ class DonasiController extends Controller
             $donasi=$request->get('dataDonasi')[0];
             $donaturid=$donasi['donatur_id'];
             $santriid=$donasi['donasi_santri_id'];
+            $pendampingid=$donasi['donasi_pendamping_id'];
             $donatur=Donatur::where('id',$donaturid)->first();
             $donatur->santri()->attach(['donatur_id'=>$donaturid],[
                 'santri_id' =>$santriid,
+                'pendamping_id' => $pendampingid,
                 'donasi_id' =>$donasi['id'],
-                'donatur_santri_status' =>'0',
+                'donatur_santri_status' =>'1', //aktif
             ]);
             #update status santri sudah menerima donasi
             Santri::where('id',$santriid)->update(['santri_status'=>'5']);
@@ -151,11 +174,13 @@ class DonasiController extends Controller
                 $id=$request->get('dataDonasi')[$i]['id'];
                 $donaturid=$request->get('dataDonasi')[$i]['donatur_id'];
                 $santriid=$request->get('dataDonasi')[$i]['donasi_santri_id'];
+                $pendampingid=$request->get('dataDonasi')[$i]['donasi_pendamping_id'];
                 $donatur=Donatur::where('id',$donaturid)->first();
                 $donatur->santri()->attach(['donatur_id'=>$donaturid],[
                     'santri_id' =>$santriid,
                     'donasi_id' =>$id,
-                    'donatur_santri_status' =>'0',
+                    'pendamping_id' => $pendampingid,
+                    'donatur_santri_status' =>'1', //aktif
                 ]);
                 #update status santri sudah menerima donasi
                 Santri::where('id',$santriid)->update(['santri_status'=>'5']);

@@ -36,6 +36,6 @@ class ProdukAPI extends Controller
         $produk->save();
 
         return response()->json($produk,200);
-
     }
+
 }

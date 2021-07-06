@@ -31,9 +31,9 @@ class Donatur extends Model
         'donatur_status', //0=tidak aktif 1=aktif data belum lengkap 2=aktif data sudah lengkap 
     ];
     public function santri(){
-        return $this->belongsToMany('App\Models\Donatur','donatur_santri','donatur_id','santri_id','id','id')
+        return $this->belongsToMany('App\Models\Santri','donatur_santri','donatur_id','santri_id','id','id')
                     ->as('donatursantri')
-                    ->withPivot('donatur_santri_status')
+                    ->withPivot('donasi_id','pendamping_id','donatur_santri_status')
                     ->withTimestamps();
     }
     public function hadist(){
