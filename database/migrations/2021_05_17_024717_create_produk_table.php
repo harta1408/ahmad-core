@@ -19,6 +19,7 @@ class CreateProdukTable extends Migration
             $table->text('produk_deskripsi')->nullable();
             $table->string('produk_lokasi_gambar')->nullable();
             $table->string('produk_lokasi_video')->nullable();
+            $table->integer('produk_masa_bimbingan',3)->default(0);
             $table->double('produk_harga',12,2)->default(0);
             $table->double('produk_discount',6,2)->default(0);
             $table->integer('produk_stok')->default(0);

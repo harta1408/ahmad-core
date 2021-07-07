@@ -211,7 +211,7 @@ class SantriAPI extends Controller
                   'santri_kecamatan'=>$request->get('santri_kecamatan'),
                   'santri_kota'=>$request->get('santri_kota'),
                   'santri_provinsi'=>$request->get('santri_provinsi'),
-                  'santri_status' => '2',
+                  'santri_status' => '4',
                   ]);
         if(!$exec){
             return response()->json(['status' => 'error', 'message' => "Data Cannot be Save", 'code' => 404]);

@@ -13,6 +13,7 @@ class Produk extends Model
         'produk_deskripsi', //penjelasan produk
         'produk_lokasi_gambar', //lokasi gambar produk
         'produk_lokasi_video', //lokasi video produk
+        'produk_masa_bimbingan', //masa bimbingan dalam hari
         'produk_harga',  //harga produk
         'produk_discount', //discount
         'produk_stok', // jumlah stok

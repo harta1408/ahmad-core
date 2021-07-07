@@ -194,7 +194,7 @@ class PendampingController extends Controller
                     'pendamping_kota'=>$request->get('pendamping_kota'),
                     'pendamping_provinsi'=>$request->get('pendamping_provinsi'),
                     'pendamping_kode_pos' =>$request->get('pendamping_kode_pos'),
-                    // 'pendamping_status' => '2', //data sudah lengkap
+                    'pendamping_status' => '4', //data sudah lengkap
                 ]);
         return redirect()->action('PendampingController@pendampingRenewIndex');
     }

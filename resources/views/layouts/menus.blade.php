@@ -449,9 +449,9 @@
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="{{route('soal.index')}}" class="nav-link">
+                  <a href="{{route('bimbingan.index')}}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Soal Ujian</p>
+                    <p>Bimbingan</p>
                   </a>
                 </li>
                 <li class="nav-item">
@@ -751,7 +751,7 @@
       <strong>Copyright &copy; 2021 <a href="http://agile.co.id">AHMaD Project</a></strong>
       All rights reserved.
       <div class="float-right d-none d-sm-inline-block">
-        {{ Auth::user()->name}} - <b>Version</b> BETA 1.03
+        {{ Auth::user()->name}} - <b>Version</b> BETA 1.04
       </div>
     </footer>
 

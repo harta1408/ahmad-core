@@ -3,6 +3,8 @@
 namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Models\ProdukLacak;
+use App\Models\KirimProduk;
+use App\Http\Controllers\BimbinganController;
 
 class ProdukCommand extends Command
 {
@@ -11,7 +13,7 @@ class ProdukCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'periksan:kirimproduk {noresi}';
+    protected $signature = 'periksa:kirimproduk {noresi}';
 
     /**
      * The console command description.
@@ -74,5 +76,12 @@ class ProdukCommand extends Command
             'tanggal' => date("Y-m-d H:i:s"),
             'deskripsi' => 'Paket diterima oleh Keluarga',
         ]);
+
+
+        #update bimbingan produk telah diterima santri
+        $mulai=date("Y-m-d H:i:s");
+        $santriid=KirimProduk::where('kirim_no_resi',$noresi)->first()->santri_id;
+        $bimbingancontrol=new BimbinganController;
+        $bimbingancontrol->bimbinganSantriMulai($santriid,$mulai);
     }
 }

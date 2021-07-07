@@ -8,6 +8,7 @@ use App\Models\Santri;
 use App\Models\Produk;
 use App\Models\Lembaga;
 use App\Models\DonaturSantri;
+use App\Models\Bimbingan;
 use Validator;
 
 class KirimProdukController extends Controller
@@ -72,6 +73,7 @@ class KirimProdukController extends Controller
         $donsantri=DonaturSantri::where([['santri_id',$santriid],['donatur_santri_status','1']])->first();
         $donaturid=$donsantri->donatur_id;
         $donasiid=$donsantri->donasi_id;
+        $pendampingid=$donsantri->pendamping_id;
 
      
         $lembaga=Lembaga::first();
@@ -102,7 +104,25 @@ class KirimProdukController extends Controller
         $kirimproduk->save();
 
         #update status santri sendang menunggu produk
-        Santri::where('id',$santriid)->update(['santri_status','5']);
+        Santri::where('id',$santriid)->update(['santri_status'=>'5']);
+
+        #buat pesan ke entitas terkait bahwa produk sedang dikirimkan
+        //-----belum jadi
+
+        #simpan bimbingan dengan status masih 0, belum aktif
+        #bimbingan bisa aktif otomatis pada saat produk sampai ke santri
+        $bimbingan=new Bimbingan;
+        $bimbingan->santri_id=$santriid;
+        $bimbingan->pendamping_id=$pendampingid;
+        $bimbingan->produk_id=$produkid;
+        $bimbingan->bimbingan_mulai=date("Y-m-d"); //diganti tanggal sampai
+        $bimbingan->bimbingan_berakhir=date("Y-m-d"); //diganti tanggal sampai + produk masa bimbingan
+        $bimbingan->bimbingan_nilai_angka='0';
+        $bimbingan->bimbingan_nilai_huruf='0';
+        $bimbingan->bimbingan_predikat='BELAJAR';
+        $bimbingan->bimbingan_catatan='';
+        $bimbingan->bimbingan_status='0'; //belum aktif
+        $bimbingan->save();
 
         return redirect()->action('KirimProdukController@index');
     }

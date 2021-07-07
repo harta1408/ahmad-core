@@ -70,7 +70,6 @@ Route::middleware(['cors'])->group(function () {
     Route::get('donasi/santri/{id}','DonasiAPI@donasiSantriById');
     Route::put('donasi/update/rekening/{id}','DonasiAPI@donasiUpdateRekening');
 
-
     Route::post('berita/save','BeritaAPI@beritaSimpan');
     Route::put('berita/update/{id}','BeritaAPI@beritaUpdate');
     Route::get('berita/kampanye','BeritaAPI@beritaKampanye');
@@ -82,10 +81,10 @@ Route::middleware(['cors'])->group(function () {
     Route::post('referral/send/link','ReferralAPI@referralSendLink');
     Route::put('referral/update/berita','ReferralAPI@rreferralUpdateIdBerita');
 
-    Route::post('pengingat/save','pengingatAPI@pengingatSimpan');
-    Route::put('pengingat/update/{id}','pengingatAPI@pengingatUpdate');
-    Route::get('pengingat/jenis/{jenis}','pengingatAPI@pengingatJenis');
-    Route::get('pengingat/list','pengingatAPI@pengingatList');
+    Route::post('pengingat/save','PengingatAPI@pengingatSimpan');
+    Route::put('pengingat/update/{id}','PengingatAPI@pengingatUpdate');
+    Route::get('pengingat/jenis/{jenis}','PengingatAPI@pengingatJenis');
+    Route::get('pengingat/list','PengingatAPI@pengingatList');
 
     Route::get('pesan/aktif/byuser/{userid}','PesanAPI@pesanAktifByUserId');
     Route::get('pesan/unread/byuser/{userid}','PesanAPI@pesanBelumTerbacaByUserId');
@@ -100,6 +99,9 @@ Route::middleware(['cors'])->group(function () {
     Route::post('kuesioner/santri/simpan','KuesionerAPI@kuesionerSantriSimpan');
 
     Route::post('message/send/wa','MessageAPI@sendWhatsApp');
+
+    Route::post('bimbingan/penilaian/santri','BimbinganAPI@bimbinganPenilaian');
+    Route::get('bimbingan/dashboard/santri/{santriid}','BimbinganAPI@bimbinganDashboardSantri');
 
     Route::get('materi/list','MateriAPI@materiList');
     Route::get('soal/list','SoalAPI@soalList');

@@ -89,6 +89,8 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['role:manajer|helpdesk|s
 
     Route::resource('materi','MateriController');
     Route::resource('kuesioner', 'KuesionerController');
+    Route::resource('bimbingan', 'BimbinganController');
+    
     Route::resource('soal','SoalController');
     Route::post('soal/main','SoalController@main')->name('soal.main');
     Route::post('soal/new/menu','SoalController@soalNewMenu')->name('soal.new.menu');
