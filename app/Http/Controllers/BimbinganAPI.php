@@ -29,7 +29,16 @@ class BimbinganAPI extends Controller
         $materiid=$request->get('materi_id');
         $pendampingid=$request->get('pendamping_id');
 
+        #cari santri
+        $santri=Santri::where('id',$santriid)->first();
+        if (!$santri) {
+            return response()->json(['status' => 'error', 'message' => 'Santri dengan ID '.$santriid.' Tidak ditemukan', 'code' => 404]);
+        }
         $bimbingan=Bimbingan::where('santri_id',$santriid)->first();
+        if (!$bimbingan) {
+            return response()->json(['status' => 'error', 'message' => 'Produk belum dikirimkan ke santri '.$santri->santri_nama, 'code' => 404]);
+        }
+
         $bimbinganid=$bimbingan->id;
         #pastikan tidak ada materi bimbingan yang ganda
         $bimbingan->materi()->detach($materiid);
@@ -79,6 +88,13 @@ class BimbinganAPI extends Controller
         return response()->json($dashsantri,200);
     }
     public function bimbinganDashboardDonatur($donaturid){
+        #validasi
+        $materi=Materi::where('materi_status','1')->get();
+        if(!$materi){
+            return response()->json(['status' => 'error', 'message' => 'Belum ada Materi', 'code' => 404]);
+        }
+
+
         $jmldonasi=Donasi::where('donatur_id',$donaturid)->sum('donasi_jumlah_santri');
         $jmltersalurkan=DonaturSantri::where('donatur_id',$donaturid)->count();
 
@@ -92,9 +108,14 @@ class BimbinganAPI extends Controller
 
         $jmlmateri=Materi::where('materi_status','1')->count()*$jmltersalurkan;        
         $materiselesai=BimbinganMateri::whereIn('bimbingan_id',$bimbinganids)->count();
-        $progresbelajar=$materiselesai/$jmlmateri;
+        if($materiselesai==0){
+            return response()->json(['status' => 'error', 'message' => 'Santri Belum Bimbingan', 'code' => 404]);
+        }
+        $progresbelajar=$materiselesai/$jmlmateri; //perhitungan sepertinya belum sesuai
 
-        $dashdonatur=['donatur_id'=> $donaturid,
+
+        $donatur=Donatur::where('id',$donaturid)->first();
+        $dashdonatur=['donatur'=> $donatur,
                      'donatur_tanggal' => date("Y-m-d"),
                      'donatur_paket_donasi' => $jmldonasi,
                      'donatur_paket_tersalurkan' => $jmltersalurkan,
