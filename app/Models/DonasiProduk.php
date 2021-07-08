@@ -1,7 +1,7 @@
 <?php
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\Relations\Pivot;
 class DonasiProduk extends Pivot
 {
     #tabel yang berisi produk yang di donasikan, hubungan many to many karena ada
