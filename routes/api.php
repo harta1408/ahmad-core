@@ -103,7 +103,7 @@ Route::middleware(['cors'])->group(function () {
     Route::post('bimbingan/penilaian/santri','BimbinganAPI@bimbinganPenilaian');
     Route::get('bimbingan/dashboard/santri/{santriid}','BimbinganAPI@bimbinganDashboardSantri');
     Route::get('bimbingan/dashboard/donatur/{donaturid}','BimbinganAPI@bimbinganDashboardDonatur');
-    
+    Route::get('bimbingan/list/santri/donatur/{donaturid}','BimbinganAPI@bimbinganListSantryByDonatur');
     
 
     Route::get('materi/list','MateriAPI@materiList');

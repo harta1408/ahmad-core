@@ -22,6 +22,10 @@ class Bimbingan extends Model
         'bimbingan_predikat', //predikat kelulusan
         'bimbingan_catatan', //catatan pendamping jika ada
         'bimbingan_status', //0=belum aktif 1=aktif 2=selesai
+
+        //dummy
+        'bimbingan_progress',
+
     ];
     public function santri()
     {

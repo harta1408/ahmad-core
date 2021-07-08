@@ -94,7 +94,6 @@ class BimbinganAPI extends Controller
             return response()->json(['status' => 'error', 'message' => 'Belum ada Materi', 'code' => 404]);
         }
 
-
         $jmldonasi=Donasi::where('donatur_id',$donaturid)->sum('donasi_jumlah_santri');
         $jmltersalurkan=DonaturSantri::where('donatur_id',$donaturid)->count();
 
@@ -105,14 +104,12 @@ class BimbinganAPI extends Controller
         $bimbinganids=Bimbingan::whereIn('santri_id',$santriids)->pluck('id')->toArray();
         $jmlsantriselesai=Bimbingan::whereIn('santri_id',$santriids)->where('bimbingan_status','2')->count();
 
-
         $jmlmateri=Materi::where('materi_status','1')->count()*$jmltersalurkan;        
         $materiselesai=BimbinganMateri::whereIn('bimbingan_id',$bimbinganids)->count();
         if($materiselesai==0){
             return response()->json(['status' => 'error', 'message' => 'Santri Belum Bimbingan', 'code' => 404]);
         }
         $progresbelajar=$materiselesai/$jmlmateri; //perhitungan sepertinya belum sesuai
-
 
         $donatur=Donatur::where('id',$donaturid)->first();
         $dashdonatur=['donatur'=> $donatur,
@@ -123,5 +120,28 @@ class BimbinganAPI extends Controller
                      'bimbingan_santri_progress'=>$progresbelajar];
 
         return response()->json($dashdonatur,200);
+    }
+
+    public function bimbinganListSantryByDonatur($donaturid){
+        #validasi
+        $materi=Materi::where('materi_status','1')->get();
+        if(!$materi){
+            return response()->json(['status' => 'error', 'message' => 'Belum ada Materi', 'code' => 404]);
+        }
+        $donatursantri=function($query) use ($donaturid){
+            $query->where('id',$donaturid);
+        };
+        $santriids=Santri::whereHas('donatur',$donatursantri)->pluck('id')->toArray();
+        $bimbingan=Bimbingan::with('santri')->whereIn('santri_id',$santriids)->get();
+
+        foreach ($bimbingan as $key => $bm) {
+            $materiselesai=BimbinganMateri::where('bimbingan_id',$bm->bimbingan_id)->count();
+            $jmlmateri=Materi::where('materi_status','1')->count();
+            $progresbelajar=$materiselesai/$jmlmateri;
+            $bm->bimbingan_progress=$progresbelajar;
+        }
+
+
+        return response()->json($bimbingan,200);
     }
 }
