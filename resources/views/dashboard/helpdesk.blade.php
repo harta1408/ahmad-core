@@ -8,7 +8,7 @@
       <div class="small-box bg-info">
         <div class="inner">
           <div class="long-title"><h4>Rp. {!!number_format($dashboard->dash_donasi_nilai)!!}</h4></div>
-            <p>Penerimaan Donasi Harian</p>
+            <p>Donasi Harian</p>
           </div>
           <div class="icon">
             <i class="ion ion-pie-graph"></i>
@@ -19,15 +19,29 @@
     <!-- ./col -->
     <div class="col-lg-3 col-6">
       <!-- small box -->
-      <div class="small-box bg-success">
+      <div class="small-box bg-danger">
         <div class="inner">
-          <div class="long-title"><h4>{!!number_format($dashboard->dash_donasi_jumlah)!!}</h4></div>
-            <p>Produk Dibagikan</p>
+          <div class="long-title"><h4>Rp. {!!number_format($dashboard->dash_donasi_nilai)!!}</h4></div>
+            <p>Outstanding Cicilan</p>
           </div>
           <div class="icon">
             <i class="ion ion-stats-bars"></i>
           </div>
-        <a href="{{route('donasi.index')}}" class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
+        <a href="#" class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
+      </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-3 col-6">
+      <!-- small box -->
+      <div class="small-box bg-success">
+        <div class="inner">
+          <div class="long-title"><h4><sup style="font-size: 20px"> {!!number_format($dashboard->dash_bimbingan_jumlah)!!}</sup></h4></div>
+            <p>Bimbingan</p>
+          </div>
+          <div class="icon">
+            <i class="fas fa-chalkboard-teacher"></i>
+          </div>
+        <a href="#" class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
       </div>
     </div>
     <!-- ./col -->
@@ -35,27 +49,13 @@
       <!-- small box -->
       <div class="small-box bg-warning">
         <div class="inner">
-          <div class="long-title"><h4><sup style="font-size: 20px">%</sup></h4></div>
-            <p>Bimbingan</p>
-          </div>
-          <div class="icon">
-            <i class="ion ion-bag"></i>
-          </div>
-        <a href="#" class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
-      </div>
-    </div>
-    <!-- ./col -->
-    <div class="col-lg-3 col-6">
-      <!-- small box -->
-      <div class="small-box bg-danger">
-        <div class="inner">
-          <div class="long-title"><h4>0</h4></div>
-            <p>Menunggu Otorisasi</p>
+          <div class="long-title"><h4>{!!number_format($dashboard->dash_santri_otorisasi)!!}</h4></div>
+            <p>Pengajuan Santri</p>
           </div>
           <div class="icon">
             <i class="ion ion-person-add"></i>
           </div>
-        <a href="#" class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
+        <a href="{{route('santri.otorisasi.index')}}" class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
       </div>
     </div>
     <!-- ./col -->

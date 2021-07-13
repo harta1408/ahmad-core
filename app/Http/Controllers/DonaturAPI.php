@@ -521,6 +521,7 @@ class DonaturAPI extends Controller
         $donatur=Donatur::where('id',$id)->first();
         return response()->json($donatur,200);
     }
+
     public function donaturKode()
     {
       //otomatis pengaturan kode santri dengan format 

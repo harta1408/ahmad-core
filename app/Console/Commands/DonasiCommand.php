@@ -38,6 +38,7 @@ class DonasiCommand extends Command
      */
     public function handle()
     {
-        Donasi::where('donasi_status','1')->update(['donasi_status'=>'2']);
+        #di matikan dulu, nanti di ganti dengan proses dari moota
+        // Donasi::where('donasi_status','1')->update(['donasi_status'=>'2']);
     }
 }

@@ -57,4 +57,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public function donatur(){
         return $this->hasOne('App\Models\Donatur','donatur_email','email');
     }
+    public function pendamping(){
+        return $this->hasOne('App\Models\Pendamping','pendamping_email','email');
+    }
 }

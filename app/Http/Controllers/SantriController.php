@@ -252,11 +252,11 @@ class SantriController extends Controller
         }
     }
     public function santriOtorisasiLoad(){
-        $santri=Santri::with('user')->where('santri_status','2')->get();
+        $santri=Santri::with('user')->where('santri_status','3')->get();
         return $santri;
     }
     public function santriOtorisasiUpdate(Request $request,$id){
-        $exec=Santri::where('id','=' ,$id)->update(['santri_status' => '3']); //data di otorisasi
+        $exec=Santri::where('id','=' ,$id)->update(['santri_status' => '4']); //data di otorisasi
     }
     public function santriOtorisasiIndex(){
         return view('santri/santriotorisasi',compact('santri'));
@@ -264,7 +264,7 @@ class SantriController extends Controller
     
     #------------utility
     public function santriSimpleList(){
-        $santri=Santri::where('santri_status','1')->get();
+        $santri=Santri::where('santri_status','!=','0')->get();
         return $santri;
     }
 }

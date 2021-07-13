@@ -263,7 +263,7 @@ class PendampingController extends Controller
 
     #------------utility
     public function pendampingSimpleList(){
-        $pendamping=Pendamping::where('pendamping_status','1')->get();
+        $pendamping=Pendamping::where('pendamping_status','!=','0')->get();
         return $pendamping;
     }
 }

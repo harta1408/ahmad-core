@@ -13,7 +13,8 @@ class Bayar extends Model
     #jika gagal bayar status menjadi 3
     protected $table='bayar';
     protected $fillable=[
-        'donasi_id', //id donasi
+        'cicilan_id', //id cicilan
+        'bayar_tanggal', //tanggal pembayaran diterima
         'bayar_total', //total pembayaran, termasuk kode unik jika berupa cicilan maka sebesar nilai cicilannya
         'bayar_kode_unik', //kode unik untuk melakukan tracing ke rekening bank
         'bayar_kode_voucer', //jika ada promo

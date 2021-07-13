@@ -44,6 +44,7 @@ $(function(){
             {
               dataField: "referral_entitas_kode",
               caption: "Pengirim",
+              width:100,
             },{
               dataField: "referral_telepon",
               caption: "No Tujuan",

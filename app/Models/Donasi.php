@@ -45,9 +45,9 @@ class Donasi extends Model
                     ->withPivot('donasi_id','pendamping_id','donatur_santri_status')
                     ->withTimestamps();
     }
-    public function bayar(){
-        return $this->hasOne('App\Models\Bayar','donasi_id','id');
-    }
+    // public function bayar(){
+    //     return $this->hasOne('App\Models\Bayar','donasi_id','id');
+    // }
     public function rekeningbank(){
         return $this->hasOne('App\Models\RekeningBank','id','rekening_id');
     }

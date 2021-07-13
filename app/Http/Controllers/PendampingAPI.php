@@ -183,7 +183,6 @@ class PendampingAPI extends Controller
           'pendamping_photo' => 'required | image | mimes:jpeg,png,jpg,gif | max:256'
         ]);
     
-      
         // menyimpan data file yang diupload ke variabel $file
         $images = $request->file('pendamping_photo');
         $new_name=$pendamping_kode.'.'.$images->getClientOriginalExtension();
@@ -192,10 +191,7 @@ class PendampingAPI extends Controller
         $tujuan_upload = base_path("images");
         $images->move($tujuan_upload,$new_name); 
 
-        // dd($request->root());
-
         $fileloc=substr($request->root(),0,strlen($request->root())-6) ."images/".$new_name;
-        // $fileloc=$request->root()."/"."images/".$new_name;
 
         Pendamping::where('pendamping_kode','=',$pendamping_kode)->update(['pendamping_lokasi_photo'=>$fileloc]);
 

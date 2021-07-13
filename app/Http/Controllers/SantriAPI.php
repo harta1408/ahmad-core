@@ -255,7 +255,7 @@ class SantriAPI extends Controller
           'santri_photo' => 'required | image | mimes:jpeg,png,jpg,gif | max:256'
         ]);
     
-      
+
         // menyimpan data file yang diupload ke variabel $file
         $images = $request->file('santri_photo');
         $new_name=$santri_kode.'.'.$images->getClientOriginalExtension();
@@ -264,10 +264,7 @@ class SantriAPI extends Controller
         $tujuan_upload = base_path("images");
         $images->move($tujuan_upload,$new_name); 
 
-        // dd($request->root());
-
         $fileloc=substr($request->root(),0,strlen($request->root())-6) ."images/".$new_name;
-        // $fileloc=$request->root()."/"."images/".$new_name;
 
         Santri::where('santri_kode','=',$santri_kode)->update(['santri_lokasi_photo'=>$fileloc]);
 

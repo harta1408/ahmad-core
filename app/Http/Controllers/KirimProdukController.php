@@ -9,7 +9,9 @@ use App\Models\Produk;
 use App\Models\Lembaga;
 use App\Models\DonaturSantri;
 use App\Models\Bimbingan;
+use App\Http\Controllers\BimbinganController;
 use Validator;
+use Carbon\Carbon;
 
 class KirimProdukController extends Controller
 {
@@ -24,22 +26,24 @@ class KirimProdukController extends Controller
     }
     public function index()
     {
-        // $donatur=Donatur::with('user')->where('donatur_status','!=','0')->get();
-        // foreach ($donatur as $key => $dnt) {
-        //     if($dnt->user['email_verified_at']==null){
-        //         $dnt->donatur_status="Belum Konfirmasi Email";
-        //     }else{
-        //         if($dnt->donatur_status=="2"){
-        //             $dnt->donatur_status="Belum Lengkap";
-        //         }else{
-        //             $dnt->donatur_status="Sudah Lengkap";
-        //         }
+        return view('produk/kirimlist');
+    }
+    public function load(){
+        $kirimproduk=KirimProduk::where('kirim_status','1')->get();
+        // foreach ($kirimproduk as $key => $kp) {
+        //     if($kp->kirim_status=="1"){
+        //         $kp->kirim_status="Dalam Pengiriman";
+        //     }
+        //     if($kp->kirim_status=="2"){
+        //         $kp->kirim_status="Sudah Diterima";
+        //     }
+        //     if($kp->kirim_status=="3"){
+        //         $kp->kirim_status="Dikembalikan";
         //     }
         // }
-        $kirimproduk=KirimProduk::where('kirim_status','1')->get();
-        return view('produk/kirimlist',compact('kirimproduk'));
-    }
 
+        return $kirimproduk;
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -158,35 +162,30 @@ class KirimProdukController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(), [
-            'donatur_nama' => 'required|string',
-            'donatur_telepon' => 'required|string',
-            'donatur_alamat' => 'required|string',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['status' => 'error', 'message' => $validator->messages()->first(), 'code' => 404]);
+        $noresi="";
+        $kirimstatus="";
+        if(isset($request->kirim_no_resi)){ //no resi dikirim
+            $noresi=$request->kirim_no_resi;
+            KirimProduk::where('id',$id)->update(['kirim_no_resi'=>$noresi]);
         }
 
-        $exec=Donatur::where('id','=' ,$id)
-            ->update(['donatur_nid'=>$request->get('donatur_nid'),
-                    'donatur_nama'=>$request->get('donatur_nama'),
-                    'donatur_tmp_lahir'=>$request->get('donatur_tmp_lahir'), 
-                    'donatur_tgl_lahir'=>$request->get('donatur_tgl_lahir'), 
-                    'donatur_gender'=>$request->get('donatur_gender'), 
-                    'donatur_agama'=>$request->get('donatur_agama'), 
-                    'donatur_telepon'=>$request->get('donatur_telepon'), 
-                    'donatur_kerja'=>$request->get('donatur_kerja'),
-                    'donatur_alamat'=>$request->get('donatur_alamat'), 
-                    'donatur_kode_pos'=>$request->get('donatur_kode_pos'),
-                    'donatur_kelurahan'=>$request->get('donatur_kelurahan'),
-                    'donatur_kecamatan'=>$request->get('donatur_kecamatan'),
-                    'donatur_kota'=>$request->get('donatur_kota'),
-                    'donatur_provinsi'=>$request->get('donatur_provinsi'),
-                    'donatur_kode_pos' =>$request->get('donatur_kode_pos'),
-                    'donatur_status' => '2', //data sudah lengkap
-                ]);
-        return redirect()->action('DonaturController@donaturRenewIndex');
+        if(isset($request->kirim_status)){ //status tidak di perbaharui
+            if(!isset($request->kirim_tanggal_terima)){
+                return response()->json(['status' => 'error', 'message' => 'Tanggal Sampai Harus di Isi', 'code' => 200]);
+            }
+
+            $tglterima=$request->kirim_tanggal_terima;
+           
+            $kirimstatus=$request->kirim_status;
+            $kirimproduk=KirimProduk::where('id',$id)->first();
+            $santriid=$kirimproduk->santri_id;
+
+            $bimbingancontrol=new BimbinganController;
+            $bimbingancontrol->bimbinganSantriMulai($santriid,$tglterima);
+            KirimProduk::where('id',$id)->update(['kirim_tanggal_terima'=>$tglterima,'kirim_status'=>'2']);
+
+        }
+        return response()->json(['status' => 'success', 'message' => 'Berhasil di perbaharui', 'code' => 200]);
     }
 
     /**
@@ -199,34 +198,4 @@ class KirimProdukController extends Controller
     {
         //
     }
-
-    public function donaturRenewIndex(){
-        $donatur=Donatur::with('user')->where('donatur_status','!=','0')->get();
-        foreach ($donatur as $key => $dnt) {
-            if($dnt->user['email_verified_at']==null){
-                $dnt->donatur_status="Belum Konfirmasi Email";
-            }else{
-                if($dnt->donatur_status=="2"){
-                    $dnt->donatur_status="Belum Lengkap";
-                }else{
-                    $dnt->donatur_status="Sudah Lengkap";
-                }
-            }
-        }
-        return view('donatur/donaturrenewindex',compact('donatur'));
-    }
-    public function donaturRenewMain(Request $request){
-        $id=$request->get('donatur_id');
-        $status=$request->get('donatur_state');
-
-        if($status=="UPDATE"){
-            $donatur=Donatur::where('id',$id)->first();  
-            return view ('donatur/donaturupdate',compact('donatur'));
-        }else{
-
-        }
-
-
-    }
-
 }

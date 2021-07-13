@@ -1,10 +1,9 @@
 @extends('layouts.menus')
 @section('content')
-    <div class="long-title"><h3>Daftar Pengiriman Produk</h3></div>
+    <div class="long-title"><h3>Daftar Donasi Pending</h3></div>
     <div class="second-group">
         <div id="gridData"></div>
-    </div>
-
+    </div> 
 @endsection
 
 @section('script')
@@ -15,16 +14,17 @@ $(function(){
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       }
     });
+    
     var gridDataSource = new DevExpress.data.DataSource({
         load: function (loadOptions) {
             return $.ajax({
-                url: "{{route('kirimproduk.load')}}"
+                url: "{{route('donasi.pending.load')}}"
             })
         },
         update: function(key, value) {
             var kunci= key.id;
             $.ajax({
-                url: "{{URL::to('dashboard/kirimproduk')}}"+"/"+kunci,
+                url: "{{URL::to('dashboard/donasi/pending/update')}}"+"/"+kunci,
                 method: "PUT",
                 data: value,
                 dataType: "json",
@@ -76,13 +76,14 @@ $(function(){
         showBorders: true,
         dateSerializationFormat:"yyyy-MM-dd",
         selection: {
-            mode: "single"
+            mode: "single",
         },
         editing: {
             mode: "batch",
             allowUpdating: true,
             useIcons: true,
         },
+        hoverStateEnabled: true,
         searchPanel: {
             visible: true
         },
@@ -91,40 +92,40 @@ $(function(){
         },
         columns: [
             {
-              dataField: "kirim_penerima_nama",
-              caption: "Tujuan",
+                dataField: "donasi_no",
+                caption: "No Donasi",
             },{
-              dataField: "kirim_no_resi",
-              caption: "No Resi",
+                dataField: "donatur.donatur_nama",
+                caption: "Donatur",
             },{
-              dataField: "kirim_tanggal_kirim",
-              caption: "Tanggal Kirim",
+                dataField: "donasi_jumlah_santri",
+                caption: "Jumlah Santri",
             },{
-              dataField: "kirim_tanggal_terima",
-              caption: "Tanggal Sampai",
-              dataType:"date",
-              format:"shortDate",       
-            },{
-                dataField: "kirim_status",
-                caption: "Status",
+                dataField: "donasi_status",
+                caption: "Pembayaran Pertama",
                 lookup: {
-                    dataSource: [{"kirim_status":"1","kirim_status_desc":"Dalam Pengiriman"},
-                            {"kirim_status":"2","kirim_status_desc":"Sudah Diterima"}],
-                    valueExpr: "kirim_status",
-                    displayExpr: "kirim_status_desc",
+                    dataSource: [{"donasi_status":"1","donasi_status_desc":"Belum Diterima"},
+                            {"donasi_status":"2","donasi_status_desc":"Sudah Diterima"}],
+                    valueExpr: "donasi_status",
+                    displayExpr: "donasi_status_desc",
                 },
                 validationRules:[{
                         type: "required",
                         message: "Pilih dari daftar",}],
-            },            
+            },{
+                dataField: "donasi_tanggal_bayar",
+                caption: "Tanggal Bayar",
+                dataType:"date",
+                format:"shortDate",     
+            },
+            
         ],
         onEditingStart: function(e){
-        if (e.column.dataField != "kirim_no_resi" && e.column.dataField != "kirim_tanggal_terima" && e.column.dataField != "kirim_status") {
+        if (e.column.dataField != "donasi_tanggal_bayar" && e.column.dataField != "donasi_status") {
              e.cancel = true;
           }
         },
     });
-   
 });
 </script>
 @endsection

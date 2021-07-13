@@ -24,7 +24,6 @@ class ReferralController extends Controller
 	}
     public function index()
     {
-        
         return view('referral/referralindex');
     }
 
@@ -35,28 +34,33 @@ class ReferralController extends Controller
         $referral=new Referral;
         if($jenis=="DONATUR"){
             $donatur=Donatur::where('id',$id)->first();
-            $jenisentitas=substr($donatur->donatur_kode,0,1); 
-            $berita=Berita::where([['berita_jenis','3'],['berita_entitas',$jenisentitas]])->latest('created_at')->first();
-            if(!$berita){
-                return false;
-            }
-            $referral->berita_id=$berita->id;
+            // $jenisentitas=substr($donatur->donatur_kode,0,1); 
+            // $berita=Berita::where([['berita_jenis','3'],['berita_entitas',$jenisentitas]])->latest('created_at')->first();
+            // if(!$berita){
+            //     return response()->json(['status' => 'error', 'message' => 'Broadcast Donatur tidak ditemukan', 'code' => 404]);
+            // }
+            // $referral->berita_id=$berita->id;
             $referral->referral_entitas_kode=$donatur->donatur_kode;
             $referral->referral_nama=$donatur->donatur_nama;
         }
         if($jenis=='SANTRI'){
             $santri=Santri::where('id',$id)->first();
-            $jenisentitas=substr($santri->santri_kode,0,1); 
-            $berita=Berita::where([['berita_jenis','3'],['berita_entitas',$jenisentitas]])->latest('created_at')->first();
-            $referral->berita_id=$berita->id;
+            // $jenisentitas=substr($santri->santri_kode,0,1); 
+            // $berita=Berita::where([['berita_jenis','3'],['berita_entitas',$jenisentitas]])->latest('created_at')->first();
+            // if(!$berita){
+            //     return response()->json(['status' => 'error', 'message' => 'Broadcast Santri tidak ditemukan', 'code' => 404]);
+            // }
+            // $referral->berita_id=$berita->id;
             $referral->referral_entitas_kode=$santri->santri_kode;
             $referral->referral_nama=$santri->santri_nama;
         }
         if($jenis=='PENDAMPING'){
             $pendamping=Pendamping::where('id',$id)->first();
-            $jenisentitas=substr($pendamping->pendamping_kode,0,1); 
-            $berita=Berita::where([['berita_jenis','3'],['berita_entitas',$jenisentitas]])->latest('created_at')->first();
-            $referral->berita_id=$berita->id;
+            // $jenisentitas=substr($pendamping->pendamping_kode,0,1); 
+            // if(!$berita){
+            //     return response()->json(['status' => 'error', 'message' => 'Broadcast Pendamping tidak ditemukan', 'code' => 404]);
+            // }
+            // $referral->berita_id=$berita->id;
             $referral->referral_entitas_kode=$pendamping->pendamping_kode;
             $referral->referral_nama=$pendamping->pendamping_nama;
         }
@@ -69,7 +73,7 @@ class ReferralController extends Controller
      */
     public function create()
     {
-        $referral=Referral::where('referral_status','1')->get();
+        $referral=Referral::where('referral_status','1')->orderBy('created_at','desc')->get();
         return $referral;
     }
 
@@ -81,30 +85,30 @@ class ReferralController extends Controller
      */
     public function store(Request $request)
     {
-        $urldonatur = Config::get('ahmad.referral.development.donatur');
-        $urlsantri = Config::get('ahmad.referral.development.santri');
-        $urlpendamping = Config::get('ahmad.referral.development.pendamping');
+        $url = Config::get('ahmad.referral.development'); 
 
         if (!isset($request->get('referral')['referral_telepon'])) {
             return response()->json(['status' => 'error', 'message' => 'Telepon Harus di Isi', 'code' => 404]);
         }
+        if (!isset($request->get('referral')['referral_entitas_tujuan'])) {
+            return response()->json(['status' => 'error', 'message' => 'Pilih Entitas Tujuan', 'code' => 404]);
+        }
         $refpone=$request->get('referral')['referral_telepon'];
         $refenkode=$request->get('referral')['referral_entitas_kode'];
-        $berita_id=$request->get('referral')['berita_id'];
-        $jenisentitas=substr($refenkode,0,1); 
-        if($jenisentitas=='1'){
-            
-            $url=$urldonatur.$refenkode;
-        }
-        if($jenisentitas=='2'){
-            $url=$urlsantri.$refenkode;
-        }
-        if($jenisentitas=='3'){
-            $url=$urlpendamping.$refenkode;
-        }
+        $jenisentitas=$request->get('referral')['referral_entitas_tujuan'];
 
-        $berita=Berita::where('id',$berita_id)->first();
-        $pesan=$berita->berita_judul." ".$url;
+        // if($jenisentitas=='1'){
+        //     $url=$urldonatur.$refenkode;
+        // }
+        // if($jenisentitas=='2'){
+        //     $url=$urlsantri.$refenkode;
+        // }
+        // if($jenisentitas=='3'){
+        //     $url=$urlpendamping.$refenkode;
+        // }
+
+        $berita=Berita::where([['berita_jenis','3'],['berita_entitas',$jenisentitas]])->latest('created_at')->first();
+        $pesan=$berita->berita_judul." ".$url.$refenkode;
 
         $requestsendmessage=array();
         $requestsendmessage[]= array('NOMOR_TUJUAN' => $refpone,
@@ -121,8 +125,8 @@ class ReferralController extends Controller
             $referral=new Referral;
             $referral->referral_entitas_kode=$refenkode;
             $referral->referral_telepon=$refpone;
-            $referral->berita_id=$berita_id;
-            $referral->referral_web_link=$url;
+            $referral->berita_id=$berita->id;
+            $referral->referral_web_link=$url.$refenkode;
             $referral->referral_status='1';
             $referral->save();
         }

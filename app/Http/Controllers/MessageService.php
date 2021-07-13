@@ -16,7 +16,7 @@ class MessageService extends Controller
 	}
     public function kirimEmailVerifikasi($useremail,$username,$hashcode){
 
-        return; //sementara program dibuat agar tidak mengirim email
+        // return; //sementara program dibuat agar tidak mengirim email
 
         // kirim email registrasi
         $tipe=User::where('email',$useremail)->first()->tipe;

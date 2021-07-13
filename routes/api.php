@@ -43,6 +43,7 @@ Route::middleware(['cors'])->group(function () {
     Route::post('santri/register/referral','SantriAPI@santriRegisterReferral');
     Route::post('santri/register/gmail','SantriAPI@santriRegisterGMail');
     Route::put('santri/update/profile/{id}','SantriAPI@santriUpdateProfile');
+    Route::post('santri/upload/photo','SantriAPI@santriUploadImage');
     Route::get('santri/byemail/{email}','SantriAPI@santriByEmail');
     Route::get('santri/list','SantriAPI@santriList');
     Route::get('santri/byid/{id}','SantriAPI@santriById');
@@ -53,6 +54,8 @@ Route::middleware(['cors'])->group(function () {
     Route::post('pendamping/register/gmail','PendampingAPI@pendampingRegisterGMail');
     Route::get('pendamping/byid/{id}','PendampingAPI@pendampingById');
     Route::get('pendamping/santri/byid/{id}','PendampingAPI@pendampingSantriById');
+    Route::post('pendamping/upload/photo','PendampingAPI@pendampingUploadImage');
+
 
     Route::post('produk/save','ProdukAPI@produkSimpan');
     Route::get('produk/byid/{id}','ProdukAPI@produkById');
@@ -77,6 +80,9 @@ Route::middleware(['cors'])->group(function () {
     Route::get('berita/list','BeritaAPI@beritaList');
 
     Route::get('hadist/entitas/donatur/{id}','HadistAPI@hadistByDonaturId');
+    Route::get('hadist/entitas/santri/{id}','HadistAPI@hadistBySantriId');
+    Route::get('hadist/entitas/pendamping/{id}','HadistAPI@hadistByPendampingId');
+    Route::get('hadist/random/{jenis}','HadistAPI@hadistRandom');
 
     Route::post('referral/send/link','ReferralAPI@referralSendLink');
     Route::put('referral/update/berita','ReferralAPI@rreferralUpdateIdBerita');

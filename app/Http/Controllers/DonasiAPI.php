@@ -93,19 +93,7 @@ class DonasiAPI extends Controller
                 ]);
         }
 
-        //simpan pembayaran dengan status belum dibayar, pembayaran akan berubah status menjadi 
-        //sudah di bayar ketika melakukan pengecekan ke rekening bank
-        $kodeunik=rand(0,200);
-        $bayar=new Bayar;
-        $bayar->donasi_id=$donasiid;
-        $bayar->bayar_total=$donasi->donasi_total_harga+$kodeunik;
-        $bayar->bayar_kode_unik=$kodeunik;
-        $bayar->bayar_disc=0;
-        $bayar->bayar_onkir=0;
-        $bayar->bayar_status=1;
-        $bayar->save();
-
-
+       
         #proses jadwal cicilan
         $jumlahcicilan=$totalharga/$nominal;
         $datehijr = 0;
@@ -158,19 +146,35 @@ class DonasiAPI extends Controller
             $cicilan->cicilan_status='1';
             $cicilan->save();
         }
+        //simpan pembayaran dengan status belum dibayar, pembayaran akan berubah status menjadi 
+        //sudah di bayar ketika melakukan pengecekan ke rekening bank
+        //pembayaran mengacu kepada cicilan
+        //ambil cicilan pertama
+        $cicilanid=DonasiCicilan::where([['donasi_id',$donasiid],['cicilan_ke','1']])->first()->id;
 
-        $donasi=Donasi::with('produk','bayar','cicilan')->where('donasi_no',$donasino)->first();
+        $kodeunik=rand(0,200);
+        $bayar=new Bayar;
+        $bayar->cicilan_id=$cicilanid;
+        // $bayar->bayar_tanggal=$todaydate; //di isi pada saat status bayar 2
+        $bayar->bayar_total=$donasi->donasi_total_harga+$kodeunik;
+        $bayar->bayar_kode_unik=$kodeunik;
+        $bayar->bayar_disc=0;
+        $bayar->bayar_onkir=0;
+        $bayar->bayar_status=1;
+        $bayar->save();
+
+        $donasi=Donasi::with('produk','cicilan')->where('donasi_no',$donasino)->first();
         return response()->json($donasi,200);
     }
  
     #mengambil data donasi berdasarkan id donasi
     public function donasiById($id){
-        $donasi=Donasi::with('donatur','produk','bayar')->where('id',$id)->first();
+        $donasi=Donasi::with('donatur','produk')->where('id',$id)->first();
         return response()->json($donasi,200);
     }
     #mengambil data donasi berdasarkan id donasi dan id donatur
     public function donasiDonaturById($donasiid,$donaturid){
-        $donasi=Donasi::with('donatur','produk','bayar')
+        $donasi=Donasi::with('donatur','produk')
             ->where([['id',$donasiid],['donatur_id',$donaturid]])->first();
         return response()->json($donasi,200);
     }
@@ -178,7 +182,7 @@ class DonasiAPI extends Controller
     public function donasiUpdateRekening(Request $request,$id){
         $rekeningid=$request->get('rekening_id');
         Donasi::where('id',$id)->update(['rekening_id'=>$rekeningid]);
-        $donasi=Donasi::with('donatur','produk','bayar')->where('id',$id)->first();
+        $donasi=Donasi::with('donatur','produk')->where('id',$id)->first();
         return response()->json($donasi,200);
     }
     public function donasiCicilanByDonaturId($id){
@@ -192,6 +196,7 @@ class DonasiAPI extends Controller
         $donasi=Donasi::with('santri')->where('id',$id)->get();
         return response()->json($donasi,200);
     }
+    
     
     public function donasino()
     {

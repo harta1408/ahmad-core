@@ -74,10 +74,6 @@ $(function() {
           label:{
             text:"Nomor Resi",
           },
-          validationRules: [{
-              type: "required",
-              message: "Nomor Resi Harus di isi"
-          }]
         },{
           dataField: "kirim_tanggal_kirim",
           label:{

@@ -6,7 +6,8 @@ use App\Models\Donasi;
 use App\Models\Donatur;
 use App\Models\Santri;
 use App\Models\Pendamping;
-
+use App\Models\DonasiCicilan;
+use App\Http\Controllers\BayarService;
 class DonasiController extends Controller
 {
     /**
@@ -14,6 +15,10 @@ class DonasiController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index()
     {
         return view('donasi/donasiindex');
@@ -234,5 +239,33 @@ class DonasiController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    #daftar donasi yang sedang menunggu pembayaran, bisa di override jika
+    #pembayaran otomatis gagal
+    public function donasiPendingList(){
+        return view('donasi/donasipendingindex');
+    }
+    public function donasiPendingLoad(){
+        $donasi=Donasi::with('donatur')->where('donasi_status','!=','0')->get();
+        return $donasi;
+    }
+    public function donasiPendingUpdate(Request $request, $id){
+        $tglbayar="";
+        $donasistatus="";
+        if(isset($request->donasi_status)){ //status di ubah dikirim
+            if(!isset($request->donasi_tanggal_bayar)){
+                return response()->json(['status' => 'error', 'message' => 'Tanggal Bayar Harus di Isi', 'code' => 200]);
+            }
+            $tglbayar=$request->donasi_tanggal_bayar;
+            $donasistatus=$request->donasi_status;
+            Donasi::where('id',$id)->update(['donasi_status'=>$donasistatus]);
+
+            #update status pembayaran cicilan pertama
+            $bayarcontrol=new BayarService;
+            $bayarcontrol->bayarCicilanPertama($id,$tglbayar);
+            return response()->json(['status' => 'success', 'message' => 'Berhasil di perbaharui', 'code' => 200]);
+
+        }
     }
 }

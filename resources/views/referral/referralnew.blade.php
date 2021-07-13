@@ -60,6 +60,23 @@ $(function() {
                     disabled: true
                 },
             },{
+                dataField: "referral_entitas_tujuan",
+                label:{
+                    text:"Entitas Tujuan Referral",
+                },
+                editorType: "dxSelectBox",
+                editorOptions: {
+                    items: [{"referral_entitas_tujuan":"1","referral_entitas_tujuan_desc":"DONATUR"},
+                            {"referral_entitas_tujuan":"2","referral_entitas_tujuan_desc":"SANTRI"},
+                            {"referral_entitas_tujuan":"3","referral_entitas_tujuan_desc":"PENDAMPING"}],
+                    displayExpr: "referral_entitas_tujuan_desc",
+                    valueExpr: "referral_entitas_tujuan",
+                    value:"1",
+                },
+                validationRules: [{
+                            type: "required",
+                            message: "Pilih Jenis Berita"}]
+            },{
                 dataField: "referral_telepon",
                 label:{
                     text:"Nomor Penerima",

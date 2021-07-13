@@ -40,6 +40,9 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['role:manajer|helpdesk|s
     Route::resource('faq', 'FAQController');
     Route::resource('rekeningbank', 'RekeningBankController');
 
+    Route::resource('hadiah', 'HadiahController');
+    Route::post('hadiah/main','HadiahController@main')->name('hadiah.main');
+
     Route::resource('donatur', 'DonaturController');
     Route::get('donatur/pembaharuan/index','DonaturController@donaturRenewIndex')->name('donatur.pembaharuan.index');
     Route::post('donatur/pembaharuan/main','DonaturController@donaturRenewMain')->name('donatur.pembaharuan.main');
@@ -63,7 +66,9 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['role:manajer|helpdesk|s
 
     
     Route::resource('produk', 'ProdukController');
-    Route::resource('kirimproduk', 'KirimProdukController');
+    
+    Route::get('kirimproduk/load','KirimProdukController@load')->name('kirimproduk.load');
+    Route::resource('kirimproduk', 'KirimProdukController'); 
 
     Route::resource('pengingat', 'PengingatController');
     Route::post('pengingat/main','PengingatController@main')->name('pengingat.main');
@@ -97,6 +102,9 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['role:manajer|helpdesk|s
 
     Route::resource('donasi', 'DonasiController');
     Route::post('donasi/main','DonasiController@main')->name('donasi.main');
+    Route::get('donasi/pending/list','DonasiController@donasiPendingList')->name('donasi.pending.list');
+    Route::get('donasi/pending/load','DonasiController@donasiPendingLoad')->name('donasi.pending.load');
+    Route::put('donasi/pending/update/{id}','DonasiController@donasiPendingUpdate')->name('donasi.pending.update');
 
     Route::get('kodepos/provinsi/all','KodePosController@kodeposProvinsiAll');
     Route::get('kodepos/kota/{provinsi}','KodePosController@kodeposKotaByProvinsi');

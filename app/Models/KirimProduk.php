@@ -31,7 +31,7 @@ class KirimProduk extends Model
         'kirim_penerima_kecamatan', //kecamatan santri penerima
         'kirim_penerima_kelurahan', //kelurahan santri penerima
         'kirim_penerima_provinsi', //provinsi santri penerima
-        'kirim_status', //kode pos
+        'kirim_status', //0=not aktif 1=aktif belum selesai 2=aktif selesai 3=dikembalikan
     ];
     public function produklacak(){
         return $this->hasMany('App\Models\ProdukLacak','no_resi','kirim_no_resi');

@@ -10,9 +10,9 @@ class Hadist extends Model
     protected $fillable=[
         'hadist_judul', //judul hadist
         'hadist_isi', //isi hadist
-        'hadist_jenis', //1=hadist 2-kampanye 3=kampanye broadcast wa
-        'hadist_kirim', //0=tidak aktif 1=setiap hari 2=mingguan 3=bulanan 4=waktu tertenu
-        'hadist_waktu_kirim', //kirim waktu tertentu status 4
+        'hadist_jenis', //1=hadist 2-doa
+        'hadist_kirim', 
+        'hadist_waktu_kirim', //kirim waktu 
         'hadist_lokasi_gambar', //lokasi gambar
         'hadist_lokasi_video', //lokasi video
         'hadist_web_link', //alamat web hadist (khusud web)
@@ -33,7 +33,7 @@ class Hadist extends Model
     public function pendamping(){
         return $this->belongsToMany('App\Models\Pendamping','hadist_pendamping','hadist_id','pendamping_id','id','id')
                     ->as('hadistpendamping')
-                    ->withPivot('hadist_pedamping_status')
+                    ->withPivot('hadist_pendamping_status')
                     ->withTimestamps();
     }
 }
