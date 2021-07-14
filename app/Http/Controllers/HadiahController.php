@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
+use App\Models\Hadiah;
 
 class HadiahController extends Controller
 {
@@ -61,30 +61,13 @@ class HadiahController extends Controller
     public function create()
     {
         $hadiah=Hadiah::where('hadiah_status','1')->get();
-        foreach ($hadiah as $key => $pngt) {
+        foreach ($hadiah as $key => $hdh) {
             //deskripsi jenis berita
-            if($pngt->hadiah_jenis=='1'){
-                $pngt->hadiah_jenis="Berita";
+            if($hdh->hadiah_jenis=='1'){
+                $hdh->hadiah_jenis="Nominal";
             }
-            if($pngt->hadiah_jenis=='2'){
-                $pngt->hadiah_jenis="Kampanye";
-            }
-            if($pngt->hadiah_jenis=='3'){
-                $pngt->hadiah_jenis="Broadcast";
-            }
-
-            //deskripsi entitas
-            if($pngt->hadiah_entitas=='0'){
-                $pngt->hadiah_entitas="Semua";
-            }
-            if($pngt->hadiah_entitas=='1'){
-                $pngt->hadiah_entitas="Donatur";
-            }
-            if($pngt->hadiah_entitas=='2'){
-                $pngt->hadiah_entitas="Santri";
-            }
-            if($pngt->hadiah_entitas=='3'){
-                $pngt->hadiah_entitas="Pendamping";
+            if($hdh->hadiah_jenis=='2'){
+                $hdh->hadiah_jenis="Produk";
             }
         }
         return $hadiah;

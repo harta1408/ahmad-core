@@ -1,6 +1,6 @@
 @extends('layouts.menus')
 @section('content')
-<div class="long-title"><h3>Buat Berita Baru</h3></div>
+<div class="long-title"><h3>Buat Hadiah Baru</h3></div>
 {!! Form::open(['id' => 'frm','route' => 'berita.store','class' => 'form-horizontal']) !!}
 <div class="second-group">
     <div id="form"></div>
@@ -42,44 +42,25 @@ $(function() {
         itemType:"group",
         colCount:1,
         items: [{
-                dataField: "berita_jenis",
+                dataField: "hadiah_jenis",
                 label:{
-                    text:"Jenis Berita",
+                    text:"Jenis Hadiah",
                 },
                 editorType: "dxSelectBox",
                 editorOptions: {
-                    items: [{"berita_jenis":"1","berita_jenis_desc":"BERITA"},
-                            {"berita_jenis":"2","berita_jenis_desc":"KAMPANYE"},
-                            {"berita_jenis":"3","berita_jenis_desc":"BROADCAST"}],
-                    displayExpr: "berita_jenis_desc",
-                    valueExpr: "berita_jenis",
+                    items: [{"hadiah_jenis":"1","hadiah_jenis_desc":"NOMINAL"}, 
+                            {"hadiah_jenis":"2","hadiah_jenis_desc":"PRODUK"}],
+                    displayExpr: "hadiah_jenis_desc",
+                    valueExpr: "hadiah_jenis",
                     value:"1",
                 },
                 validationRules: [{
                             type: "required",
                             message: "Pilih Jenis Berita"}]
             },{
-                dataField: "berita_entitas",
+                dataField: "hadiah_judul",
                 label:{
-                    text:"Tujuan Berita",
-                },
-                editorType: "dxSelectBox",
-                editorOptions: {
-                    items: [{"berita_entitas":"0","berita_entitas_desc":"SEMUA"},
-                            {"berita_entitas":"1","berita_entitas_desc":"DONATUR"},
-                            {"berita_entitas":"2","berita_entitas_desc":"SANTRI"},
-                            {"berita_entitas":"3","berita_entitas_desc":"PENDAMPING"}],
-                    displayExpr: "berita_entitas_desc",
-                    valueExpr: "berita_entitas",
-                    value:"1",
-                },
-                validationRules: [{
-                            type: "required",
-                            message: "Pilih Jenis Berita"}]
-            },{
-                dataField: "berita_judul",
-                label:{
-                    text:"Judul Berita",
+                    text:"Nama Hadiah",
                 }, 
                 editorOptions:{
                 },
@@ -88,33 +69,47 @@ $(function() {
                         message: "Judul Berita harus di isi",
                 }],
             },{
-                dataField: "berita_isi",
+                dataField: "hadiah_nilai",
                 label:{
-                    text:"Isi Berita",
+                    text:"Nilai Refferal (Poin)",
                 },
-                editorType: "dxHtmlEditor",
-                editorOptions:{
-                    height: 200,
-                    toolbar: {
-                        items: [
-                            "undo", "redo", "separator",
-                            {
-                                name: "size",
-                                acceptedValues: ["8pt", "10pt", "12pt", "14pt", "18pt", "24pt", "36pt"] },
-                            "separator", "bold", "italic", "underline", "separator",
-                            "alignLeft", "alignCenter", "alignRight", "alignJustify", "separator",
-                            "link", "image", "separator",
-                        ],
-                        multiline:true,
-                    },
-                    mediaResizing: {
-                        enabled: true
-                    }
+                editorType: "dxNumberBox",
+                editorOptions: { 
+                    dataType:"number",
+                    format: "#,##0",
+                    value:0,
                 },
                 validationRules: [{
                     type: "required",
-                    message: "Masukan Berita"
+                    message: "Harga Produk harus di isi"
                 }]
+            },{
+                dataField: "hadiah_nominal",
+                label:{
+                    text:"Nilai Hadiah (Rp.)",
+                },
+                editorType: "dxNumberBox",
+                editorOptions: { 
+                    dataType:"number",
+                    format: "#,##0",
+                    value:0,
+                },
+                validationRules: [{
+                    type: "required",
+                    message: "Harga Produk harus di isi"
+                }]
+          
+            },{
+                dataField: "hadiah_no_seri",
+                label:{
+                    text:"No Seri (Opsional)",
+                }, 
+                editorOptions:{
+                },
+                validationRules: [{
+                        type: "required",
+                        message: "Judul Berita harus di isi",
+                }],
             },],
       },{
           itemType: "button",

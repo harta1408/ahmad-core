@@ -129,8 +129,8 @@ class DonaturAPI extends Controller
 
         //jika sudah ada pemesanan produk
         $donaturid=Donatur::where('donatur_email',$useremail)->first()->id;
-
-        $this->pindahkanDonasi($temp_donasi_no,$donaturid);
+        $donasiAPI=new DonasiAPI;
+        $donasiAPI->pindahkanDonasi($temp_donasi_no,$donaturid);
         
         #ambil user berdasarkan email
         $user=User::with('donatur.donasi')->where('email',$useremail)->first();
@@ -251,8 +251,8 @@ class DonaturAPI extends Controller
 
         //jika sudah ada pemesanan produk
         $donaturid=Donatur::where('donatur_email',$useremail)->first()->id;
-
-        $this->pindahkanDonasi($temp_donasi_no,$donaturid);
+        $donasiAPI=new DonasiAPI;
+        $donasiAPI->pindahkanDonasi($temp_donasi_no,$donaturid);
         $user=User::with('donatur.donasi')->where('email',$useremail)->first();
 
         //jika berasal dari referral maka cari id pemberi referral kemudian tambahkan
@@ -328,118 +328,6 @@ class DonaturAPI extends Controller
         return response()->json($user,200);    
     }
 
-
-    private function pindahkanDonasi($temp_donasi_no,$donaturid){
-        $donasiTemp=DonasiTemp::with('produk')->where('temp_donasi_no',$temp_donasi_no)->first();
-        $donasiapi=new DonasiAPI;
-
-        $donasino=$donasiapi->donasino();
-        $jumlah=$donasiTemp->temp_donasi_jumlah_santri;
-        $totalharga=$donasiTemp->temp_donasi_total_harga;
-        $carabayar=$donasiTemp->temp_donasi_cara_bayar; 
-        $nominal=$donasiTemp->temp_donasi_nominal;
-
-        $donasi=new Donasi;
-        $donasi->donasi_no=$donasino;
-        $donasi->donatur_id=$donaturid;
-        $donasi->donasi_tanggal=$donasiTemp->temp_donasi_tanggal;  
-        $donasi->rekening_id=$donasiTemp->rekening_id;
-        $donasi->donasi_nominal=$nominal;
-        $donasi->donasi_jumlah_santri=$jumlah;
-        $donasi->donasi_total_harga=$totalharga;
-        $donasi->donasi_cara_bayar=$carabayar; //cara pembayaran 1=harian, 2=mingguan, 3=bulanan 4=tunai
-        $donasi->donasi_status='1'; //donasi disimpan, belum di bayar
-        $donasi->save();
-
-        $donasiid=Donasi::where('donasi_no',$donasino)->first()->id;
-        foreach ($donasiTemp->produk as $key => $produk) {
-            $produkid=$produk->id;
-            // var_dump($produk);
-            // dd($produk->donasiproduktemp['temp_donasi_produk_harga']);
-            $donasiprodukjml=$produk->donasiproduktemp['temp_donasi_produk_jml'];
-            $donasiprodukharga=$produk->donasiproduktemp['temp_donasi_produk_harga'];
-            $donasiproduktotal=$produk->donasiproduktemp['temp_donasi_produk_total'];
-            $produk=Produk::where('id',$produkid)->first(); 
-            $donasi->produk()->attach(['produk_id'=>$produkid],
-                [
-                    'donasi_id'=>$donasiid,
-                    'donasi_produk_jml' => $donasiprodukjml,
-                    'donasi_produk_harga' =>$donasiprodukharga,
-                    'donasi_produk_total' =>$donasiproduktotal,
-                ]);
-        }
-        //simpan pembayaran dengan status belum dibayar, pembayaran akan berubah status menjadi 
-        //sudah di bayar ketika melakukan pengecekan ke rekening bank
-        $kodeunik=rand(0,200);
-        $bayar=new Bayar;
-        $bayar->donasi_id=$donasiid;
-        $bayar->bayar_total=$donasi->donasi_total_harga+$kodeunik;
-        $bayar->bayar_kode_unik=$kodeunik;
-        $bayar->bayar_disc=0;
-        $bayar->bayar_onkir=0;
-        $bayar->bayar_status=1;
-        $bayar->save();
-
-         #proses jadwal cicilan
-         $jumlahcicilan=$totalharga/$nominal;
-         $datehijr = 0;
-         $blnhijr=0;
-         $thnhijr=1;
-         $todaydate=date("Y-m-d");
-         $datehijr = Hijri::convertToHijri($todaydate);
-         $blnhijr=$datehijr->format('m');
-         $thnhijr=$datehijr->format('Y');
-         for ($i=1; $i <= $jumlahcicilan; $i++) { 
-             if($carabayar=='1'){
-                 $dayno=$i." days";
-                 $date=date("Y-m-d",strtotime($dayno));
-                 $yaumilbidh=Hijri::convertToHijri($date)->format('d-m-Y');
-             }
-             if($carabayar=='2'){
-                 #jika tanggal bukan jumat, maka geser dulu ke hari jumat
-                 $todaydate=date("Y-m-d");
-                 if(date('w', strtotime($todaydate))!=5){ //5:friday
-                     $interval=5-date('w', strtotime($todaydate)); 
-                     $weekno=$i." weeks ".$interval." days";
-                 }else{
-                     $weekno=$i." weeks";
-                 }
-                 $date=date("Y-m-d",strtotime($weekno));
-                 $yaumilbidh=Hijri::convertToHijri($date)->format('d-m-Y');
-             }
-             if($carabayar=='3'){
-                 #generate tanggal yaumil bidh (hijriah) secara acak
-                 $blnhijr=$blnhijr+1;
-                 if($blnhijr>=12){
-                     $thnhijr=$thnhijr+1;
-                     $blnhijr=1;
-                 }
- 
-                 if(strlen($blnhijr)==1){
-                     $blnhijr='0'.$blnhijr;
-                 }
-                 $randhijrdate=rand(13,15); //pilih tanggal yaumil bidh secara acak
-         
-                 $yaumilbidh=$randhijrdate.'-'.$blnhijr.'-'.$thnhijr;
-                 $date=Hijri::convertToGregorian(13,$blnhijr,$thnhijr);
-             }
-             $cicilan=new DonasiCicilan;
-             $cicilan->donasi_id=$donasiid;
-             $cicilan->cicilan_ke=$i;
-             $cicilan->cicilan_jatuh_tempo=$date;
-             $cicilan->cicilan_hijr=$yaumilbidh;
-             $cicilan->cicilan_nominal=$nominal;
-             $cicilan->cicilan_status='1';
-             $cicilan->save();
-         }
- 
-         $donasi=Donasi::with('produk','bayar','cicilan')->where('donasi_no',$donasino)->first();
-
-        //hapus pemesanan sementara sebelum register
-        $donasitemp=DonasiTemp::where('temp_donasi_no',$temp_donasi_no)->first()->produk()->detach();
-        $donasitemp=DonasiTemp::where('temp_donasi_no',$temp_donasi_no)->delete();
-        return $donasi;
-    }
 
     #memperbaharui profile donatur
     public function donaturUpdateProfile($id,Request $request){
