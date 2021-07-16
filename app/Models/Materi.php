@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Materi extends Model
 {
     #tabel yang berisi informasi terkait materi yang diberikan kepada santri
+    #total materi yang diberikan kepada santri adalah 70 materi dengan bobot yang sama
     #jumlah progress materi di hitung dari total jumlah bobot materi yang diberikan
     #di bagi dengan bobot materi yang telah di capai
     protected $table='materi';

@@ -54,6 +54,7 @@ $(function() {
                     displayExpr: "berita_jenis_desc",
                     valueExpr: "berita_jenis",
                     value:"1",
+                    disabled:true
                 },
                 validationRules: [{
                             type: "required",
@@ -87,6 +88,13 @@ $(function() {
                         type: "required",
                         message: "Judul Berita harus di isi",
                 }],
+            },{
+                dataField: "berita_lokasi_video",
+                label:{
+                    text:"Alamat Video Youtube",
+                }, 
+                editorOptions:{
+                },
             },{
                 dataField: "berita_isi",
                 label:{

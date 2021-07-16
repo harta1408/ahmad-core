@@ -75,9 +75,11 @@ Route::middleware(['cors'])->group(function () {
 
     Route::post('berita/save','BeritaAPI@beritaSimpan');
     Route::put('berita/update/{id}','BeritaAPI@beritaUpdate');
-    Route::get('berita/kampanye','BeritaAPI@beritaKampanye');
     Route::get('berita/entitas/{jenis}','BeritaAPI@beritaEntitas');
     Route::get('berita/list','BeritaAPI@beritaList');
+    Route::get('berita/kampanye','BeritaAPI@beritaKampanye');
+    Route::get('berita/kampanye/donatur/{nourut2digit}','BeritaAPI@beritaKampanyeDonatur');
+    Route::get('berita/kampanye/santri/{nourut2digit}','BeritaAPI@beritaKampanyeSantri');
 
     Route::get('hadist/entitas/donatur/{id}','HadistAPI@hadistByDonaturId');
     Route::get('hadist/entitas/santri/{id}','HadistAPI@hadistBySantriId');

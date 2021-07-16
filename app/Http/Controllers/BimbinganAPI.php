@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Models\Bimbingan;
 use App\Models\Materi;
 use App\Models\Donasi;
+use App\Models\Donatur;
 use App\Models\Santri;
 use App\Models\BimbinganMateri;
 use App\Models\DonaturSantri;

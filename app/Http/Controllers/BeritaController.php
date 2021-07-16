@@ -64,7 +64,8 @@ class BeritaController extends Controller
      */
     public function create()
     {
-        $berita=Berita::where('berita_status','1')->get();
+        #hanya menampilkan berita yang dikirim oleh lembaga untuk entitas
+        $berita=Berita::where([['berita_status','1'],['berita_jenis','1']])->get();
         foreach ($berita as $key => $pngt) {
             //deskripsi jenis berita
             if($pngt->berita_jenis=='1'){
@@ -117,6 +118,7 @@ class BeritaController extends Controller
             $berita->berita_judul=$request->get('berita_judul'); 
             $berita->berita_isi=$request->get('berita_isi'); 
             $berita->berita_entitas=$request->get('berita_entitas'); 
+            $berita->berita_index='00'; 
             $berita->berita_status='1'; //aktif 
             $exec = $berita->save();
             if (!$exec) {
@@ -289,5 +291,158 @@ class BeritaController extends Controller
         }
 
         return $arrentitas;
+    }
+
+    public function panggilBeritaBroadcast($entitas){
+        $beritaentitas='1';
+        if($entitas=='Donatur'){
+            $beritaentitas='1';
+        }
+        if($entitas=='Santri'){
+            $beritaentitas='2';
+        }
+        if($entitas=='Pendamping'){
+            $beritaentitas='3';
+        }
+        $sudahada=Berita::where([['berita_entitas',$beritaentitas],['berita_jenis','3']])->count();
+        if($sudahada==0){
+            #buat baru
+            $berita=new Berita;
+            $berita->berita_jenis='3'; 
+            $berita->berita_judul='Broadcast '.$entitas; 
+            $berita->berita_index='00'; 
+            $berita->berita_isi='Bergabung dengan AHMaD Project sebagai '.$entitas; 
+            $berita->berita_entitas=$beritaentitas; 
+            $berita->berita_status='1'; //aktif 
+            $exec = $berita->save();
+        }
+
+        $berita=Berita::where([['berita_entitas',$beritaentitas],['berita_jenis','3']])->first();
+        return $berita;
+    }
+
+    #modul untuk menangani kampanye 
+    public function beritaKampanyeIndex(){
+        return view('berita/kampanyeindex');
+    }
+    public function beritaKampanyeLoad(){
+        #hanya menampilkan berita yang dikirim oleh lembaga untuk entitas
+        $berita=Berita::where([['berita_status','1'],['berita_jenis','2']])->get();
+        foreach ($berita as $key => $pngt) {
+            //deskripsi jenis berita
+            if($pngt->berita_jenis=='1'){
+                $pngt->berita_jenis="Berita";
+            }
+            if($pngt->berita_jenis=='2'){
+                $pngt->berita_jenis="Kampanye";
+            }
+            if($pngt->berita_jenis=='3'){
+                $pngt->berita_jenis="Broadcast";
+            }
+
+            //deskripsi entitas
+            if($pngt->berita_entitas=='0'){
+                $pngt->berita_entitas="Semua";
+            }
+            if($pngt->berita_entitas=='1'){
+                $pngt->berita_entitas="Donatur";
+            }
+            if($pngt->berita_entitas=='2'){
+                $pngt->berita_entitas="Santri";
+            }
+            if($pngt->berita_entitas=='3'){
+                $pngt->berita_entitas="Pendamping";
+            }
+        }
+        return $berita;        
+    }
+    public function beritaKampanyeMain(Request $request){
+        $beritaid=$request->get('berita_id');
+        $beritastatus=$request->get("berita_state");
+
+        if($beritastatus=="NEW"){
+            return view("berita/kampanyenew");
+        }
+
+        $berita=Berita::where('id',$beritaid)->first();
+        if($beritastatus=="UPDATE"){
+            return view("berita/kampanyeupdate",compact('berita'));
+        }    
+        if($beritastatus=="PREVIEW"){
+            return view("berita/kampanyevideo",compact('berita'));
+        }    
+    }
+    public function beritaKampanyeSave(Request $request){
+        $validator = Validator::make($request->all(), [
+            'berita_jenis' => 'required|string',
+            'berita_judul' => 'required|string', 
+            'berita_entitas' => 'required|string', 
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 'error', 'message' => $validator->messages()->first(), 'code' => 404]);
+        }
+        try {
+            $berita=new Berita;
+            $berita->berita_jenis=$request->get('berita_jenis'); 
+            $berita->berita_index=$request->get('berita_index'); 
+            $berita->berita_judul=$request->get('berita_judul'); 
+            $berita->berita_isi=$request->get('berita_isi'); 
+            $berita->berita_entitas=$request->get('berita_entitas'); 
+            $berita->berita_lokasi_video=$request->get('berita_lokasi_video'); 
+            $berita->berita_status='1'; //aktif 
+            $exec = $berita->save();
+            if (!$exec) {
+                return response()->json(['status' => 'error', 'message' => 'System error', 'code' => 404]);
+            }
+            return redirect()->action('BeritaController@beritaKampanyeIndex');
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage(), 'code' => 404]);
+        }
+        return response()->json(['status' => 'error', 'message' => 'System error', 'code' => 404]);
+    }
+    public function beritaKampanyeUpdate(Request $request, $id)
+    {
+        $res = Berita::where('id', $id)->update($request->except(['id','_token','_method']));
+
+        if (!$res) {
+            return response()->json(['status' => 'error', 'message' => 'System Error', 'code' => 404]);
+        }
+        return redirect()->action('BeritaController@beritaKampanyeIndex');
+    }
+
+    public function beritaVideoIndex(){
+        return view('berita/beritavideolist');
+    }
+    public function beritaVideoLoad(){
+          #hanya menampilkan video untuk berita jenis 1 dan 2
+          $berita=Berita::where('berita_status','1')->whereIn('berita_jenis',['1','2'])->get();
+          foreach ($berita as $key => $pngt) {
+              //deskripsi jenis berita
+              if($pngt->berita_jenis=='1'){
+                  $pngt->berita_jenis="Berita";
+              }
+              if($pngt->berita_jenis=='2'){
+                  $pngt->berita_jenis="Kampanye";
+              }
+              if($pngt->berita_jenis=='3'){
+                  $pngt->berita_jenis="Broadcast";
+              }
+  
+              //deskripsi entitas
+              if($pngt->berita_entitas=='0'){
+                  $pngt->berita_entitas="Semua";
+              }
+              if($pngt->berita_entitas=='1'){
+                  $pngt->berita_entitas="Donatur";
+              }
+              if($pngt->berita_entitas=='2'){
+                  $pngt->berita_entitas="Santri";
+              }
+              if($pngt->berita_entitas=='3'){
+                  $pngt->berita_entitas="Pendamping";
+              }
+          }
+          return $berita;   
     }
 }

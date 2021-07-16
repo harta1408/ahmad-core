@@ -5,7 +5,7 @@
 <div class="row">
     <div class="col-lg-3 col-6">
       <!-- small box -->
-      <div class="small-box bg-info">
+      <div class="small-box bg-warning">
         <div class="inner">
           <div class="long-title"><h4>Rp. {!!number_format($dashboard->dash_donasi_nilai)!!}</h4></div>
             <p>Donasi Harian</p>
@@ -19,7 +19,7 @@
     <!-- ./col -->
     <div class="col-lg-3 col-6">
       <!-- small box -->
-      <div class="small-box bg-danger">
+      <div class="small-box bg-warning">
         <div class="inner">
           <div class="long-title"><h4>Rp. {!!number_format($dashboard->dash_donasi_nilai)!!}</h4></div>
             <p>Outstanding Cicilan</p>
@@ -33,9 +33,9 @@
     <!-- ./col -->
     <div class="col-lg-3 col-6">
       <!-- small box -->
-      <div class="small-box bg-success">
+      <div class="small-box bg-warning">
         <div class="inner">
-          <div class="long-title"><h4><sup style="font-size: 20px"> {!!number_format($dashboard->dash_bimbingan_jumlah)!!}</sup></h4></div>
+          <div class="long-title"><h4>{!!number_format($dashboard->dash_bimbingan_jumlah)!!}</h4></div>
             <p>Bimbingan</p>
           </div>
           <div class="icon">

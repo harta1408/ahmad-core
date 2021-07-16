@@ -251,9 +251,9 @@ class SantriAPI extends Controller
         $id=$request->get('id');  
         $santri_kode=Santri::where('id',$id)->first()->santri_kode;
 
-        $this->validate($request, [
-          'santri_photo' => 'required | image | mimes:jpeg,png,jpg,gif | max:256'
-        ]);
+        // $this->validate($request, [
+        //   'santri_photo' => 'required | image | mimes:jpeg,png,jpg,gif | max:256'
+        // ]);
     
 
         // menyimpan data file yang diupload ke variabel $file

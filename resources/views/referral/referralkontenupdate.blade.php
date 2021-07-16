@@ -1,7 +1,7 @@
 @extends('layouts.menus')
 @section('content')
-<div class="long-title"><h3>Perbaharui Berita</h3></div>
-{!! Form::open(['id' => 'frm','route' =>  ['berita.update',$berita->id],'method' => 'PUT','class' => 'form-horizontal']) !!}
+<div class="long-title"><h3>Perbaharui Konten Referral</h3></div>
+{!! Form::open(['id' => 'frm','route' =>  ['referral.konten.update',$berita->id],'method' => 'PUT','class' => 'form-horizontal']) !!}
 <div class="second-group">
     <div id="form"></div>
     {{-- <input id="txtjenissoal" type="text" name="soal_jenis" value="{!!$pilihan!!}" hidden> --}}
@@ -57,9 +57,6 @@ $(function() {
                     valueExpr: "berita_jenis",
                     disabled:true,
                 },
-                validationRules: [{
-                            type: "required",
-                            message: "Pilih Jenis Berita"}]
             },{
                 dataField: "berita_entitas",
                 label:{
@@ -73,10 +70,8 @@ $(function() {
                             {"berita_entitas":"3","berita_entitas_desc":"PENDAMPING"}],
                     displayExpr: "berita_entitas_desc",
                     valueExpr: "berita_entitas",
+                    disabled:true,
                 },
-                validationRules: [{
-                            type: "required",
-                            message: "Pilih Jenis Berita"}]
             },{
                 dataField: "berita_judul",
                 label:{
@@ -89,39 +84,17 @@ $(function() {
                             message: "Nomor Soal harus di isi",
                 }],
             },{
-                dataField: "berita_lokasi_video",
-                label:{
-                    text:"Alamat Video Youtube",
-                }, 
-                editorOptions:{
-                },
-            },{
                 dataField: "berita_isi",
                 label:{
                     text:"Isi berita",
                 },
-                editorType: "dxHtmlEditor",
+                editorType: "dxTextArea",
                 editorOptions:{
-                    height: 200,
-                    toolbar: {
-                        items: [
-                            "undo", "redo", "separator",
-                            {
-                                name: "size",
-                                acceptedValues: ["8pt", "10pt", "12pt", "14pt", "18pt", "24pt", "36pt"] },
-                            "separator", "bold", "italic", "underline", "separator",
-                            "alignLeft", "alignCenter", "alignRight", "alignJustify", "separator",
-                            "link", "image", "separator",
-                        ],
-                        multiline:true,
-                    },
-                    mediaResizing: {
-                        enabled: true
-                    }
+                    height: 100,
                 },
                 validationRules: [{
                     type: "required",
-                    message: "Masukan Pertanyaan untuk Soal"
+                    message: "Silakan masukan konten referral"
                 }]
             },],
       },{

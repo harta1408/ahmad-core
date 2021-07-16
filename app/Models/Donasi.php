@@ -23,6 +23,7 @@ class Donasi extends Model
         'donasi_pengingat_mingguan', //donatur meninginkan notifikasi mingguan
         'donasi_pengingat_bulanan', //donatur menginginkan notifikasi bulanan
         'donasi_cara_bayar', //cara pembayaran 1=harian, 2=mingguan, 3=bulanan 4=tunai
+        'donasi_random_santri', //0=random santri by system, 1=random santro by helpdesk, request by donatur
         'donasi_status', //0=tidak aktif/batal  1=aktif belum bayar 2=aktif sudah bayar 3=sudah tersalurkan ke santri 4=berhenti(khusus cicilan)
 
         #dummy 

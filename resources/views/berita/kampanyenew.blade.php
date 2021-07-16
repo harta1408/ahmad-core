@@ -1,10 +1,9 @@
 @extends('layouts.menus')
 @section('content')
-<div class="long-title"><h3>Perbaharui Berita</h3></div>
-{!! Form::open(['id' => 'frm','route' =>  ['berita.update',$berita->id],'method' => 'PUT','class' => 'form-horizontal']) !!}
+<div class="long-title"><h3>Buat Kampanye Baru</h3></div>
+{!! Form::open(['id' => 'frm','route' => 'berita.kampanye.save','class' => 'form-horizontal']) !!}
 <div class="second-group">
     <div id="form"></div>
-    {{-- <input id="txtjenissoal" type="text" name="soal_jenis" value="{!!$pilihan!!}" hidden> --}}
 </div>
 {!! Form::close()!!}
 @endsection
@@ -35,7 +34,6 @@ $(function() {
   });
 
   $("#form").dxForm({
-      formData:{!!$berita!!},
       colCount: 1,
       showColonAfterLabel: true,
       showValidationSummary: true,
@@ -44,7 +42,7 @@ $(function() {
         itemType:"group",
         colCount:1,
         items: [{
-            dataField: "berita_jenis",
+                dataField: "berita_jenis",
                 label:{
                     text:"Jenis Berita",
                 },
@@ -55,7 +53,8 @@ $(function() {
                             {"berita_jenis":"3","berita_jenis_desc":"BROADCAST"}],
                     displayExpr: "berita_jenis_desc",
                     valueExpr: "berita_jenis",
-                    disabled:true,
+                    value:"2",
+                    disabled:true
                 },
                 validationRules: [{
                             type: "required",
@@ -67,26 +66,40 @@ $(function() {
                 },
                 editorType: "dxSelectBox",
                 editorOptions: {
-                    items: [{"berita_entitas":"0","berita_entitas_desc":"SEMUA"},
-                            {"berita_entitas":"1","berita_entitas_desc":"DONATUR"},
-                            {"berita_entitas":"2","berita_entitas_desc":"SANTRI"},
-                            {"berita_entitas":"3","berita_entitas_desc":"PENDAMPING"}],
+                    items: [{"berita_entitas":"1","berita_entitas_desc":"DONATUR"},
+                            {"berita_entitas":"2","berita_entitas_desc":"SANTRI"},],
                     displayExpr: "berita_entitas_desc",
                     valueExpr: "berita_entitas",
+                    value:"1",
                 },
                 validationRules: [{
                             type: "required",
                             message: "Pilih Jenis Berita"}]
             },{
+                dataField: "berita_index",
+                label:{
+                    text:"Nomor Urut",
+                }, 
+                editorOptions:{
+                    mask: "00",
+                    maskInvalidMessage: "Nomor Urut dua Digit",
+                    useMaskedValue: true,
+                    width:50,
+                },
+                validationRules: [{
+                            type: "required",
+                            message: "Nomor Urut harus di isi",
+                }],            
+            },{
                 dataField: "berita_judul",
                 label:{
-                    text:"Judul berita",
+                    text:"Judul Berita",
                 }, 
                 editorOptions:{
                 },
                 validationRules: [{
-                            type: "required",
-                            message: "Nomor Soal harus di isi",
+                        type: "required",
+                        message: "Judul Berita harus di isi",
                 }],
             },{
                 dataField: "berita_lokasi_video",
@@ -98,7 +111,7 @@ $(function() {
             },{
                 dataField: "berita_isi",
                 label:{
-                    text:"Isi berita",
+                    text:"Isi Berita",
                 },
                 editorType: "dxHtmlEditor",
                 editorOptions:{
@@ -121,14 +134,14 @@ $(function() {
                 },
                 validationRules: [{
                     type: "required",
-                    message: "Masukan Pertanyaan untuk Soal"
+                    message: "Masukan Berita"
                 }]
             },],
       },{
           itemType: "button",
           horizontalAlignment: "left",
           buttonOptions: {
-              text: "Perbaharui",
+              text: "Simpan",
               type: "success",
               useSubmitBehavior: true
           }

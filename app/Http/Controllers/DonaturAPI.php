@@ -387,14 +387,16 @@ class DonaturAPI extends Controller
         $id=$request->get('id');  
         $donatur_kode=Donatur::where('id',$id)->first()->donatur_kode;
 
-        $this->validate($request, [
-          'donatur_photo' => 'required | image | mimes:jpeg,png,jpg,gif | max:256'
-        ]);
+
+        // $this->validate($request, [
+        //   'donatur_photo' => 'required | image | mimes:jpeg,png,jpg,gif | max:256'
+        // ]);
     
       
         // menyimpan data file yang diupload ke variabel $file
         $images = $request->file('donatur_photo');
         $new_name=$donatur_kode.'.'.$images->getClientOriginalExtension();
+
 
         //tujuan penyimpanan file
         $tujuan_upload = base_path("images");
@@ -404,6 +406,7 @@ class DonaturAPI extends Controller
         $fileloc=substr($request->root(),0,strlen($request->root())-6) ."images/".$new_name; //upload ke server
         // $fileloc=$request->root()."/"."images/".$new_name;
     
+       
         Donatur::where('donatur_kode','=',$donatur_kode)->update(['donatur_lokasi_photo'=>$fileloc]);
 
         $donatur=Donatur::where('id',$id)->first();

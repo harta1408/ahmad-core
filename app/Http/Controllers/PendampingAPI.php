@@ -179,9 +179,9 @@ class PendampingAPI extends Controller
         $id=$request->get('id');  
         $pendamping_kode=Pendamping::where('id',$id)->first()->pendamping_kode;
 
-        $this->validate($request, [
-          'pendamping_photo' => 'required | image | mimes:jpeg,png,jpg,gif | max:256'
-        ]);
+        // $this->validate($request, [
+        //   'pendamping_photo' => 'required | image | mimes:jpeg,png,jpg,gif | max:256'
+        // ]);
     
         // menyimpan data file yang diupload ke variabel $file
         $images = $request->file('pendamping_photo');

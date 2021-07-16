@@ -58,6 +58,14 @@ class BeritaAPI extends Controller
         $berita=Berita::where('berita_jenis','2')->first();
         return response()->json($berita,200); 
     }
+    public function beritaKampanyeDonatur($index){
+        $berita=Berita::where([['berita_jenis','2'],['berita_entitas','1'],['berita_index',$index]])->first();
+        return response()->json($berita,200); 
+    }
+    public function beritaKampanyeSantri($index){
+        $berita=Berita::where([['berita_jenis','2'],['berita_entitas','2'],['berita_index',$index]])->first();
+        return response()->json($berita,200); 
+    }
     public function beritaEntitas($entitas){
         $berita=Berita::where([['berita_entitas',$entitas],['berita_status','1']])->get();
         return response()->json($berita,200);    

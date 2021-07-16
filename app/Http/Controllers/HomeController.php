@@ -23,9 +23,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-
-
-
         $approve=Auth::user()->approve;
         if($approve=='1' ){ //approved
             // return redirect()->action('HomeController@saDashboardIndex'); 

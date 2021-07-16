@@ -23,9 +23,20 @@ class ReferralAPI extends Controller
     public function referralSendLink(Request $request){
         $url = Config::get('ahmad.referral.development');
 
+        $validator = Validator::make($request->all(), [
+            'referral_entitas_kode' => 'required|string|',
+            'referral_telepon' => 'required|string|',
+            'referral_entitas_tujuan' => 'required|string|',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 'error', 'message' => $validator->messages()->first(), 'code' => 404]);
+        }
+
         $kode_entitas=$request->get('referral_entitas_kode'); //kode pengirim
         $nomor_tujuan=$request->get('referral_telepon'); //telepon tujuan
-        $berita=Berita::where([['berita_jenis','3'],['berita_entitas','0']])->first();
+        $entitas_tujuan=$request->get('referral_entitas_tujuan'); //tujuan entitas kirim
+        $berita=Berita::where([['berita_jenis','3'],['berita_entitas',$entitas_tujuan]])->first();
 
         $refpone=$request->get('referral_telepon');
         $refenkode=$request->get('referral_entitas_kode');

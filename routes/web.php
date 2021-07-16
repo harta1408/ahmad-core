@@ -12,7 +12,10 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    // return view('welcome');
+    // return view('welcome');
+    return redirect('/login');
+
 });
 
 // Route::resource('email', 'EmailController');
@@ -76,6 +79,14 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['role:manajer|helpdesk|s
     Route::resource('berita','BeritaController');
     Route::post('berita/main','BeritaController@main')->name('berita.main');
     Route::post('berita/send','BeritaController@send')->name('berita.send');
+    Route::get('berita/kampanye/index','BeritaController@beritaKampanyeIndex')->name('berita.kampanye.index');
+    Route::get('berita/kampanye/load','BeritaController@beritaKampanyeLoad')->name('berita.kampanye.load');
+    Route::post('berita/kampanye/main','BeritaController@beritaKampanyeMain')->name('berita.kampanye.main');
+    Route::post('berita/kampanye/save','BeritaController@beritaKampanyeSave')->name('berita.kampanye.save');
+    Route::put('berita/kampanye/update/{id}','BeritaController@beritaKampanyeUpdate')->name('berita.kampanye.update');
+    Route::get('berita/video/index','BeritaController@beritaVideoIndex')->name('berita.video.index');
+    Route::get('berita/video/load','BeritaController@beritaVideoLoad')->name('berita.video.load');
+
 
     Route::resource('hadist', 'HadistController');
     Route::post('hadist/main','HadistController@main')->name('hadist.main');
@@ -91,6 +102,9 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['role:manajer|helpdesk|s
     Route::post('referral/new/menu/index','ReferralController@newmenuindex')->name('referral.new.menu.index');
     Route::post('referral/new/menu/','ReferralController@newmenu')->name('referral.new.menu');
     Route::post('referral/main','ReferralController@main')->name('referral.main');
+    Route::get('referral/konten/index','ReferralController@referralKontenIndex')->name('referral.konten.index');
+    Route::post('referral/konten/main','ReferralController@referralKontenMain')->name('referral.konten.main');
+    Route::put('referral/konten/update/{id}','ReferralController@referralKontenUpdate')->name('referral.konten.update');
 
     Route::resource('materi','MateriController');
     Route::resource('kuesioner', 'KuesionerController');

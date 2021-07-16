@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class PengingatDonatur extends Model
 {
     #tabel berisi relasi pengingat dan donatur untuk mengetahui respon donatur
-    #terhadap pengingat tersebut
+    #terhadap pengingat tersebut, akan di isi untuk jenis pengingat
+    #1, 2 dan 3 saja
     protected $table='pengingat_donatur';
     protected $fillable=[
         'donatur_id', //id donatur

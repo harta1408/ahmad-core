@@ -27,6 +27,7 @@ class CreateDonasiTable extends Migration
             $table->char('donasi_pengingat_harian',1)->default(0);
             $table->char('donasi_pengingat_mingguan',1)->default(0);
             $table->char('donasi_pengingat_bulanan',1)->default(0);
+            $table->char('donasi_random_santri',1)->default(0);
             $table->char('donasi_cara_bayar',1)->default(0);
             $table->char('donasi_status',1)->default(0);
             $table->timestamps();

@@ -83,20 +83,29 @@ class HadiahController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'hadiah_jenis' => 'required|string',
-            'hadiah_judul' => 'required|string', 
-            'hadiah_entitas' => 'required|string', 
+            'hadiah_nilai' => 'required|string', 
+            'hadiah_nominal' => 'required|string', 
+            'hadiah_nama' => 'required|string',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['status' => 'error', 'message' => $validator->messages()->first(), 'code' => 404]);
         }
         try {
-            $hadiah=new Berita;
+            #hadiah baru defaultnya aktif
+            #cari apakah ada data hadiah sebelumnya, jika ada maka lakukan perubahan status 
+            #menjadi tidak aktif
+            $adahadiah=Hadiah::where('hadiah_status','!=','0')->count();
+            if($adahadiah>0){
+                
+            }
+
+            $hadiah=new Hadiah;
             $hadiah->hadiah_jenis=$request->get('hadiah_jenis'); 
-            $hadiah->hadiah_judul=$request->get('hadiah_judul'); 
-            $hadiah->hadiah_isi=$request->get('hadiah_isi'); 
-            $hadiah->hadiah_entitas=$request->get('hadiah_entitas'); 
-            $hadiah->hadiah_status='1'; //aktif 
+            $hadiah->hadiah_nama=$request->get('hadiah_nama'); 
+            $hadiah->hadiah_nominal=$request->get('hadiah_nominal'); 
+            $hadiah->hadiah_nilai=$request->get('hadiah_nilai'); 
+            $hadiah->hadiah_status='2'; //aktif 
             $exec = $hadiah->save();
             if (!$exec) {
                 return response()->json(['status' => 'error', 'message' => 'System error', 'code' => 404]);

@@ -1,7 +1,7 @@
 @extends('layouts.menus')
 @section('content')
-<div class="long-title"><h3>Perbaharui Berita</h3></div>
-{!! Form::open(['id' => 'frm','route' =>  ['berita.update',$berita->id],'method' => 'PUT','class' => 'form-horizontal']) !!}
+<div class="long-title"><h3>Perbaharui Kampanye</h3></div>
+{!! Form::open(['id' => 'frm','route' =>  ['berita.kampanye.update',$berita->id],'method' => 'PUT','class' => 'form-horizontal']) !!}
 <div class="second-group">
     <div id="form"></div>
     {{-- <input id="txtjenissoal" type="text" name="soal_jenis" value="{!!$pilihan!!}" hidden> --}}
@@ -77,6 +77,21 @@ $(function() {
                 validationRules: [{
                             type: "required",
                             message: "Pilih Jenis Berita"}]
+            },{
+                dataField: "berita_index",
+                label:{
+                    text:"Nomor Urut",
+                }, 
+                editorOptions:{
+                    mask: "00",
+                    maskInvalidMessage: "Nomor Urut dua Digit",
+                    useMaskedValue: true,
+                    width:50,
+                },
+                validationRules: [{
+                            type: "required",
+                            message: "Nomor Urut harus di isi",
+                }],
             },{
                 dataField: "berita_judul",
                 label:{

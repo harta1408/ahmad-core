@@ -8,6 +8,7 @@ use App\Models\Donatur;
 use App\Models\Santri;
 use App\Models\Pendamping;
 use App\Http\Controllers\MessageService;
+use App\Http\Controllers\BeritaController;
 use Config;
 use Validator;
 
@@ -197,5 +198,25 @@ class ReferralController extends Controller
             $pendamping=Pendamping::where('pendamping_status')->get(); 
             return view('referral/referralpendamping');
         }
+    }
+
+    #modul untuk mengubah isi berita yang dikirimkan ke donatur, santri atau pendamping
+    #walaupun ada di referral, namun penyimpanan data pada tabel berita
+    public function referralKontenIndex(){
+        return view('referral/referralkontenindex');
+    }
+    public function referralKontenMain(Request $request){
+        $entitas=$request->get('pilihan');
+        $beritacontrol=new BeritaController;
+        $berita=$beritacontrol->panggilBeritaBroadcast($entitas);
+
+        return view('referral/referralkontenupdate',compact('berita'));
+    }
+    public function referralKontenUpdate(Request $request, $id){
+        $res = Berita::where('id', $id)->update($request->except(['id','_token','_method']));
+        if (!$res) {
+            return response()->json(['status' => 'error', 'message' => 'System Error', 'code' => 404]);
+        }
+        return redirect()->action('HomeController@index');
     }
 }

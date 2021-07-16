@@ -1,7 +1,7 @@
 @extends('layouts.menus')
 @section('content')
 <div class="long-title"><h3>Buat Hadiah Baru</h3></div>
-{!! Form::open(['id' => 'frm','route' => 'berita.store','class' => 'form-horizontal']) !!}
+{!! Form::open(['id' => 'frm','route' => 'hadiah.store','class' => 'form-horizontal']) !!}
 <div class="second-group">
     <div id="form"></div>
 </div>
@@ -66,7 +66,7 @@ $(function() {
                 },
                 validationRules: [{
                         type: "required",
-                        message: "Judul Berita harus di isi",
+                        message: "Silakan isi nama hadiah",
                 }],
             },{
                 dataField: "hadiah_nilai",
@@ -81,7 +81,7 @@ $(function() {
                 },
                 validationRules: [{
                     type: "required",
-                    message: "Harga Produk harus di isi"
+                    message: "Silakan isi jumlah poin yang ditukarkan"
                 }]
             },{
                 dataField: "hadiah_nominal",
@@ -96,7 +96,7 @@ $(function() {
                 },
                 validationRules: [{
                     type: "required",
-                    message: "Harga Produk harus di isi"
+                    message: "Silakan isi Nominal Hadiah"
                 }]
           
             },{
@@ -106,10 +106,6 @@ $(function() {
                 }, 
                 editorOptions:{
                 },
-                validationRules: [{
-                        type: "required",
-                        message: "Judul Berita harus di isi",
-                }],
             },],
       },{
           itemType: "button",

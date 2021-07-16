@@ -14,6 +14,7 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="{{asset('/css/dx.common.css')}}"  type="text/css">
     <link rel="stylesheet" href="{{asset('/css/dx.greenmist.css')}}"  type="text/css">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{asset('images/logo_ahmad.png')}}">
     {{-- <link rel="stylesheet" href="{{asset('/css/jquery-ui.css')}}" type="text/css"> --}}
     <link rel="stylesheet" href="{{asset('/css/bootstrap.min.css')}}" type="text/css">
     <link rel="stylesheet" href="{{asset('/css/datepicker3.css')}}" type="text/css">
@@ -180,7 +181,7 @@
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
       <!-- Brand Logo -->
       <a href="{{ route('login') }}" class="brand-link">
-        <img src="{{asset('images/agile_logo.png')}}" alt="Agile" class="brand-image img-circle elevation-3"
+        <img src="{{asset('images/logo_ahmad.jpg')}}" alt="Agile" class="brand-image img-circle elevation-3"
              style="opacity: .8">
              @guest
                <span class="brand-text font-weight-light">AHMaD Dashboard</span>
@@ -194,7 +195,7 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
           <div class="image">
-            <img src="{{asset('images/kidswa_logos.png')}}" class="img-circle elevation-2" alt="User">
+            <img src="{{asset('images/logo_ahmad.png')}}" class="img-circle elevation-2" alt="User">
           </div>
           <div class="info">
             <a href="#" class="d-block"><span class="text-muted">{{ Auth::user()->name }}</span></a>
@@ -287,12 +288,6 @@
                   <a href="{{route('hadiah.index')}}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Hadiah</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="{{route('referral.index')}}" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Referral</p>
                   </a>
                 </li>
               </ul>
@@ -511,7 +506,7 @@
             </li> 
             @endrole
             @hasrole('helpdesk')
-            <li class="nav-header">HADIST & BERITA </li>
+            <li class="nav-header">PENGINGAT & BERITA</li>
             <li class="nav-item has-treeview">
               <a href="#" class="nav-link">
                 <i class="nav-icon far fa-bell"></i>
@@ -522,25 +517,86 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="{{route('berita.index')}}" class="nav-link">
+                  <a href="{{route('pengingat.index')}}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Berita</p>
+                    <p>Pengingat Donatur</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{route('pengingat.index')}}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Pengingat Santri</p>
                   </a>
                 </li>
                 <li class="nav-item">
                   <a href="{{route('hadist.index')}}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Hadist & Do'a</p>
+                    <p>Konten Video</p>
                   </a>
                 </li>
                 <li class="nav-item">
                   <a href="{{route('pesan.index')}}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Pesan</p>
+                    <p>Konten Gambar</p>
                   </a>
                 </li>
               </ul>
             </li>
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="nav-icon 	fas fa-bullhorn"></i>
+                <p>
+                  Berita
+                  <i class="right fas fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="{{route('berita.index')}}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Daftar Berita</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{route('berita.kampanye.index')}}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Kampanye</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{route('berita.video.index')}}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Video</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-share-alt"></i>
+                <p>
+                  Referral
+                  <i class="right fas fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="{{route('referral.index')}}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Daftar Referral</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{route('referral.konten.index')}}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Konten Referral</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            @endrole
+            @hasrole('helpdesk')
+            <li class="nav-header">HADIST</li>
             <li class="nav-item has-treeview">
               <a href="#" class="nav-link">
                 <i class="nav-icon fas fa-layer-group"></i>
@@ -568,104 +624,6 @@
                     <p>Pesan</p>
                   </a>
                 </li>
-              </ul>
-            </li>
-            <li class="nav-item has-treeview">
-              <a href="#" class="nav-link">
-                <i class="nav-icon 	fas fa-bullhorn"></i>
-                <p>
-                  Berita
-                  <i class="right fas fa-angle-left"></i>
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="{{route('pengingat.index')}}" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Pengingat</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="{{route('berita.index')}}" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Berita</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="{{route('hadist.index')}}" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Hadist & Do'a</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="{{route('pesan.index')}}" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Pesan</p>
-                  </a>
-                </li>
-              </ul>
-            </li>
-            @endrole
-            @hasrole('helpdesk')
-            <li class="nav-header">AKUN</li>
-            <li class="nav-item has-treeview">
-              <a href="#" class="nav-link">
-                <i class="nav-icon 	fas fa-user-shield"></i>
-                <p>
-                  Pengguna
-                  <i class="fas fa-angle-left right"></i>
-                  {{-- <span class="badge badge-info right">6</span> --}}
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                    <a href="{{route('produk.index')}}" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                    <p>Buat Baru</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="{{route('produk.edit','1')}}" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                  <p>Perbaharui</p>
-                </a>
-              </li>
-                <li class="nav-item">
-                  <a href="{{route('kirimproduk.create')}}"  class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                  <p>Pengiriman</p>
-                </a>
-              </li>  
-              </ul>
-            </li>
-            <li class="nav-item has-treeview">
-              <a href="#" class="nav-link">
-                <i class="nav-icon far fa-comments"></i>
-                <p>
-                  Pesan
-                  <i class="fas fa-angle-left right"></i>
-                  {{-- <span class="badge badge-info right">6</span> --}}
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                    <a href="{{route('produk.index')}}" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                    <p>Buat Baru</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="{{route('produk.edit','1')}}" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                  <p>Perbaharui</p>
-                </a>
-              </li>
-                <li class="nav-item">
-                  <a href="{{route('kirimproduk.create')}}"  class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                  <p>Pengiriman</p>
-                </a>
-              </li>  
               </ul>
             </li>
             @endrole
@@ -856,6 +814,69 @@
                         <p>Daftar Pengajuan User</p>
                     </a>
                 </li>
+              </ul>
+            </li>
+            @endrole
+            @hasrole('helpdesk')
+            <li class="nav-header">AKUN</li>
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="nav-icon 	fas fa-user-shield"></i>
+                <p>
+                  Pengguna
+                  <i class="fas fa-angle-left right"></i>
+                  {{-- <span class="badge badge-info right">6</span> --}}
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="{{route('produk.index')}}" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                    <p>Buat Baru</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{route('produk.edit','1')}}" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                  <p>Perbaharui</p>
+                </a>
+              </li>
+                <li class="nav-item">
+                  <a href="{{route('kirimproduk.create')}}"  class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                  <p>Pengiriman</p>
+                </a>
+              </li>  
+              </ul>
+            </li>
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="nav-icon far fa-comments"></i>
+                <p>
+                  Pesan
+                  <i class="fas fa-angle-left right"></i>
+                  {{-- <span class="badge badge-info right">6</span> --}}
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="{{route('produk.index')}}" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                    <p>Buat Baru</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{route('produk.edit','1')}}" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                  <p>Perbaharui</p>
+                </a>
+              </li>
+                <li class="nav-item">
+                  <a href="{{route('kirimproduk.create')}}"  class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                  <p>Pengiriman</p>
+                </a>
+              </li>  
               </ul>
             </li>
             @endrole
