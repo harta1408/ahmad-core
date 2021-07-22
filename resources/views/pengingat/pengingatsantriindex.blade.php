@@ -1,13 +1,13 @@
 @extends('layouts.menus')
 @section('content')
-    <div class="long-title"><h3>Daftar Hadist dan Do'a</h3></div>
-    {!! Form::open(['id' => 'frm','route' => 'hadist.main', 'class' => 'form-horizontal']) !!}
+    <div class="long-title"><h3>Daftar Pengingat Santri</h3></div>
+    {!! Form::open(['id' => 'frm','route' => 'pengingat.santri.main', 'class' => 'form-horizontal']) !!}
         <div id="toolbar"></div>
         <div class="second-group">
             <div id="gridData"></div>
         </div>
-        <input id="txtHadistId" type="text" name="hadist_id" class="form-control" hidden >
-        <input id="txtHadistState" type="text" name="hadist_state" class="form-control" hidden>
+        <input id="txtPengingatId" type="text" name="pengingat_id" class="form-control" hidden >
+        <input id="txtPengingatState" type="text" name="pengingat_state" class="form-control" hidden>
     {!! Form::close()!!}
 @endsection
 
@@ -22,7 +22,7 @@ $(function(){
     var gridDataSource = new DevExpress.data.DataSource({
         load: function (loadOptions) {
             return $.ajax({
-                url: "{{route('hadist.create')}}"
+                url: "{{route('pengingat.santri.load')}}"
             })
         },
     });
@@ -42,18 +42,17 @@ $(function(){
         },
         columns: [
             {
-              dataField: "hadist_jenis",
+              dataField: "pengingat_jenis",
               caption: "Jenis",
-              width:100,
             },{
-              dataField: "hadist_isi",
-              caption: "Isi",
+              dataField: "pengingat_judul",
+              caption: "Judul",
             },
             
         ],
         onSelectionChanged: function (selectedItems) {
             var data = selectedItems.selectedRowsData[0];
-            $("#txtHadistId").val(data.id);
+            $("#txtPengingatId").val(data.id);
           },
     });
     $("#toolbar").dxToolbar({
@@ -61,7 +60,7 @@ $(function(){
         location: 'center',
         locateInMenu: 'never',
         template: function() {
-            return $("<div class='toolbar-label'><b>Pembaharuan Hadist dan Do'a</b></div>");
+            return $("<div class='toolbar-label'><b>Pembaharuan Data Pengingat</b></div>");
         }
     },{
         location: 'after',
@@ -69,10 +68,10 @@ $(function(){
         locateInMenu: 'auto',
         options: {
             icon: "plus",
-            hint: 'Tambah Hadist atau Doa',
+            hint: 'Tambah Pengingat Baru',
             useSubmitBehavior: true,
             onClick: function(e) {      
-                $("#txtHadistState").val("NEW"); //kirim perintah tambah ke server
+                $("#txtPengingatState").val("NEW"); //kirim perintah tambah ke server
             }
         }
     },{
@@ -81,13 +80,13 @@ $(function(){
         locateInMenu: 'auto',
         options: {
             icon: "edit",
-            hint: 'Update Hadist atau Doa',
+            hint: 'Update Data Pengingat',
             useSubmitBehavior: true,
             onClick: function(e) {      
-            var txtHadistId=document.getElementById("txtHadistId").value;
-            if(txtHadistId==""){
+            var txtPengingatId=document.getElementById("txtPengingatId").value;
+            if(txtPengingatId==""){
                 DevExpress.ui.notify({
-                    message: "Silakan Pilih Hadist atau Doa",
+                    message: "Silakan Pilih Pengingat",
                     position: {
                         my: "center top",
                         at: "center top"
@@ -96,31 +95,7 @@ $(function(){
                 e.preventDefault();
                 return false;
             }
-            $("#txtHadistState").val("UPDATE"); //kirim perintah update ke server
-            }
-        }
-    },{
-        location: 'after',
-        widget: 'dxButton',
-        locateInMenu: 'auto',
-        options: {
-            icon: "message",
-            hint: 'Kirim Hadist atau Doa',
-            useSubmitBehavior: true,
-            onClick: function(e) {      
-            var txtHadistId=document.getElementById("txtHadistId").value;
-            if(txtHadistId==""){
-                DevExpress.ui.notify({
-                    message: "Silakan Pilih Hadist atau Doa",
-                    position: {
-                        my: "center top",
-                        at: "center top"
-                    }
-                }, "warning", 3000);
-                e.preventDefault();
-                return false;
-            }
-            $("#txtHadistState").val("SEND"); //kirim perintah update ke server
+            $("#txtPengingatState").val("UPDATE"); //kirim perintah update ke server
             }
         }
     },{
@@ -129,14 +104,14 @@ $(function(){
         locateInMenu: 'auto',
         options: {
             icon: "trash",
-            hint: 'Hapus Hadist atau Doa',
+            hint: 'Hapus Data pendamping',
             useSubmitBehavior: true,
             onClick: function(e) {      
-            var txtHadistId=document.getElementById("txtHadistId").value;
-            var txtHadistState=document.getElementById("txtHadistState").value;
-            if(txtHadistId==""){
+            var txtPengingatId=document.getElementById("txtPengingatId").value;
+            var txtPengingatState=document.getElementById("txtPengingatState").value;
+            if(txtPengingatId==""){
                 DevExpress.ui.notify({
-                    message: "Silakan Pilih Hadist atau Doa.",
+                    message: "Silakan Pilih pendamping.",
                     position: {
                         my: "center top",
                         at: "center top"
@@ -145,9 +120,9 @@ $(function(){
                 e.preventDefault();
                 return false;
             }
-            if(txtHadistState!="0"){
+            if(txtPengingatState!="0"){
                 DevExpress.ui.notify({
-                    message: "Proses Hapus Hadist atau Doa",
+                    message: "Proses Hapus pendamping",
                     position: {
                         my: "center top",
                         at: "center top"
@@ -156,7 +131,7 @@ $(function(){
                 e.preventDefault();
                 return false;
             }
-            $("#txtHadistState").val("DELETE"); //kirim perintah hapus ke server
+            $("#txtPengingatState").val("DELETE"); //kirim perintah hapus ke server
             }
         }
         }]

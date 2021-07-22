@@ -92,28 +92,44 @@ $(function(){
         },
         columns: [
             {
-                dataField: "donasi_no",
+                dataField: "donasi.donasi_no",
                 caption: "No Donasi",
             },{
-                dataField: "donatur.donatur_nama",
+                dataField: "donasi.donatur.donatur_nama",
                 caption: "Donatur",
             },{
-                dataField: "donasi_jumlah_santri",
-                caption: "Jumlah Santri",
-            },{
-                dataField: "donasi_status",
-                caption: "Pembayaran Pertama",
+                dataField: "donasi.donasi_cara_bayar",
+                caption: "Cara Pembayaran",
                 lookup: {
-                    dataSource: [{"donasi_status":"1","donasi_status_desc":"Belum Diterima"},
-                            {"donasi_status":"2","donasi_status_desc":"Sudah Diterima"}],
-                    valueExpr: "donasi_status",
-                    displayExpr: "donasi_status_desc",
+                    dataSource: [{"donasi_cara_bayar":"1","donasi_cara_bayar_desc":"Harian"},
+                            {"donasi_cara_bayar":"2","donasi_cara_bayar_desc":"Pekanan"},
+                            {"donasi_cara_bayar":"3","donasi_cara_bayar_desc":"Bulanan"},
+                            {"donasi_cara_bayar":"4","donasi_cara_bayar_desc":"Tunai"}],
+                    valueExpr: "donasi_cara_bayar",
+                    displayExpr: "donasi_cara_bayar_desc",
+                },
+            },{
+                dataField: "cicilan_ke",
+                caption: "Cicilan Ke",
+            },{
+                dataField: "cicilan_jatuh_tempo",
+                caption: "Jatuh Tempo",
+                dataType:"date",
+                format:"dd-MM-yyyy",    
+            },{
+                dataField: "cicilan_status",
+                caption: "Status Cicilan",
+                lookup: {
+                    dataSource: [{"cicilan_status":"1","cicilan_status_desc":"Belum Diterima"},
+                            {"cicilan_status":"2","cicilan_status_desc":"Sudah Diterima"}],
+                    valueExpr: "cicilan_status",
+                    displayExpr: "cicilan_status_desc",
                 },
                 validationRules:[{
                         type: "required",
                         message: "Pilih dari daftar",}],
             },{
-                dataField: "donasi_tanggal_bayar",
+                dataField: "cicilan_tanggal_bayar",
                 caption: "Tanggal Bayar",
                 dataType:"date",
                 format:"shortDate",     
@@ -121,7 +137,7 @@ $(function(){
             
         ],
         onEditingStart: function(e){
-        if (e.column.dataField != "donasi_tanggal_bayar" && e.column.dataField != "donasi_status") {
+        if (e.column.dataField != "cicilan_tanggal_bayar" && e.column.dataField != "cicilan_status") {
              e.cancel = true;
           }
         },

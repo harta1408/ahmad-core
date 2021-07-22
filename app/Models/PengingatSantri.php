@@ -3,8 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class PengingatSantri extends Model
+class PengingatSantri extends Pivot
 {
     #tabel berisi relasi pengingat dan santri untuk mengetahui respon santri
     #terhadap pengingat tersebut, akan di isi untuk jenis pengingat
@@ -16,5 +17,6 @@ class PengingatSantri extends Model
         'pengingat_id', //id pengingat
         'pengingat_santri_index', //nomor urut yang pengingat yang telah dikirimkan ke santri
         'pengingat_santri_respon', //0=no respon 1=berterimakasih 2=biasa saja 3=tidak suka
+        'pengingat_santri_status', //0=tidak aktif 1=aktif
     ];
 }

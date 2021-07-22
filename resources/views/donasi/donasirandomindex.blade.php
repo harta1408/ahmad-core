@@ -1,7 +1,7 @@
 @extends('layouts.menus')
 @section('content')
     <div class="long-title"><h3>Daftar Donasi Aktif</h3></div>
-    {!! Form::open(['id' => 'frm','route' => 'donasi.main', 'class' => 'form-horizontal']) !!}
+    {!! Form::open(['id' => 'frm','route' => 'donasi.random.main', 'class' => 'form-horizontal']) !!}
         <div id="toolbar"></div>
         <div class="second-group">
             <div id="gridData"></div>
@@ -22,7 +22,7 @@ $(function(){
     var gridDataSource = new DevExpress.data.DataSource({
         load: function (loadOptions) {
             return $.ajax({
-                url: "{{route('donasi.create')}}"
+                url: "{{route('donasi.random.load')}}"
             })
         },
     });

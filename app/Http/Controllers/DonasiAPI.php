@@ -32,6 +32,7 @@ class DonasiAPI extends Controller
         $donasitemp->temp_donasi_nominal=$request->get('temp_donasi_nominal'); 
         $donasitemp->temp_donasi_total_harga=$request->get('donasi_total_harga');
         $donasitemp->temp_donasi_cara_bayar=$request->get('donasi_cara_bayar'); 
+        $donasitemp->temp_donasi_random_santri=$request->get('donasi_random_santri'); 
         $donasitemp->save();
 
         // $donasino=DonasiTemp::where('temp_donasi_no',$tempdonasino)->first()->id;
@@ -56,6 +57,7 @@ class DonasiAPI extends Controller
             'donasi_total_harga' => 'required|integer',
             'donasi_cara_bayar' => 'required|integer',
             'donasi_nominal' => 'required|integer',
+            'donasi_random_santri' =>'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -72,6 +74,7 @@ class DonasiAPI extends Controller
         $donasi->donatur_id=$request->get('donatur_id');
         $donasi->rekening_id=$request->get('rekening_id');
         $donasi->donasi_tanggal=$request->get('donasi_tanggal');  
+        $donasi->donasi_random_santri=$request->get('donasi_random_santri');
         $donasi->donasi_nominal=$nominal;
         $donasi->donasi_jumlah_santri=$jumlah;
         $donasi->donasi_total_harga=$totalharga;
@@ -102,43 +105,49 @@ class DonasiAPI extends Controller
         $datehijr = Hijri::convertToHijri($todaydate);
         $blnhijr=$datehijr->format('m');
         $thnhijr=$datehijr->format('Y');
-        for ($i=1; $i <= $jumlahcicilan; $i++) { 
-            if($carabayar=='1'){
+        for ($i=0; $i < $jumlahcicilan; $i++) { 
+
+            if($i=='0'){ //khusus hari pertama atau cara bayar tunai, jatuh tempo pada hari yang sama
                 $dayno=$i." days";
                 $date=date("Y-m-d",strtotime($dayno));
                 $yaumilbidh=Hijri::convertToHijri($date)->format('d-m-Y');
-            }
-            if($carabayar=='2'){
-                #jika tanggal bukan jumat, maka geser dulu ke hari jumat
-                $todaydate=date("Y-m-d");
-                if(date('w', strtotime($todaydate))!=5){ //5:friday
-                    $interval=5-date('w', strtotime($todaydate)); 
-                    $weekno=$i." weeks ".$interval." days";
-                }else{
-                    $weekno=$i." weeks";
+            }else{
+                if($carabayar=='1' ){
+                    $dayno=$i." days";
+                    $date=date("Y-m-d",strtotime($dayno));
+                    $yaumilbidh=Hijri::convertToHijri($date)->format('d-m-Y');
                 }
-                $date=date("Y-m-d",strtotime($weekno));
-                $yaumilbidh=Hijri::convertToHijri($date)->format('d-m-Y');
-            }
-            if($carabayar=='3'){
-                #generate tanggal yaumil bidh (hijriah) secara acak
-                $blnhijr=$blnhijr+1;
-                if($blnhijr>=12){
-                    $thnhijr=$thnhijr+1;
-                    $blnhijr=1;
+                if($carabayar=='2'){
+                    #jika tanggal bukan jumat, maka geser dulu ke hari jumat
+                    if(date('w', strtotime($todaydate))!=5){ //5:friday
+                        $interval=5-date('w', strtotime($todaydate)); 
+                        $weekno=$i." weeks ".$interval." days";
+                    }else{
+                        $weekno=$i." weeks";
+                    }
+                    $date=date("Y-m-d",strtotime($weekno));
+                    $yaumilbidh=Hijri::convertToHijri($date)->format('d-m-Y');
                 }
-
-                if(strlen($blnhijr)==1){
-                    $blnhijr='0'.$blnhijr;
+                if($carabayar=='3'){
+                    #generate tanggal yaumil bidh (hijriah) secara acak
+                    $blnhijr=$blnhijr+1;
+                    if($blnhijr>=12){
+                        $thnhijr=$thnhijr+1;
+                        $blnhijr=1;
+                    }
+    
+                    if(strlen($blnhijr)==1){
+                        $blnhijr='0'.$blnhijr;
+                    }
+                    $randhijrdate=rand(13,15); //pilih tanggal yaumil bidh secara acak
+            
+                    $yaumilbidh=$randhijrdate.'-'.$blnhijr.'-'.$thnhijr;
+                    $date=Hijri::convertToGregorian(13,$blnhijr,$thnhijr);
                 }
-                $randhijrdate=rand(13,15); //pilih tanggal yaumil bidh secara acak
-        
-                $yaumilbidh=$randhijrdate.'-'.$blnhijr.'-'.$thnhijr;
-                $date=Hijri::convertToGregorian(13,$blnhijr,$thnhijr);
             }
             $cicilan=new DonasiCicilan;
             $cicilan->donasi_id=$donasiid;
-            $cicilan->cicilan_ke=$i;
+            $cicilan->cicilan_ke=$i+1;
             $cicilan->cicilan_jatuh_tempo=$date;
             $cicilan->cicilan_hijr=$yaumilbidh;
             $cicilan->cicilan_nominal=$nominal;

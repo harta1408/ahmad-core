@@ -18,6 +18,7 @@ class CreatePengingatTable extends Migration
             $table->char('pengingat_entitas',1)->default(1);
             $table->char('pengingat_index',2)->default(1);
             $table->string('pengingat_judul')->nullable();
+            $table->string('pengingat_isi_singkat')->nullable();
             $table->text('pengingat_isi')->nullable();
             $table->char('pengingat_jenis',1)->default(0);
             $table->text('pengingat_lokasi_gambar')->nullable();

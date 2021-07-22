@@ -1,6 +1,6 @@
 @extends('layouts.menus')
 @section('content')
-    <div class="long-title"><h3>Daftar Video Berita</h3></div>
+    <div class="long-title"><h3>Daftar Video Hadist dan Do'a</h3></div>
         <div class="second-group">
             <div id="gridData"></div>
             <span>Pastikan pada link Video Youtube ada embed</span>
@@ -45,7 +45,7 @@ $(function(){
     var gridDataSource = new DevExpress.data.DataSource({
         load: function (loadOptions) {
             return $.ajax({
-                url: "{{route('berita.video.load')}}"
+                url: "{{route('hadist.create')}}"
             })
         },
     });
@@ -65,24 +65,24 @@ $(function(){
         },
         columns: [
             {
-              dataField: "berita_jenis",
+            dataField: "hadist_jenis",
               caption: "Jenis",
+              width:100,
             },{
-              dataField: "berita_judul",
-              caption: "Judul",
+              dataField: "hadist_isi",
+              caption: "Isi",
             },{
-              dataField: "berita_lokasi_video",
+              dataField: "hadist_lokasi_video",
               caption: "Lokasi Video",
             },
             
         ],
         onSelectionChanged: function (selectedItems) {
             var data = selectedItems.selectedRowsData[0];            
-            $('#modal1 iframe').attr("src",data.berita_lokasi_video);
+            $('#modal1 iframe').attr("src",data.hadist_lokasi_video);
             $('#modal1').modal('show');
           },
     });
- 
 });
 </script>
 @endsection

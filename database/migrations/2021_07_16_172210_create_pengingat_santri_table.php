@@ -18,8 +18,9 @@ class CreatePengingatSantriTable extends Migration
             $table->foreign('santri_id')->references('id')->on('santri'); 
             $table->integer('pengingat_id')->unsigned();
             $table->foreign('pengingat_id')->references('id')->on('pengingat'); 
-            $table->char('pengingat_santri_index',1)->default(1);
+            $table->char('pengingat_santri_index',2)->default(1);
             $table->char('pengingat_santri_respon',1)->default(1);
+            $table->char('pengingat_santri_status',1)->default(1);
             $table->timestamps();
         });
     }

@@ -67,6 +67,7 @@ class HadistController extends Controller
             'hadist_judul' => 'required|string',
             'hadist_jenis' => 'required|string', 
             'hadist_isi' => 'required|string', 
+            'hadist_isi_singkat' => 'required|string|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -76,7 +77,9 @@ class HadistController extends Controller
             $hadist=new Hadist;
             $hadist->hadist_jenis=$request->get('hadist_jenis'); 
             $hadist->hadist_judul=$request->get('hadist_judul'); 
-            $hadist->hadist_isi=$request->get('hadist_isi'); 
+            $hadist->hadist_isi=$request->get('hadist_isi');
+            $hadist->hadist_lokasi_video=$request->get('hadist_lokasi_video' );  
+            $hadist->hadist_isi_singkat=substr($request->get('hadist_isi_singkat'),0,255); 
             $hadist->hadist_status='1'; //aktif 
             $exec = $hadist->save();
             if (!$exec) {
@@ -120,6 +123,12 @@ class HadistController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $validator = Validator::make($request->all(), [
+            'hadist_isi_singkat' => 'required|string|max:255',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['status' => 'error', 'message' => $validator->messages()->first(), 'code' => 404]);
+        }
         $res = Hadist::where('id', $id)->update($request->except(['id','_token','_method']));
 
         if (!$res) {
@@ -274,5 +283,8 @@ class HadistController extends Controller
         // dd($arrentitas);
 
         return $arrentitas;
+    }
+    public function hadistVideoIndex(){
+        return view('hadist/hadistvideolist');
     }
 }

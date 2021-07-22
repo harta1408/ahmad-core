@@ -1,10 +1,10 @@
 @extends('layouts.menus')
 @section('content')
-<div class="long-title"><h3>Buat Pengingat Baru</h3></div>
-{!! Form::open(['id' => 'frm','route' => 'pengingat.store','class' => 'form-horizontal']) !!}
+<div class="long-title"><h3>Perbaharui Pengingat</h3></div>
+{!! Form::open(['id' => 'frm','route' =>  ['pengingat.update',$pengingat->id],'method' => 'PUT','class' => 'form-horizontal']) !!}
 <div class="second-group">
     <div id="form"></div>
-    {{-- <input id="txtjenissoal" type="text" name="soal_jenis" value="{!!$pilihan!!}" hidden> --}}
+    <input id="txtentitas" type="text" name="pengingat_entitas" value="2" hidden>
 </div>
 {!! Form::close()!!}
 @endsection
@@ -35,6 +35,7 @@ $(function() {
   });
 
   $("#form").dxForm({
+      formData:{!!$pengingat!!},
       colCount: 1,
       showColonAfterLabel: true,
       showValidationSummary: true,
@@ -49,16 +50,15 @@ $(function() {
                 },
                 editorType: "dxSelectBox",
                 editorOptions: {
-                    items: [{"pengingat_jenis":"1","pengingat_jenis_desc":"SEDEKAH SUBUH"},
-                            {"pengingat_jenis":"2","pengingat_jenis_desc":"SEDEKAH JUM'AT"},
-                            {"pengingat_jenis":"3","pengingat_jenis_desc":"SEDEKAH YAUMUL BIDH"}],
+                    items: [{"pengingat_jenis":"4","pengingat_jenis_desc":"SUNNAH SENIN"},
+                            {"pengingat_jenis":"5","pengingat_jenis_desc":"SUNNAH KAMIS"},
+                            {"pengingat_jenis":"6","pengingat_jenis_desc":"SUNNAH JUM'AT"}],
                     displayExpr: "pengingat_jenis_desc",
                     valueExpr: "pengingat_jenis",
-                    value:"1",
                 },
                 validationRules: [{
                             type: "required",
-                            message: "Pilih Jenis Pengingat"}]
+                            message: "Alamat Email Harus Di isi"}]
             },{
                 dataField: "pengingat_judul",
                 label:{
@@ -67,8 +67,28 @@ $(function() {
                 editorOptions:{
                 },
                 validationRules: [{
-                        type: "required",
-                        message: "Judul Pengingat harus di isi",
+                            type: "required",
+                            message: "Nomor Soal harus di isi",
+                }],
+            },{
+                dataField: "pengingat_lokasi_video",
+                label:{
+                    text:"Lokasi Link Video",
+                }, 
+                editorOptions:{
+                },
+            },{
+                dataField: "pengingat_isi_singkat",
+                label:{
+                    text:"Isi (versi singkat)",
+                },
+                editorType: "dxTextArea",
+                editorOptions:{
+                    height: 150,
+                },
+                validationRules: [{
+                    type: "required",
+                    message: "Masukan Pengingat",
                 }],
             },{
                 dataField: "pengingat_isi",
@@ -96,14 +116,14 @@ $(function() {
                 },
                 validationRules: [{
                     type: "required",
-                    message: "Masukan Pengingat"
+                    message: "Masukan Pertanyaan untuk Soal"
                 }]
             },],
       },{
           itemType: "button",
           horizontalAlignment: "left",
           buttonOptions: {
-              text: "Simpan",
+              text: "Perbaharui",
               type: "success",
               useSubmitBehavior: true
           }

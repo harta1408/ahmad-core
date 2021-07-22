@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\Santri;
 use App\Models\User;
 use App\Http\Controllers\ReferralAPI;
+use App\Http\Controllers\Service\MessageService;
 use Config;
 use Validator;
 

@@ -16,6 +16,7 @@ class CreateHadistTable extends Migration
         Schema::create('hadist', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('hadist_judul')->nullable();
+            $table->string('hadist_isi_singkat')->nullable();
             $table->text('hadist_isi')->nullable();
             $table->char('hadist_jenis',1)->default(0);
             $table->char('hadist_kirim',1)->default(0);

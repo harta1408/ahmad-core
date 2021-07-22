@@ -9,6 +9,12 @@ class Donasi extends Model
     #berisi data/ informasi donasi, jika memilih pembayaran cicilan, maka
     #status pengingat akan sesuai dengan waktu donasi yang di pilih
     #jika donatur membayar penuh, maka di berikan opsi apakah menginkan notifikasi
+
+    #mekanisme pengacakan santri berada di modul random service untuk donasi yang telah mencapai
+    #angka lebih dari 200rb
+    #untuk donasi tunai (cara bayar=4), di cek pada field random santri, jika tunai dan random santri bernilai 1 maka
+    #pengacakan dilakukan melalui modul Donasi Controller
+    #pemeriksaan pembayaran dilakukan melalui Random Service, pembayaran manual melalui modul Donasi Controller
     protected $table='donasi';
     protected $fillable=[
         'donasi_no', //no bukti/ referensi donasi untuk pelacakan oleh donatur
@@ -24,8 +30,8 @@ class Donasi extends Model
         'donasi_pengingat_bulanan', //donatur menginginkan notifikasi bulanan
         'donasi_cara_bayar', //cara pembayaran 1=harian, 2=mingguan, 3=bulanan 4=tunai
         'donasi_random_santri', //0=random santri by system, 1=random santro by helpdesk, request by donatur
-        'donasi_status', //0=tidak aktif/batal  1=aktif belum bayar 2=aktif sudah bayar 3=sudah tersalurkan ke santri 4=berhenti(khusus cicilan)
-
+        'donasi_status', //0=tidak aktif/batal  1=aktif belum lunas 2=sudah lebih dari 200rb(eligible untuk random santri) 3=sudah lunas  4=berhenti(khusus cicilan)
+                         //jika status=3 dan cara bayar 4 ->eligible untuk random santri
         #dummy 
         'donasi_donatur_nama',
         'donasi_santri_id',

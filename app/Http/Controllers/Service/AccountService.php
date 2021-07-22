@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Service;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Models\Donasi;
 
 class AccountService extends Controller

@@ -19,6 +19,7 @@ class CreatePengingatDonaturTable extends Migration
             $table->integer('pengingat_id')->unsigned();
             $table->foreign('pengingat_id')->references('id')->on('pengingat'); 
             $table->char('pengingat_donatur_respon',1)->default(0);
+            $table->char('pengingat_donatur_status')->default(0);
             $table->timestamps();
         });
     }

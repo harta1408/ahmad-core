@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Santri extends Model
 {
     #tabel berisi informasi santri
+
     protected $table='santri';
     protected $fillable=[
         'santri_kode', //kode santri
@@ -28,7 +29,7 @@ class Santri extends Model
         'santri_rangkap', // untuk memeriksa apakah santri merangkap entitas lain (donatur/pendamping)
         'santri_min_referral', //hitungan minimal refferal untuk selalu mengingatkan
         'santri_status', //0=tidak aktif 1=aktif data belum lengkap 2=belum isi kuesioner 3=belum otorisasi, data belum lengkap 
-        //4=aktif data sudah lengkap, menunggu produk  5=terpilih, menunggu produk 6=sudah dapat produk, dalam, dalam bimbingan 7=lulus
+                         //4=aktif data sudah lengkap, menunggu produk  5=terpilih, menunggu produk 6=sudah dapat produk, dalam, dalam bimbingan 7=lulus
     ];
 
     public function donatur(){
@@ -60,5 +61,11 @@ class Santri extends Model
     }
     public function user(){
         return $this->hasOne('App\Models\User','email','santri_email');
+    }
+    public function pengingat(){
+        return $this->belongsToMany('App\Models\Pengingat','pengingat_santri','santri_id','pengingat_id','id','id')
+                    ->as('santripengingat')
+                    ->withPivot('pengingat_santri_index','pengingat_santri_respon','pengingat_santri_status')
+                    ->withTimestamps();
     }
 }

@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use App\Http\Controllers\Controller;
 use GuzzleHttp\Client;
 use App\Models\Pesan;
 use App\Models\User;
@@ -16,7 +17,7 @@ class MessageService extends Controller
 	}
     public function kirimEmailVerifikasi($useremail,$username,$hashcode){
 
-        // return; //sementara program dibuat agar tidak mengirim email
+        return; //sementara program dibuat agar tidak mengirim email
 
         // kirim email registrasi
         $tipe=User::where('email',$useremail)->first()->tipe;
@@ -92,7 +93,6 @@ class MessageService extends Controller
                 ]
             );
             $result = json_decode($response->getBody()->getContents());
-            dd($result);
         } catch (\Exception $e) {
             return response()->json(['STATUS' => 'ER', 'MSG' => $e->getMessage()]);
         }

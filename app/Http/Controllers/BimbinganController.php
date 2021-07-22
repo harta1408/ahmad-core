@@ -9,7 +9,7 @@ use App\Models\Santri;
 use App\Models\Pendamping;
 use App\Models\DonaturSantri;
 use App\Models\User;
-use App\Http\Controllers\MessageService;
+use App\Http\Controllers\Service\MessageService;
 
 class BimbinganController extends Controller
 {
@@ -110,7 +110,6 @@ class BimbinganController extends Controller
         $dayno=Produk::where('id',$produkid)->first()->produk_masa_bimbingan;
         $santri=Santri::where('id',$santriid)->first();
 
-
         #hitung penambahan tanggal untuk menentukan tanggal akhir
         $akhir=date('Y-m-d',strtotime($mulai.' '.$dayno." days"));
 
@@ -124,6 +123,10 @@ class BimbinganController extends Controller
         $donaturemail=Donatur::where('id',$donaturid)->first()->donatur_email;
         $santriemail=$santri->santri_email;
         $pendampingemail=Pendamping::where('id',$pendampingid)->first()->pendamping_email;
+
+        #update status santri dan pendamping dalam bimbingan
+        Santri::where('id',$santriid)->update(['santri_status'=>'6']);
+        Pendamping::where('id',$pendampingid)->update(['pendamping_status'=>'5']);
 
         #kirim pesan ke donatur, santri dan pendamping bahwa produk telah diterima (belum aktif)
         $msg=new MessageService;

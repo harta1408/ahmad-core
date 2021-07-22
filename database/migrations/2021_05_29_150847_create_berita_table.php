@@ -16,6 +16,7 @@ class CreateBeritaTable extends Migration
         Schema::create('berita', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('berita_judul')->nullable();
+            $table->string('berita_isi_singkat')->nullable();
             $table->text('berita_isi')->nullable();
             $table->char('berita_jenis',1)->default(0);
             $table->char('berita_entitas',1)->default(0);

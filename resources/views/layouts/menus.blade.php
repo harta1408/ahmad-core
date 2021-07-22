@@ -308,7 +308,7 @@
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="{{route('donasi.index')}}"  class="nav-link">
+                  <a href="{{route('donasi.random.index')}}"  class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Pemilihan Santri</p>
                   </a>
@@ -346,9 +346,9 @@
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="{{route('donasi.index')}}" class="nav-link">
+                  <a href="{{route('donatur.donasi.index')}}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Pemilihan Santri</p>
+                    <p>Daftar Cicilan</p>
                   </a>
                 </li>
               </ul>
@@ -519,17 +519,11 @@
                 <li class="nav-item">
                   <a href="{{route('pengingat.index')}}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Pengingat Donatur</p>
+                    <p>Daftar Pengingat</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="{{route('pengingat.index')}}" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Pengingat Santri</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="{{route('hadist.index')}}" class="nav-link">
+                  <a href="{{route('pengingat.video.index')}}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Konten Video</p>
                   </a>
@@ -607,21 +601,21 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="{{route('berita.index')}}" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Berita</p>
-                  </a>
-                </li>
-                <li class="nav-item">
                   <a href="{{route('hadist.index')}}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Hadist & Do'a</p>
+                    <p>Daftar Hadist & Do'a</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="{{route('pesan.index')}}" class="nav-link">
+                  <a href="{{route('hadist.video.index')}}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Pesan</p>
+                    <p>Daftar Video</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Daftar Gambar</p>
                   </a>
                 </li>
               </ul>
@@ -907,7 +901,7 @@
       <strong>Copyright &copy; 2021 <a href="http://agile.co.id">AHMaD Project</a></strong>
       All rights reserved.
       <div class="float-right d-none d-sm-inline-block">
-        {{ Auth::user()->name}} - <b>Version</b> BETA 1.05
+        {{ Auth::user()->name}} - <b>Version</b> BETA 1.07
       </div>
     </footer>
 

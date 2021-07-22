@@ -107,6 +107,7 @@ class BeritaController extends Controller
             'berita_jenis' => 'required|string',
             'berita_judul' => 'required|string', 
             'berita_entitas' => 'required|string', 
+            'berita_isi_singkat' => 'required|string|max:256',
         ]);
 
         if ($validator->fails()) {
@@ -116,6 +117,7 @@ class BeritaController extends Controller
             $berita=new Berita;
             $berita->berita_jenis=$request->get('berita_jenis'); 
             $berita->berita_judul=$request->get('berita_judul'); 
+            $berita->berita_isi_singkat=substr($request->get('pengingat_isi_singkat'),0,255); 
             $berita->berita_isi=$request->get('berita_isi'); 
             $berita->berita_entitas=$request->get('berita_entitas'); 
             $berita->berita_index='00'; 
@@ -162,6 +164,12 @@ class BeritaController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $validator = Validator::make($request->all(), [
+            'berita_isi_singkat' => 'required|string|max:255',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['status' => 'error', 'message' => $validator->messages()->first(), 'code' => 404]);
+        }
         $res = Berita::where('id', $id)->update($request->except(['id','_token','_method']));
 
         if (!$res) {

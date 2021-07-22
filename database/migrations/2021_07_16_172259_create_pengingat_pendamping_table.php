@@ -20,7 +20,8 @@ class CreatePengingatPendampingTable extends Migration
             $table->foreign('pengingat_id')->references('id')->on('pengingat');
             $table->bigInteger('santri_id')->unsigned();
             $table->foreign('santri_id')->references('id')->on('santri');  
-            $table->char('santri_respon',1)->default(0);
+            $table->char('peningat_pendamping_santri_respon',1)->default(0);
+            $table->char('peningat_pendamping_status',1)->default(0);
             $table->timestamps();
         });
     }

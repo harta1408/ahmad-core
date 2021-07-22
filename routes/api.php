@@ -89,10 +89,13 @@ Route::middleware(['cors'])->group(function () {
     Route::post('referral/send/link','ReferralAPI@referralSendLink');
     Route::put('referral/update/berita','ReferralAPI@rreferralUpdateIdBerita');
 
-    Route::post('pengingat/save','PengingatAPI@pengingatSimpan');
-    Route::put('pengingat/update/{id}','PengingatAPI@pengingatUpdate');
-    Route::get('pengingat/jenis/{jenis}','PengingatAPI@pengingatJenis');
-    Route::get('pengingat/list','PengingatAPI@pengingatList');
+    Route::get('pengingat/donatur/byid/{donaturid}','PengingatAPI@pengingatDonaturById');
+    Route::put('pengingat/donatur/respon/{pengingatid}','PengingatAPI@pengingatDonaturRespon');
+    Route::get('pengingat/santri/byid/{santriid}','PengingatAPI@pengingatSantriById');
+    Route::put('pengingat/santri/respon/{pengingatid}','PengingatAPI@pengingatSantriRespon');
+    Route::post('pengingat/bimbingan/simpan','PengingatAPI@pengingatSimpan');
+    Route::put('pengingat/bimbingan/update/{id}','PengingatAPI@pengingatUpdate');
+    Route::get('pengingat/pendamping/list/byid/{idpendamping}','PengingatAPI@pengingatListByPendampingId');
 
     Route::get('pesan/aktif/byuser/{userid}','PesanAPI@pesanAktifByUserId');
     Route::get('pesan/unread/byuser/{userid}','PesanAPI@pesanBelumTerbacaByUserId');

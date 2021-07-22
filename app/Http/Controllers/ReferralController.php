@@ -7,7 +7,7 @@ use App\Models\Berita;
 use App\Models\Donatur;
 use App\Models\Santri;
 use App\Models\Pendamping;
-use App\Http\Controllers\MessageService;
+use App\Http\Controllers\Service\MessageService;
 use App\Http\Controllers\BeritaController;
 use Config;
 use Validator;

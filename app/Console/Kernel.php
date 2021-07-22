@@ -31,6 +31,7 @@ class Kernel extends ConsoleKernel
         ->everyMinute(); 
         // $schedule->command('periksa:kirimproduk')
         // ->everyMinute(); 
+        $schedule->command('pengingat:harian')->daily();
     }
 
     /**

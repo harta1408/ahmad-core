@@ -69,6 +69,26 @@ $(function() {
                         message: "Judul hadist harus di isi",
                 }],
             },{
+                dataField: "hadist_lokasi_video",
+                label:{
+                    text:"Lokasi Link Video",
+                }, 
+                editorOptions:{
+                },
+            },{
+                dataField: "hadist_isi_singkat",
+                label:{
+                    text:"Isi (versi singkat)",
+                },
+                editorType: "dxTextArea",
+                editorOptions:{
+                    height: 150,
+                },
+                validationRules: [{
+                    type: "required",
+                    message: "Masukan Hadist",
+                }],   
+            },{
                 dataField: "hadist_isi",
                 label:{
                     text:"Isi Hadist",

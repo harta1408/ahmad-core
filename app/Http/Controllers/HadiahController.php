@@ -278,4 +278,6 @@ class HadiahController extends Controller
 
         return $arrentitas;
     }
+
+
 }

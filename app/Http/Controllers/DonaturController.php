@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Models\Donatur;
 use App\Models\KodePos;
 use App\Models\User;
+use App\Models\Donasi;
 use App\Http\Controllers\KodePosAPI;
 use App\Http\Controllers\DonaturAPI;
 use Validator;
@@ -222,13 +223,23 @@ class DonaturController extends Controller
         if($status=="UPDATE"){
             $donatur=Donatur::where('id',$id)->first();  
             return view ('donatur/donaturupdate',compact('donatur'));
-        }else{
-
         }
 
 
     }
-
+    #modul yang menanangani cicilan donatur
+    public function donaturDonasiIndex(){
+        return view('donatur/donaturdonasiindex');
+    }
+    public function donaturDonasiMain(Request $request){
+        $donaturid=$request->get('id_entitas');
+        return view('donatur/donaturdonasimain',compact('donaturid'));
+    }
+    public function donaturDonasiCicilanmain(Request $request){
+        $donasiid=$request->get('id_donasi');
+        $donasi=Donasi::with('donatur','cicilan')->where('id',$donasiid)->first();
+        return view('donatur/donaturdonasicicilanlist',compact('donasi'));
+    }
     #------------utility
     public function donaturSimpleList(){
         $donatur=Donatur::where('donatur_status','1')->get();

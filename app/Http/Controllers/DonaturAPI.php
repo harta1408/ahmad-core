@@ -13,7 +13,7 @@ use App\Models\Bayar;
 use App\Models\DonasiCicilan;
 use App\Http\Controllers\DonasiAPI;
 use App\Http\Controllers\ReferralAPI;
-use App\Http\Controllers\MessageService;
+use App\Http\Controllers\Service\MessageService;
 use GeniusTS\HijriDate\Date;
 use GeniusTS\HijriDate\Hijri;
 use Config;

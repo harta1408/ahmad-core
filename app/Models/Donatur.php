@@ -48,6 +48,12 @@ class Donatur extends Model
                     ->withPivot('berita_donatur_status')
                     ->withTimestamps();
     }
+    public function pengingat(){
+        return $this->belongsToMany('App\Models\Pengingat','pengingat_donatur','donatur_id','pengingat_id','id','id')
+                    ->as('donaturpengingat')
+                    ->withPivot('pengingat_donatur_respon','pengingat_donatur_status')
+                    ->withTimestamps();
+    }
     public function user(){
         return $this->hasOne('App\Models\User','email','donatur_email');
     }

@@ -1,9 +1,10 @@
 @extends('layouts.menus')
 @section('content')
-<div class="long-title"><h3>Buat Hadist dan Doa Baru</h3></div>
-{!! Form::open(['id' => 'frm','route' => 'hadist.store','class' => 'form-horizontal']) !!}
+<div class="long-title"><h3>Buat Pengingat Baru</h3></div>
+{!! Form::open(['id' => 'frm','route' => 'pengingat.store','class' => 'form-horizontal']) !!}
 <div class="second-group">
     <div id="form"></div>
+    <input id="txtentitas" type="text" name="pengingat_entitas" value="1" hidden>
 </div>
 {!! Form::close()!!}
 @endsection
@@ -42,41 +43,42 @@ $(function() {
         itemType:"group",
         colCount:1,
         items: [{
-                dataField: "hadist_jenis",
+                dataField: "pengingat_jenis",
                 label:{
                     text:"Jenis",
                 },
                 editorType: "dxSelectBox",
                 editorOptions: {
-                    items: [{"hadist_jenis":"1","hadist_jenis_desc":"HADIST"}, 
-                            {"hadist_jenis":"2","hadist_jenis_desc":"DOA"}],
-                    displayExpr: "hadist_jenis_desc",
-                    valueExpr: "hadist_jenis",
+                    items: [{"pengingat_jenis":"1","pengingat_jenis_desc":"SEDEKAH SUBUH"},
+                            {"pengingat_jenis":"2","pengingat_jenis_desc":"SEDEKAH JUM'AT"},
+                            {"pengingat_jenis":"3","pengingat_jenis_desc":"SEDEKAH YAUMUL BIDH"}],
+                    displayExpr: "pengingat_jenis_desc",
+                    valueExpr: "pengingat_jenis",
                     value:"1",
                 },
                 validationRules: [{
                             type: "required",
-                            message: "Pilih Jenis hadist"}]
+                            message: "Pilih Jenis Pengingat"}]
             },{
-                dataField: "hadist_judul",
+                dataField: "pengingat_judul",
                 label:{
-                    text:"Judul Hadist",
+                    text:"Judul",
                 }, 
                 editorOptions:{
                 },
                 validationRules: [{
                         type: "required",
-                        message: "Judul hadist harus di isi",
+                        message: "Judul Pengingat harus di isi",
                 }],
             },{
-                dataField: "hadist_lokasi_video",
+                dataField: "pengingat_lokasi_video",
                 label:{
                     text:"Lokasi Link Video",
                 }, 
                 editorOptions:{
                 },
             },{
-                dataField: "hadist_isi_singkat",
+                dataField: "pengingat_isi_singkat",
                 label:{
                     text:"Isi (versi singkat)",
                 },
@@ -86,12 +88,12 @@ $(function() {
                 },
                 validationRules: [{
                     type: "required",
-                    message: "Masukan Hadist",
-                }],                
+                    message: "Masukan Pengingat",
+                }],
             },{
-                dataField: "hadist_isi",
+                dataField: "pengingat_isi",
                 label:{
-                    text:"Isi Hadist",
+                    text:"Isi",
                 },
                 editorType: "dxHtmlEditor",
                 editorOptions:{
@@ -114,7 +116,7 @@ $(function() {
                 },
                 validationRules: [{
                     type: "required",
-                    message: "Masukan hadist"
+                    message: "Masukan Pengingat"
                 }]
             },],
       },{

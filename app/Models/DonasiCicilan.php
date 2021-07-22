@@ -17,5 +17,8 @@ class DonasiCicilan extends Model
         'cicilan_nominal', //nominal cicilan
         'cicilan_status',  //0:not active 1:aktif belum bayar 2:aktif sudah bayar
     ];
+    public function donasi(){
+        return $this->hasOne('App\Models\Donasi','id','donasi_id');
+    }
 } 
 

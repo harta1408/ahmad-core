@@ -36,7 +36,6 @@ class DashboardController extends Controller
         $jumlahsantriotor=Santri::where('santri_status',3)->count();
 
 
-
         $dashboard=new Dashboard;
         $dashboard->dash_donasi_nilai=$nilai;
         $dashboard->dash_donasi_jumlah=$jumlah;

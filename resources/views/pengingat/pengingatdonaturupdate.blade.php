@@ -4,7 +4,7 @@
 {!! Form::open(['id' => 'frm','route' =>  ['pengingat.update',$pengingat->id],'method' => 'PUT','class' => 'form-horizontal']) !!}
 <div class="second-group">
     <div id="form"></div>
-    {{-- <input id="txtjenissoal" type="text" name="soal_jenis" value="{!!$pilihan!!}" hidden> --}}
+    <input id="txtentitas" type="text" name="pengingat_entitas" value="{!!$pengingat->pengingat_entitas!!}" hidden>
 </div>
 {!! Form::close()!!}
 @endsection
@@ -69,6 +69,26 @@ $(function() {
                 validationRules: [{
                             type: "required",
                             message: "Nomor Soal harus di isi",
+                }],
+            },{
+                dataField: "pengingat_lokasi_video",
+                label:{
+                    text:"Lokasi Link Video",
+                }, 
+                editorOptions:{
+                },
+            },{
+                dataField: "pengingat_isi_singkat",
+                label:{
+                    text:"Isi (versi singkat)",
+                },
+                editorType: "dxTextArea",
+                editorOptions:{
+                    height: 150,
+                },
+                validationRules: [{
+                    type: "required",
+                    message: "Masukan Pengingat",
                 }],
             },{
                 dataField: "pengingat_isi",

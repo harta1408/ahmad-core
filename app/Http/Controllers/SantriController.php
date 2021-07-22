@@ -259,7 +259,7 @@ class SantriController extends Controller
         $exec=Santri::where('id','=' ,$id)->update(['santri_status' => '4']); //data di otorisasi
     }
     public function santriOtorisasiIndex(){
-        return view('santri/santriotorisasi',compact('santri'));
+        return view('santri/santriotorisasi');
     }
     
     #------------utility

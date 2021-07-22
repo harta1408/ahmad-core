@@ -50,6 +50,9 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['role:manajer|helpdesk|s
     Route::get('donatur/pembaharuan/index','DonaturController@donaturRenewIndex')->name('donatur.pembaharuan.index');
     Route::post('donatur/pembaharuan/main','DonaturController@donaturRenewMain')->name('donatur.pembaharuan.main');
     Route::get('donatur/simple/list','DonaturController@donaturSimpleList')->name('donatur.simple.list');
+    Route::get('donatur/donasi/index','DonaturController@donaturDonasiIndex')->name('donatur.donasi.index');
+    Route::post('donatur/donasi/main','DonaturController@donaturDonasiMain')->name('donatur.donasi.main');
+    Route::post('donatur/donasi/cicilan/main','DonaturController@donaturDonasiCicilanmain')->name('donatur.donasi.cicilan.main');
 
     Route::resource('santri', 'SantriController');
     Route::get('santri/pembaharuan/index','SantriController@santriRenewIndex')->name('santri.pembaharuan.index');
@@ -75,6 +78,14 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['role:manajer|helpdesk|s
 
     Route::resource('pengingat', 'PengingatController');
     Route::post('pengingat/main','PengingatController@main')->name('pengingat.main');
+    Route::get('pengingat/donatur/index','PengingatController@pengingatDonaturIndex')->name('pengingat.donatur.index');
+    Route::get('pengingat/donatur/load','PengingatController@pengingatDonaturLoad')->name('pengingat.donatur.load');
+    Route::post('pengingat/donatur/main','PengingatController@pengingatDonaturMain')->name('pengingat.donatur.main');
+    Route::get('pengingat/santri/index','PengingatController@pengingatSantriIndex')->name('pengingat.santri.index');
+    Route::get('pengingat/santri/load','PengingatController@pengingatSantriLoad')->name('pengingat.santri.load');
+    Route::post('pengingat/santri/main','PengingatController@pengingatSantriMain')->name('pengingat.santri.main');
+    Route::get('pengingat/video/index','PengingatController@pengingatVideoIndex')->name('pengingat.video.index');
+    Route::get('pengingat/video/load','PengingatController@pengingatVideoLoad')->name('pengingat.video.load');
 
     Route::resource('berita','BeritaController');
     Route::post('berita/main','BeritaController@main')->name('berita.main');
@@ -92,6 +103,7 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['role:manajer|helpdesk|s
     Route::post('hadist/main','HadistController@main')->name('hadist.main');
     Route::post('hadist/send/main','HadistController@mainsend')->name('hadist.send.main');
     Route::post('hadist/send','HadistController@send')->name('hadist.send');
+    Route::get('hadist/video/list','HadistController@hadistVideoIndex')->name('hadist.video.index');
 
     Route::resource('pesan', 'PesanController');
     Route::post('pesan/main','PesanController@main')->name('pesan.main');
@@ -115,10 +127,13 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['role:manajer|helpdesk|s
     Route::post('soal/new/menu','SoalController@soalNewMenu')->name('soal.new.menu');
 
     Route::resource('donasi', 'DonasiController');
-    Route::post('donasi/main','DonasiController@main')->name('donasi.main');
+    Route::get('donasi/donatur/byid/{donaturid}','DonasiController@donasiByDonaturId')->name('donasi.donatur.id');
     Route::get('donasi/pending/list','DonasiController@donasiPendingList')->name('donasi.pending.list');
     Route::get('donasi/pending/load','DonasiController@donasiPendingLoad')->name('donasi.pending.load');
     Route::put('donasi/pending/update/{id}','DonasiController@donasiPendingUpdate')->name('donasi.pending.update');
+    Route::get('donasi/random/index','DonasiController@donasiRandomIndex')->name('donasi.random.index');
+    Route::get('donasi/random/load','DonasiController@donasiRandomLoad')->name('donasi.random.load');
+    Route::post('donasi/random/main','DonasiController@donasiRandomMain')->name('donasi.random.main');
 
     Route::get('kodepos/provinsi/all','KodePosController@kodeposProvinsiAll');
     Route::get('kodepos/kota/{provinsi}','KodePosController@kodeposKotaByProvinsi');

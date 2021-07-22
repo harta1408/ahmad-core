@@ -258,7 +258,7 @@ class PendampingController extends Controller
         $exec=Pendamping::where('id','=' ,$id)->update(['pendamping_status' => '3']); //data di otorisasi
     }
     public function pendampingOtorisasiIndex(){
-        return view('pendamping/pendampingotorisasi',compact('pendamping'));
+        return view('pendamping/pendampingotorisasi');
     }
 
     #------------utility

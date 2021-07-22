@@ -10,6 +10,7 @@ class Hadist extends Model
     protected $fillable=[
         'hadist_judul', //judul hadist
         'hadist_isi', //isi hadist
+        'hadist_isi_singkat',
         'hadist_jenis', //1=hadist 2-doa
         'hadist_kirim', 
         'hadist_waktu_kirim', //kirim waktu 
