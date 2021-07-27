@@ -5,6 +5,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Santri;
 use App\Models\User;
+use App\Models\Materi;
+use App\Models\Bimbingan;
+use App\Models\BimbinganMateri;
 use App\Http\Controllers\ReferralAPI;
 use App\Http\Controllers\Service\MessageService;
 use Config;
@@ -272,7 +275,39 @@ class SantriAPI extends Controller
         $santri=Santri::where('id',$id)->first();
         return response()->json($santri,200);
     }
-    
+    public function santriDashboard($santriid){
+        $jmlmateri=Materi::where('materi_status','1')->count();
+        $bimbingan=Bimbingan::where('santri_id',$santriid)->first();
+        if(!$bimbingan){
+            return response()->json(['status' => 'error', 'message' => 'santri tidak dalam bimbingan', 'code' => 404]);
+        }
+        $bimbinganid=$bimbingan->id;
+
+        $todaydate=date_create(date("Y-m-d"));
+        $bimbinganmulai=date_create($bimbingan->bimbingan_mulai);
+        $bimbinganakhir=date_create($bimbingan->bimbingan_berakhir);
+
+        $jangkawaktu=date_diff($bimbinganmulai,$bimbinganakhir)->days;;
+        $berjalan=date_diff($todaydate,$bimbinganakhir)->days;
+        $sisabulan=date_diff($todaydate,$bimbinganakhir)->m.' bulan';
+        
+        $materiselesai=BimbinganMateri::where('bimbingan_id',$bimbinganid)->count();
+
+        $progresbelajar=$materiselesai/$jmlmateri;
+        $waktubelajar=1-($berjalan/$jangkawaktu);
+
+        $santri=Santri::where('id',$santriid)->first();
+
+        $dashsantri=['santri'=> $santri,
+                     'bimbingan_hari_ini' => date("Y-m-d"),
+                     'bimbingan_mulai' => $bimbingan->bimbingan_mulai,
+                     'bimbingan_akhir' => $bimbingan->bimbingan_berakhir,
+                     'santri_progress_belajar'=>$progresbelajar,
+                     'santri_progress_waktu'=>$waktubelajar,
+                     'santri_sisa_bulan'=>$sisabulan];
+
+        return response()->json($dashsantri,200);
+    }
     public function santriKode()
     {
       //otomatis pengaturan kode santri dengan format 

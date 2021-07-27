@@ -18,6 +18,7 @@ class KirimProduk extends Model
         'kirim_nama', //nama user pengirim 
         'kirim_telepon', //telp pengirim
         'kirim_no_resi', //nomor resi pengiriman
+        'kirim_kurir',//nama kurir
         'kirim_tanggal_kirim', //tanggal pengiriman 
         'kirim_tanggal_terima', //tanggal diterima
         'kirim_biaya', //biaya pengiriman

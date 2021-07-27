@@ -4,14 +4,14 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Http\Controllers\Service\DonasiService;
 
-class HarianCommand extends Command
+class ProsesFilePDF extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'donasi:harian';
+    protected $signature = 'proses:filepdf';
 
     /**
      * The console command description.
@@ -37,8 +37,8 @@ class HarianCommand extends Command
      */
     public function handle()
     {
-        $donasi=new DonasiService;
-        $donasi->pengingatDonasi();
-        $donasi->pesanJatuhTempo();
+        $donservice=new DonasiService;
+        // $donservice->donasiCicilanPDF('3');
+        $donservice->donasiInvoicePDF('3');
     }
 }

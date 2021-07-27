@@ -134,9 +134,12 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['role:manajer|helpdesk|s
     Route::get('donasi/random/index','DonasiController@donasiRandomIndex')->name('donasi.random.index');
     Route::get('donasi/random/load','DonasiController@donasiRandomLoad')->name('donasi.random.load');
     Route::post('donasi/random/main','DonasiController@donasiRandomMain')->name('donasi.random.main');
+    Route::post('donasi/random/save','DonasiController@donasiRandomSave')->name('donasi.random.save');
 
     Route::get('kodepos/provinsi/all','KodePosController@kodeposProvinsiAll');
     Route::get('kodepos/kota/{provinsi}','KodePosController@kodeposKotaByProvinsi');
     Route::get('kodepos/kabupaten/{kota}','KodePosController@kecamatanByKota');
     Route::get('kodepos/kelurahan/{kabupaten}','KodePosController@kelurahanByKecamatan');
+
+    
 }); 

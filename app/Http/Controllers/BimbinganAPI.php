@@ -88,40 +88,7 @@ class BimbinganAPI extends Controller
 
         return response()->json($dashsantri,200);
     }
-    public function bimbinganDashboardDonatur($donaturid){
-        #validasi
-        $materi=Materi::where('materi_status','1')->get();
-        if(!$materi){
-            return response()->json(['status' => 'error', 'message' => 'Belum ada Materi', 'code' => 404]);
-        }
-
-        $jmldonasi=Donasi::where('donatur_id',$donaturid)->sum('donasi_jumlah_santri');
-        $jmltersalurkan=DonaturSantri::where('donatur_id',$donaturid)->count();
-
-        $donatursantri=function($query) use ($donaturid){
-            $query->where('id',$donaturid);
-        };
-        $santriids=Santri::whereHas('donatur',$donatursantri)->pluck('id')->toArray();
-        $bimbinganids=Bimbingan::whereIn('santri_id',$santriids)->pluck('id')->toArray();
-        $jmlsantriselesai=Bimbingan::whereIn('santri_id',$santriids)->where('bimbingan_status','2')->count();
-
-        $jmlmateri=Materi::where('materi_status','1')->count()*$jmltersalurkan;        
-        $materiselesai=BimbinganMateri::whereIn('bimbingan_id',$bimbinganids)->count();
-        if($materiselesai==0){
-            return response()->json(['status' => 'error', 'message' => 'Santri Belum Bimbingan', 'code' => 404]);
-        }
-        $progresbelajar=$materiselesai/$jmlmateri; //perhitungan sepertinya belum sesuai
-
-        $donatur=Donatur::where('id',$donaturid)->first();
-        $dashdonatur=['donatur'=> $donatur,
-                     'donatur_tanggal' => date("Y-m-d"),
-                     'donatur_paket_donasi' => $jmldonasi,
-                     'donatur_paket_tersalurkan' => $jmltersalurkan,
-                     'donatur_santri_selesai' => $jmlsantriselesai,
-                     'bimbingan_santri_progress'=>$progresbelajar];
-
-        return response()->json($dashdonatur,200);
-    }
+ 
 
     public function bimbinganListSantryByDonatur($donaturid){
         #validasi

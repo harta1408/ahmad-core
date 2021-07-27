@@ -3,8 +3,14 @@
 return [
     #url base untuk referral
     'referral' =>[
-        'development'=> 'http://dev.ahmadproject.org/gabung/',
-        'production'=> 'http://ahmadproject.org/gabung/',
+        'development'=>[
+            'donatur' => 'http://dev.ahmadproject.org/gabung/donatur/',
+            'santri' => 'http://dev.ahmadproject.org/gabung/santri/',
+        ],
+        'production'=> [
+            'donatur' => 'http://ahmadproject.org/gabung/donatur/',
+            'santri' => 'http://ahmadproject.org/gabung/santri/',
+        ],
     ],
     #url base untuk registrasi
     'register' =>[

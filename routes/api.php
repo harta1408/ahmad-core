@@ -38,6 +38,7 @@ Route::middleware(['cors'])->group(function () {
     Route::get('donatur/byid/{id}','DonaturAPI@donaturById');
     Route::post('donatur/upload/photo','DonaturAPI@donaturUploadImage');
     Route::get('donatur/santri/byid/{id}','DonaturAPI@donasiSantriById');
+    Route::get('donatur/dashboard/{donaturid}','DonaturAPI@donaturDashboard');
     
     Route::post('santri/register','SantriAPI@santriRegister');
     Route::post('santri/register/referral','SantriAPI@santriRegisterReferral');
@@ -48,6 +49,7 @@ Route::middleware(['cors'])->group(function () {
     Route::get('santri/list','SantriAPI@santriList');
     Route::get('santri/byid/{id}','SantriAPI@santriById');
     Route::get('santri/lacak/produk/{id}','SantriAPI@santriLacakProduk');
+    Route::get('santri/dashboard/{id}','SantriAPI@santriDashboard');
 
     Route::post('pendamping/register','PendampingAPI@pendampingRegister');
     Route::post('pendamping/register/referral','PendampingAPI@pendampingRegisterReferral');
@@ -55,7 +57,6 @@ Route::middleware(['cors'])->group(function () {
     Route::get('pendamping/byid/{id}','PendampingAPI@pendampingById');
     Route::get('pendamping/santri/byid/{id}','PendampingAPI@pendampingSantriById');
     Route::post('pendamping/upload/photo','PendampingAPI@pendampingUploadImage');
-
 
     Route::post('produk/save','ProdukAPI@produkSimpan');
     Route::get('produk/byid/{id}','ProdukAPI@produkById');
@@ -112,8 +113,6 @@ Route::middleware(['cors'])->group(function () {
     Route::post('message/send/wa','MessageAPI@sendWhatsApp');
 
     Route::post('bimbingan/penilaian/santri','BimbinganAPI@bimbinganPenilaian');
-    Route::get('bimbingan/dashboard/santri/{santriid}','BimbinganAPI@bimbinganDashboardSantri');
-    Route::get('bimbingan/dashboard/donatur/{donaturid}','BimbinganAPI@bimbinganDashboardDonatur');
     Route::get('bimbingan/list/santri/donatur/{donaturid}','BimbinganAPI@bimbinganListSantryByDonatur');
     
 

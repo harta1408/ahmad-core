@@ -20,5 +20,8 @@ class DonasiCicilan extends Model
     public function donasi(){
         return $this->hasOne('App\Models\Donasi','id','donasi_id');
     }
+    public function bayar(){
+        return $this->hasOne('App\Models\Bayar','cicilan_id','id');
+    }
 } 
 

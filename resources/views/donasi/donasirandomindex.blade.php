@@ -3,7 +3,27 @@
     <div class="long-title"><h3>Daftar Donasi Aktif</h3></div>
     {!! Form::open(['id' => 'frm','route' => 'donasi.random.main', 'class' => 'form-horizontal']) !!}
         <div id="toolbar"></div>
+        <div class="dx-field">
+            <div class="dx-field-label">Jumlah Santri Tersedia</div>
+            <div class="dx-field-value">
+                <div id="txtSantriTersedia"></div>
+            </div>
+        </div>    
+        <div class="dx-field">
+            <div class="dx-field-label">Jumlah Pendamping Tersedia</div>
+            <div class="dx-field-value">
+                <div id="txtPendampingTersedia"></div>
+            </div>
+        </div>
+        <div class="dx-field">
+            <div class="dx-field-label">Jumlah Santri Diperlukan</div>
+            <div class="dx-field-value">
+                <div id="txtSantriDibutuhkan"></div>
+            </div>
+        </div>
+
         <div class="second-group">
+            <div id="form"></div>
             <div id="gridData"></div>
         </div>
         <input id="txtDonasiSelected" type="text" name="donasi_selected" class="form-control" hidden >
@@ -19,6 +39,20 @@ $(function(){
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       }
     });
+    $("#txtSantriTersedia").dxTextBox({
+        value: "{!!$santritersedia!!}",
+        readOnly: true,
+    });
+    
+    $("#txtPendampingTersedia").dxTextBox({
+        value: "{!!$pendampingtersedia!!}",
+        readOnly: true,
+    });
+    $("#txtSantriDibutuhkan").dxTextBox({
+        value: "0",
+        readOnly: true,
+    }); 
+
     var gridDataSource = new DevExpress.data.DataSource({
         load: function (loadOptions) {
             return $.ajax({
@@ -48,16 +82,34 @@ $(function(){
               dataField: "donatur.donatur_nama",
               caption: "Donatur",
             },{
-              dataField: "donasi_jumlah_santri",
+              dataField: "donasi_sisa_santri",
               caption: "Jumlah Santri",
             },
             
         ],
         onSelectionChanged: function (selectedItems) {
+            var data = selectedItems.selectedRowsData;
+            if(data.length > 0){
+                var jmlsantriterpilih=eval($.map(data, function(value) {
+                    return value.donasi_jumlah_santri ;
+                }).join("+"));
+                $("#txtSantriDibutuhkan").dxTextBox("instance").option("value",jmlsantriterpilih);
+            }else{
+                $("#txtSantriDibutuhkan").dxTextBox("instance").option("value",0);
+            } 
+
+
+
+
             // var data = selectedItems.selectedRowsData[0];
-            // var data = selectedItems.selectedRowsData;
-            // console.log(data.length);
-            // $("#txtDonasiSelected").val(data);
+            // console.log(data.donasi_jumlah_santri);
+            // if(data!= null){
+            //     var jmlsantriterpilih=parseInt($("#txtSantriDibutuhkan").dxTextBox("instance").option("value"))+
+            //     data.donasi_jumlah_santri;
+            //     $("#txtSantriDibutuhkan").dxTextBox("instance").option("value",jmlsantriterpilih);
+            // }else 
+            //     $("#txtSantriDibutuhkan").dxTextBox("instance").option("value",0);
+
           },
     });
     $("#toolbar").dxToolbar({
@@ -79,16 +131,47 @@ $(function(){
                 var dataGrid = $("#gridData").dxDataGrid("instance");
                 var selectedRowsData = dataGrid.getSelectedRowsData();
                 var jmldata=selectedRowsData.length;
+                var jmlpendamping=$("#txtPendampingTersedia").dxTextBox("instance").option("value");
+                var jmlsantritersedia=$("#txtSantriTersedia").dxTextBox("instance").option("value");
+                var jmlsantriterpilih=$("#txtSantriDibutuhkan").dxTextBox("instance").option("value");
                 if(jmldata==0){
-                    DevExpress.ui.notify({
-                        message: "Silakan Pilih Donasi",
-                        position: {
-                            my: "center top",
-                            at: "center top"
-                        }
-                    }, "warning", 3000);
+                    swal({
+                        title: "Ada Kesalahan",
+                        icon: 'error',
+                        text: "Proses tidak dapat dilanjutkan, Silakan Pilih Donasi",
+                        value: true,
+                        visible: true,
+                        className: "",
+                        closeModal: true,
+                    });
                     e.preventDefault();
                     return false;                    
+                }
+                if(jmlpendamping==0){
+                    swal({
+                        title: "Ada Kesalahan",
+                        icon: 'error',
+                        text: "Proses tidak dapat dilanjutkan, Jumlah Pendamping tidak mencukupi",
+                        value: true,
+                        visible: true,
+                        className: "",
+                        closeModal: true,
+                    });
+                    e.preventDefault();
+                    return false;                    
+                }
+                if(jmlsantriterpilih>jmlsantritersedia){
+                    swal({
+                        title: "Ada Kesalahan",
+                        icon: 'error',
+                        text: "Proses tidak dapat dilanjutkan, Jumlah Santri tidak mencukupi",
+                        value: true,
+                        visible: true,
+                        className: "",
+                        closeModal: true,
+                    });
+                    e.preventDefault();
+                    return false;  
                 }
                 var selecteddonasi="";
                 for (let i = 0; i < selectedRowsData.length; i++) {

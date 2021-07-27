@@ -32,7 +32,7 @@ class DonaturController extends Controller
             if($dnt->user['email_verified_at']==null){
                 $dnt->donatur_status="Belum Konfirmasi Email";
             }else{
-                if($dnt->donatur_status=="2"){
+                if($dnt->donatur_status=="1"){
                     $dnt->donatur_status="Belum Lengkap";
                 }else{
                     $dnt->donatur_status="Sudah Lengkap";
@@ -49,10 +49,6 @@ class DonaturController extends Controller
      */
     public function create()
     {
-        // $provinsi=KodePos::groupBy('provinsi')->get('provinsi');
-        // $kota=KodePos::groupBy('provinsi','kota')->get(['provinsi','kota']);
-        // $kecamatan=KodePos::groupBy('provinsi','kota','kecamatan')->get(['kota','kecamatan']);
-        // $kelurahan=KodePos::groupBy('provinsi','kota','kecamatan','kelurahan')->get(['kecamatan','kelurahan']);
         return view ('donatur/donaturnew');
     }
 
@@ -207,7 +203,7 @@ class DonaturController extends Controller
             if($dnt->user['email_verified_at']==null){
                 $dnt->donatur_status="Belum Konfirmasi Email";
             }else{
-                if($dnt->donatur_status=="2"){
+                if($dnt->donatur_status=="1"){
                     $dnt->donatur_status="Belum Lengkap";
                 }else{
                     $dnt->donatur_status="Sudah Lengkap";
@@ -242,7 +238,7 @@ class DonaturController extends Controller
     }
     #------------utility
     public function donaturSimpleList(){
-        $donatur=Donatur::where('donatur_status','1')->get();
+        $donatur=Donatur::where('donatur_status','!=','0')->get();
         return $donatur;
     }
 

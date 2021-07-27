@@ -22,5 +22,8 @@ class Bayar extends Model
         'bayar_onkir', //nilai ongkos kirim
         'bayar_status',  //0:tidak aktif/batal 1:belum bayar 2:sudah bayar 3:gagal bayar
     ];
+    public function cicilan(){
+        return $this->hasOne('App\Models\DonasiCicilan','id','cicilan_id');
+    }
 }
 

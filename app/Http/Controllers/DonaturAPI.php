@@ -11,6 +11,11 @@ use App\Models\DonasiTemp;
 use App\Models\Produk;
 use App\Models\Bayar;
 use App\Models\DonasiCicilan;
+use App\Models\Materi;
+use App\Models\Bimbingan;
+use App\Models\BimbinganMateri;
+use App\Models\DonaturSantri;
+use App\Models\Santri;
 use App\Http\Controllers\DonasiAPI;
 use App\Http\Controllers\ReferralAPI;
 use App\Http\Controllers\Service\MessageService;
@@ -32,7 +37,7 @@ class DonaturAPI extends Controller
         #validasi
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|unique:users|max:100',
-            'name' => ['required','string','max:50'],
+            'name' => ['required','string','max:100'],
         ]);
 
         if ($validator->fails()) {
@@ -83,10 +88,9 @@ class DonaturAPI extends Controller
 
     #registrasi donatur dengan donasi
     public function donaturRegisterDonasi(Request $request){
-        
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|unique:users|max:100',
-            'name' => ['required','string','max:50'],
+            'name' => ['required','string','max:100'],
             'nomor_donasi' =>['required','string'],
         ]);
 
@@ -100,7 +104,6 @@ class DonaturAPI extends Controller
         $useremail=$request->get('email'); 
         $username=$request->get('name');
         $temp_donasi_no=$request->get('nomor_donasi');
-
 
         $usertipe="1"; //tipe user donatur
         $hashcode=md5(rand(100000,999999)); 
@@ -149,7 +152,7 @@ class DonaturAPI extends Controller
     public function donaturRegisterReferral(Request $request){
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|unique:users|max:100',
-            'name' => ['required','string','max:50'],
+            'name' => ['required','string','max:100'],
             'referral_id'=> ['required','string'],
         ]);
 
@@ -193,7 +196,6 @@ class DonaturAPI extends Controller
 
         #ambil user berdasarkan email
         $user=User::with('donatur')->where('email',$useremail)->first();
-
         $msg=new MessageService;
 
         #kirim email verifikasi
@@ -205,7 +207,6 @@ class DonaturAPI extends Controller
 
     #registrasi donatur dengan donasi dan referral
     public function donaturRegisterDonasiReferral(Request $request){
-        
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|unique:users|max:100',
             'name' => ['required','string','max:50'],
@@ -264,7 +265,6 @@ class DonaturAPI extends Controller
         $user=User::with('donatur')->where('email',$useremail)->first();
 
         $msg=new MessageService;
-
         #kirim email verifikasi
         $msg->kirimEmailVerifikasi($useremail,$username,$hashcode);
         #simpan/kirim pesan
@@ -386,31 +386,57 @@ class DonaturAPI extends Controller
         //ambil id donatur, kemudian cari di database kodenya
         $id=$request->get('id');  
         $donatur_kode=Donatur::where('id',$id)->first()->donatur_kode;
-
-
-        // $this->validate($request, [
-        //   'donatur_photo' => 'required | image | mimes:jpeg,png,jpg,gif | max:256'
-        // ]);
-    
       
         // menyimpan data file yang diupload ke variabel $file
         $images = $request->file('donatur_photo');
         $new_name=$donatur_kode.'.'.$images->getClientOriginalExtension();
 
-
         //tujuan penyimpanan file
         $tujuan_upload = base_path("images");
         $images->move($tujuan_upload,$new_name); 
 
-
         $fileloc=substr($request->root(),0,strlen($request->root())-6) ."images/".$new_name; //upload ke server
         // $fileloc=$request->root()."/"."images/".$new_name;
     
-       
         Donatur::where('donatur_kode','=',$donatur_kode)->update(['donatur_lokasi_photo'=>$fileloc]);
 
         $donatur=Donatur::where('id',$id)->first();
         return response()->json($donatur,200);
+    }
+    public function donaturDashboard($donaturid){
+        #validasi
+        $materi=Materi::where('materi_status','1')->get();
+        if(!$materi){
+            return response()->json(['status' => 'error', 'message' => 'Belum ada Materi', 'code' => 404]);
+        }
+
+        $jmldonasi=Donasi::where('donatur_id',$donaturid)->sum('donasi_jumlah_santri');
+        $jmltersalurkan=DonaturSantri::where('donatur_id',$donaturid)->count();
+
+        $donatursantri=function($query) use ($donaturid){
+            $query->where('id',$donaturid);
+        };
+        $santriids=Santri::whereHas('donatur',$donatursantri)->pluck('id')->toArray();
+        $bimbinganids=Bimbingan::whereIn('santri_id',$santriids)->pluck('id')->toArray();
+        $jmlsantriselesai=Bimbingan::whereIn('santri_id',$santriids)->where('bimbingan_status','2')->count();
+
+        $jmlmateri=Materi::where('materi_status','1')->count()*$jmltersalurkan;        
+        $materiselesai=BimbinganMateri::whereIn('bimbingan_id',$bimbinganids)->count();
+        if($materiselesai==0){
+            $progresbelajar=0;
+        }else{
+            $progresbelajar=$materiselesai/$jmlmateri; //perhitungan sepertinya belum sesuai
+        }
+
+        $donatur=Donatur::where('id',$donaturid)->first();
+        $dashdonatur=['donatur'=> $donatur,
+                        'donatur_tanggal' => date("Y-m-d"),
+                        'donatur_paket_donasi' => $jmldonasi,
+                        'donatur_paket_tersalurkan' => $jmltersalurkan,
+                        'donatur_santri_selesai' => $jmlsantriselesai,
+                        'bimbingan_santri_progress'=>$progresbelajar];
+
+        return response()->json($dashdonatur,200);
     }
 
     public function donaturKode()

@@ -75,6 +75,11 @@ $(function() {
             text:"Nomor Resi",
           },
         },{
+          dataField: "kirim_kurir",
+          label:{
+            text:"Kurir",
+          },
+        },{
           dataField: "kirim_tanggal_kirim",
           label:{
             text:"Tanggal Kirim",

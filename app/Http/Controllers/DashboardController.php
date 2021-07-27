@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Donasi;
+use App\Models\DonasiCicilan;
 use App\Models\Dashboard;
 use App\Models\Bimbingan;
 use App\Models\Santri;
@@ -27,6 +28,14 @@ class DashboardController extends Controller
         $date = Hijri::convertToHijri($todaydate);
 
         return view('dashboard/helpdesk',compact('tanggal','dashboard'));
+    }
+
+    private function dashboardCard(){
+        #hitung donasi yang diterima pada hari aktif
+
+        #hitung donasi yang seharusnya diterima
+
+        #hitung donasi yang gagal diterima
     }
 
     private function hitungDonasiHarian(){

@@ -98,12 +98,7 @@ $(function(){
               caption: "No Resi",
             },{
               dataField: "kirim_tanggal_kirim",
-              caption: "Tanggal Kirim",
-            },{
-              dataField: "kirim_tanggal_terima",
-              caption: "Tanggal Sampai",
-              dataType:"date",
-              format:"shortDate",       
+              caption: "Tanggal Kirim",  
             },{
                 dataField: "kirim_status",
                 caption: "Status",
@@ -116,6 +111,11 @@ $(function(){
                 validationRules:[{
                         type: "required",
                         message: "Pilih dari daftar",}],
+            },{
+              dataField: "kirim_tanggal_terima",
+              caption: "Tanggal Sampai",
+              dataType:"date",
+              format:"shortDate",     
             },            
         ],
         onEditingStart: function(e){

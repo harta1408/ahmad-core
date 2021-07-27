@@ -34,7 +34,7 @@ class Pengingat extends Model
         'pengingat_status', //0=non aktif 1=aktif
     ];
     public function donatur(){
-        return $this->belongsToMany('App\Models\Donatur','pengingat_donatur','donatur_id','pengingat_id','id','id')
+        return $this->belongsToMany('App\Models\Donatur','pengingat_donatur','pengingat_id','donatur_id','id','id')
                     ->as('pengingatdonatur')
                     ->withPivot('pengingat_donatur_respon','pengingat_donatur_status')
                     ->withTimestamps();

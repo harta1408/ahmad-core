@@ -901,7 +901,7 @@
       <strong>Copyright &copy; 2021 <a href="http://agile.co.id">AHMaD Project</a></strong>
       All rights reserved.
       <div class="float-right d-none d-sm-inline-block">
-        {{ Auth::user()->name}} - <b>Version</b> BETA 1.07
+        {{ Auth::user()->name}} - <b>Version</b> BETA 1.09
       </div>
     </footer>
 

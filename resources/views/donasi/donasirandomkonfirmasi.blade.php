@@ -82,7 +82,7 @@ $(function(){
     $("#btnSave").dxButton({
         type: "success",
         icon: "save",
-        text: "Proses Pendistibusion Produk",
+        text: "Lanjut Proses Pendistibusion Produk",
         onClick: function(e) {
         // $("#btnSave").dxButton("instance").option("disabled",true);
         // var form =$('#form-container').serializeObject();
@@ -93,7 +93,7 @@ $(function(){
         $.ajax({
                 
               type: "POST",
-              url: "{{route('donasi.store')}}",
+              url: "{{route('donasi.random.save')}}",
               data: JSON.stringify({dataDonasi:arrDonasi}),
               contentType: "application/json; charset=utf-8",
               dataType: "json",

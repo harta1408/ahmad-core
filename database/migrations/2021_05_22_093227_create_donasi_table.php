@@ -22,6 +22,7 @@ class CreateDonasiTable extends Migration
             $table->string('donasi_no',10)->nullable();
             $table->dateTime('donasi_tanggal')->nullable();
             $table->integer('donasi_jumlah_santri')->default(0);
+            $table->integer('donasi_sisa_santri')->default(0);
             $table->double('donasi_total_harga',12,2)->default(0);
             $table->double('donasi_nominal',12,2)->default(0);
             $table->char('donasi_pengingat_harian',1)->default(0);

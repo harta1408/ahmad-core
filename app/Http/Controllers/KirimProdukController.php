@@ -5,11 +5,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth; 
 use App\Models\KirimProduk;
 use App\Models\Santri;
+use App\Models\Pendamping;
 use App\Models\Produk;
 use App\Models\Lembaga;
 use App\Models\DonaturSantri;
 use App\Models\Bimbingan;
+use App\Models\User;
 use App\Http\Controllers\BimbinganController;
+use App\Http\Controllers\Service\MessageService;
 use Validator;
 use Carbon\Carbon;
 
@@ -85,6 +88,9 @@ class KirimProdukController extends Controller
             return response()->json(['status' => 'error', 'message' => 'lembaga belum di definisikan', 'code' => 404]);
         }
 
+        $noresi=$request->get("kirim_no_resi");
+        $kurir=$request->get('kirim_kurir');
+        $tanggalkirim=$request->get("kirim_tanggal_kirim");
         $kirimproduk=new KirimProduk;
         $kirimproduk->produk_id=$produkid;
         $kirimproduk->santri_id=$santriid; 
@@ -93,8 +99,9 @@ class KirimProdukController extends Controller
         $kirimproduk->kirim_produk_no_seri=$request->get("kirim_produk_no_seri");
         $kirimproduk->kirim_nama=$lembaga->lembaga_nama;
         $kirimproduk->kirim_telepon=$lembaga->lembaga_telepon;
-        $kirimproduk->kirim_no_resi=$request->get("kirim_no_resi");
-        $kirimproduk->kirim_tanggal_kirim=$request->get("kirim_tanggal_kirim");
+        $kirimproduk->kirim_no_resi=$noresi;
+        $kirimproduk->kirim_kurir=$kurir;
+        $kirimproduk->kirim_tanggal_kirim=$tanggalkirim;
         $kirimproduk->kirim_biaya=$request->get("kirim_biaya");
 
         $kirimproduk->kirim_penerima_nama=$santri->santri_nama;
@@ -108,10 +115,7 @@ class KirimProdukController extends Controller
         $kirimproduk->save();
 
         #update status santri sendang menunggu produk
-        Santri::where('id',$santriid)->update(['santri_status'=>'5']);
-
-        #buat pesan ke entitas terkait bahwa produk sedang dikirimkan
-        //-----belum jadi
+        Santri::where('id',$santriid)->update(['santri_status'=>'6']);
 
         #simpan bimbingan dengan status masih 0, belum aktif
         #bimbingan bisa aktif otomatis pada saat produk sampai ke santri
@@ -127,6 +131,16 @@ class KirimProdukController extends Controller
         $bimbingan->bimbingan_catatan='';
         $bimbingan->bimbingan_status='0'; //belum aktif
         $bimbingan->save();
+
+        #buat pesan ke entitas terkait bahwa produk sedang dikirimkan
+        $msg=new MessageService;
+        $pengirim='0'; //dari sistem
+
+        #kirim pesan untuk santri
+        $santriemail=$santri->santri_email;
+        $tujuan=User::where('email',$santriemail)->first()->id;
+        $isi='Produk telah dikirimkan melalui '.$kurir.' nomor Resi '.$noresi.' Tanggal '.$tanggalkirim;
+        $msg->saveNotification($pengirim,$tujuan,$isi);
 
         return redirect()->action('KirimProdukController@index');
     }

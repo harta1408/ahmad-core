@@ -15,6 +15,7 @@ class DonaturSantri extends Pivot
         'donatur_id', // id donatur
         'santri_id',  //id santri
         'donasi_id', //id donasi
+        'pendamping_id', //id pendamping
         'donatur_santri_status', //status donatur dan santri
     ];
 }
