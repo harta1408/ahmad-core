@@ -22,6 +22,7 @@ class CreateProdukTable extends Migration
             $table->integer('produk_masa_bimbingan',3)->default(0);
             $table->double('produk_harga',12,2)->default(0);
             $table->double('produk_discount',6,2)->default(0);
+            $table->integer('produk_berat')->default(0);
             $table->integer('produk_stok')->default(0);
             $table->char('produk_status',1)->default(0);
             $table->timestamps();

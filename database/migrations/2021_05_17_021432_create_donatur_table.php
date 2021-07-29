@@ -29,8 +29,11 @@ class CreateDonaturTable extends Migration
             $table->text('donatur_alamat')->nullable();
             $table->string('donatur_kode_pos',10)->nullable();
             $table->string('donatur_kelurahan',50)->nullable();
+            $table->integer('donatur_kecamatan_id')->default(0);
             $table->string('donatur_kecamatan',50)->nullable();
+            $table->integer('donatur_kota_id')->default(0);
             $table->string('donatur_kota',50)->nullable();
+            $table->integer('donatur_provinsi_id')->default(0);
             $table->string('donatur_provinsi',50)->nullable();
             $table->char('donatur_rangkap',1)->default('0');
             $table->char('donatur_min_referral',1)->default(0);

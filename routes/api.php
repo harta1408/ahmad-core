@@ -51,6 +51,7 @@ Route::middleware(['cors'])->group(function () {
     Route::get('santri/lacak/produk/{id}','SantriAPI@santriLacakProduk');
     Route::get('santri/dashboard/{id}','SantriAPI@santriDashboard');
 
+
     Route::post('pendamping/register','PendampingAPI@pendampingRegister');
     Route::post('pendamping/register/referral','PendampingAPI@pendampingRegisterReferral');
     Route::post('pendamping/register/gmail','PendampingAPI@pendampingRegisterGMail');

@@ -469,7 +469,13 @@
                 <li class="nav-item">
                   <a href="{{route('kirimproduk.index')}}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                  <p>Daftar Kirim</p>
+                  <p>Update Resi/ Penerimaan</p>
+                </a>
+              </li>                
+                <li class="nav-item">
+                  <a href="{{route('kirimproduk.lacak.index')}}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                  <p>Lacak Pengiriman</p>
                 </a>
               </li>
               </ul>
@@ -901,7 +907,7 @@
       <strong>Copyright &copy; 2021 <a href="http://agile.co.id">AHMaD Project</a></strong>
       All rights reserved.
       <div class="float-right d-none d-sm-inline-block">
-        {{ Auth::user()->name}} - <b>Version</b> BETA 1.09
+        {{ Auth::user()->name}} - <b>Version</b> BETA 1.10
       </div>
     </footer>
 

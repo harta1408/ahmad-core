@@ -335,6 +335,9 @@ class DonaturAPI extends Controller
             'donatur_nama' => 'required|string',
             'donatur_telepon' => 'required|string',
             'donatur_alamat' => 'required|string',
+            'donatur_kecamatan_id' => 'required|string',
+            'donatur_kota_id' => 'required|string',
+            'donatur_provinsi_id' => 'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -357,6 +360,9 @@ class DonaturAPI extends Controller
                   'donatur_kecamatan'=>$request->get('donatur_kecamatan'),
                   'donatur_kota'=>$request->get('donatur_kota'),
                   'donatur_provinsi'=>$request->get('donatur_provinsi'),
+                  'donatur_kecamatan_id'=>$request->get('donatur_kecamatan_id'),
+                  'donatur_kota_id'=>$request->get('donatur_kota_id'),
+                  'donatur_provinsi_id'=>$request->get('donatur_provinsi_id'),
                   'donatur_status' => '2', //data sudah lengkap
                   ]);
         $donatur=Donatur::where('id',$id)->first();

@@ -72,8 +72,12 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['role:manajer|helpdesk|s
 
     
     Route::resource('produk', 'ProdukController');
-    
     Route::get('kirimproduk/load','KirimProdukController@load')->name('kirimproduk.load');
+    Route::post('kirimproduk/main','KirimProdukController@main')->name('kirimproduk.main');
+    Route::get('kirimproduk/lacak/load','KirimProdukController@lacakload')->name('kirimproduk.lacak.load');
+    Route::get('kirimproduk/lacak/index','KirimProdukController@lacakindex')->name('kirimproduk.lacak.index');
+    Route::post('kirimproduk/lacak/main','KirimProdukController@lacakmain')->name('kirimproduk.lacak.main');
+    Route::get('kirimprodtuk/lacak/hasil/{id}','KirimProdukController@lacakhasil')->name('kirimproduk.lacak.hasil');
     Route::resource('kirimproduk', 'KirimProdukController'); 
 
     Route::resource('pengingat', 'PengingatController');
@@ -141,5 +145,5 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['role:manajer|helpdesk|s
     Route::get('kodepos/kabupaten/{kota}','KodePosController@kecamatanByKota');
     Route::get('kodepos/kelurahan/{kabupaten}','KodePosController@kelurahanByKecamatan');
 
-    
+
 }); 

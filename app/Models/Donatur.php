@@ -26,6 +26,9 @@ class Donatur extends Model
         'donatur_kecamatan', //kecmatan
         'donatur_kota', //kota/kabupaten
         'donatur_provinsi', //provinsi
+        'donatur_kecamatan_id', //subdistrict_id
+        'donatur_kota_id', //city_id
+        'donatur_provinsi_id', //province_id
         'donatur_rangkap', //status merangkap, santri donatur
         'donatur_min_referral', //hitungan minimal refferal untuk selalu mengingatkan
         'donatur_status', //0=tidak aktif 1=aktif data belum lengkap 2=aktif data sudah lengkap 

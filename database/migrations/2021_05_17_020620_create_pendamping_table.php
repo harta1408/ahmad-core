@@ -28,9 +28,12 @@ class CreatePendampingTable extends Migration
             $table->string('pendamping_kerja',100)->nullable();
             $table->string('pendamping_kode_pos',10)->nullable();
             $table->string('pendamping_kelurahan',50)->nullable();
+            $table->integer('pendamping_kecamatan_id')->default(0);
             $table->string('pendamping_kecamatan',50)->nullable();
+            $table->integer('pendamping_kota_id')->default(0);
             $table->string('pendamping_kota',50)->nullable();
             $table->string('pendamping_provinsi',50)->nullable();
+            $table->integer('pendamping_provinsi_id')->default(0);
             $table->text('pendamping_lokasi_photo')->nullable();
             $table->string('pendamping_status_pegawai', 10, ['TETAP', 'KONTRAK'])->default('TETAP');
             $table->double('pendamping_honor', 18, 2)->default(0);

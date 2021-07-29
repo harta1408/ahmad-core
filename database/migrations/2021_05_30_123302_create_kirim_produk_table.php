@@ -31,8 +31,11 @@ class CreateKirimProdukTable extends Migration
             $table->string('kirim_penerima_alamat')->nullable();
             $table->string('kirim_penerima_kode_pos',10)->nullable();
             $table->string('kirim_penerima_kelurahan',50)->nullable();
+            $table->integer('kirim_penerima_kota_id')->default(0);
             $table->string('kirim_penerima_kota',50)->nullable();
+            $table->integer('kirim_penerima_kecamatan_id')->default(0);
             $table->string('kirim_penerima_kecamatan',50)->nullable();
+            $table->integer('kirim_penerima_provinsi_id')->default(0);
             $table->string('kirim_penerima_provinsi',50)->nullable();
             $table->string('kirim_no_resi',50)->nullable();
             $table->string('kirim_kurir',50)->nullable();

@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\Santri;
 use App\Models\User;
 use App\Models\Materi;
+use App\Models\KirimProduk;
 use App\Models\Bimbingan;
 use App\Models\BimbinganMateri;
 use App\Http\Controllers\ReferralAPI;
@@ -194,6 +195,9 @@ class SantriAPI extends Controller
             'santri_nama' => 'required|string',
             'santri_telepon' => 'required|string',
             'santri_alamat' => 'required|string',
+            'santri_kecamatan_id' => 'required|string',
+            'santri_kota_id' => 'required|string',
+            'santri_provinsi_id' => 'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -215,6 +219,9 @@ class SantriAPI extends Controller
                   'santri_kecamatan'=>$request->get('santri_kecamatan'),
                   'santri_kota'=>$request->get('santri_kota'),
                   'santri_provinsi'=>$request->get('santri_provinsi'),
+                  'santri_kecamatan_id'=>$request->get('santri_kecamatan_id'),
+                  'santri_kota_id'=>$request->get('santri_kota_id'),
+                  'santri_provinsi_id'=>$request->get('santri_provinsi_id'),
                   'santri_status' => '4',
                   ]);
         if(!$exec){
@@ -238,16 +245,9 @@ class SantriAPI extends Controller
         $santri=Santri::where('id',$id)->first();
         return response()->json($santri,200);
     }
-    public function santriLacakProduk($santriid){
-        $kirimproduk=function ($query) use ($santriid){
-            $query->with('produklacak')->where('santri_id',$santriid);
-        };
-        $santri=Santri::with(['kirimproduk'=>$kirimproduk])->whereHas('kirimproduk',$kirimproduk)->first();
-        return response()->json($santri,200);
-    }
-
-    public function santriByPendampingId($id){
-
+    public function santriLacakProduk($id){
+        $kirimproduk=KirimProduk::with('manifest')->where('santri_id',$id)->first();
+        return response()->json($kirimproduk,200);
     }
     public function santriUploadImage(Request $request){
 
@@ -308,6 +308,7 @@ class SantriAPI extends Controller
 
         return response()->json($dashsantri,200);
     }
+
     public function santriKode()
     {
       //otomatis pengaturan kode santri dengan format 

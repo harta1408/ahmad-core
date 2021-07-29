@@ -36,9 +36,9 @@ $(function() {
       }
   });
 
-  var provinsi='{!!$santri->santri_provinsi!!}';
-  var kota='{!!$santri->santri_kota!!}';
-  var kecamatan='{!!$santri->santri_kecamatan!!}';
+  var provinsi;
+  var kota;
+  var kecamatan;
   $("#form").dxForm({
       colCount: 1,
       formData: {!!$santri!!},
@@ -188,7 +188,7 @@ $(function() {
         itemType:"group",
         colCount:2,
         items: [{
-            dataField: "santri_provinsi",
+            dataField: "santri_provinsi_id",
             label:{
               text:"Provinsi",
             },  
@@ -205,8 +205,8 @@ $(function() {
                             .fail(function() { throw "Data loading error" });
                     }
                 }),
-                displayExpr: "provinsi",
-                valueExpr: "provinsi",
+                displayExpr: "province",
+                valueExpr: "province_id",
                 searchEnabled: true,
                 onValueChanged : function (e){
                     provinsi=e.value;
@@ -217,7 +217,7 @@ $(function() {
             },
            
         },{
-            dataField: "santri_kota",
+            dataField: "santri_kota_id",
             label:{
               text:"Kota",
             },  
@@ -234,8 +234,8 @@ $(function() {
                     return $.getJSON("{{URL::to('dashboard/kodepos/kota')}}"+"/"+encodeURIComponent(provinsi));
                   }
               }),                
-              displayExpr: "kota",
-              valueExpr: "kota",
+              displayExpr: "city_name",
+              valueExpr: "city_id",
               searchEnabled: true,
               onValueChanged : function (e){
                   kota=e.value;
@@ -245,7 +245,7 @@ $(function() {
               }
             }
         },{
-            dataField: "santri_kecamatan",
+            dataField: "santri_kecamatan_id",
             label:{
               text:"Kecamatan",
             },  
@@ -262,45 +262,10 @@ $(function() {
                     return $.getJSON("{{URL::to('dashboard/kodepos/kabupaten')}}"+ "/" + encodeURIComponent(kota));
                   }
               }),
-              displayExpr: "kecamatan",
-              valueExpr: "kecamatan",
+              displayExpr: "subdistrict_name",
+              valueExpr: "subdistrict_id",
               searchEnabled: true,
-              onValueChanged : function (e){
-                  kecamatan=e.value;
-                  var form=$('#form').dxForm('instance');
-                  var itemKelurahan=form.getEditor('santri_kelurahan');
-                  // itemKelurahan.getDataSource().filter(['kecamatan','=',e.value]);
-                  itemKelurahan.getDataSource().load();
-              }
-            }
-        },{
-            dataField: "santri_kelurahan",
-            label:{
-              text:"Kelurahan",
-            },  
-            editorType: "dxSelectBox",
-            validationRules: [{
-                    type: "required",
-                    message: "Silakan pilih kelurahan"
-            }],
-            editorOptions: {
-              dataSource: new DevExpress.data.CustomStore({  
-                  loadMode: "raw",    
-                  cacheRawData: false,        
-                  load: function() {
-                    return $.getJSON("{{URL::to('dashboard/kodepos/kelurahan')}}"+ "/" + encodeURIComponent(kecamatan));
-                  }
-              }),
-              displayExpr: "kelurahan",
-              valueExpr: "kelurahan",
-              searchEnabled: true,
-            },
-        },{
-            dataField: "santri_kode_pos",
-            label:{
-              text:"Kode Pos",
-            }, 
-       
+            }       
         },]
       },{
           itemType: "button",

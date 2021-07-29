@@ -1,7 +1,7 @@
 @extends('layouts.menus')
 @section('content')
 <div class="long-title"><h3>Buat Pengiriman Produk</h3></div>
-{!! Form::open(['id' => 'frm','route' => 'kirimproduk.store','class' => 'form-horizontal']) !!}
+{!! Form::open(['id' => 'frm','route' => 'kirimproduk.main','class' => 'form-horizontal']) !!}
   <div id="form"></div>
 {!! Form::close()!!}
 
@@ -39,6 +39,10 @@ $(function() {
   var provinsi;
   var kota;
   var kecamatan;
+
+  $("#produknoseri").dxTextBox({
+        placeholder: "Masukan nomor seri produk..."
+  });
   $("#form").dxForm({
       colCount: 1,
       showColonAfterLabel: true,
@@ -52,8 +56,6 @@ $(function() {
           label:{
             text:"Nomor Seri Produk",
           },
-          editorOptions: { 
-          }
         },{
           dataField: "santri_id",
           label:{
@@ -68,17 +70,22 @@ $(function() {
           validationRules: [{
                     type: "required",
                     message: "Pilih Santri dari Daftar",
-                }]
-        },{
-          dataField: "kirim_no_resi",
-          label:{
-            text:"Nomor Resi",
-          },
+            }]
         },{
           dataField: "kirim_kurir",
           label:{
             text:"Kurir",
           },
+          editorType: "dxSelectBox",
+          editorOptions: {
+              items: {!!$kurir!!},
+              displayExpr: "kurir_nama",
+              valueExpr: "kurir_id",
+          },
+          validationRules: [{
+                    type: "required",
+                    message: "Pilih Kurir dari Daftar",
+            }]
         },{
           dataField: "kirim_tanggal_kirim",
           label:{
@@ -88,30 +95,13 @@ $(function() {
             editorOptions:{
                 value: new Date(),
                 type: "date",
-            },
-        },{
-          dataField: "kirim_biaya",
-          label:{
-            text:"Biaya Kirim",
-          },
-          editorType: "dxNumberBox",
-            editorOptions: { 
-                dataType:"number",
-                format: "#,##0",
-                value:0,
-            },
-          validationRules: [{
-              type: "required",
-              message: "Biaya Kirim harus di isi"
-          }]
-
-       
+            },       
         },]
       },{
           itemType: "button",
           horizontalAlignment: "left",
           buttonOptions: {
-              text: "Simpan",
+              text: "Proses",
               type: "success",
               useSubmitBehavior: true
           }

@@ -43,7 +43,7 @@ $(function() {
             })
         }, 
   });
-
+  var provinsi;
   $("#form").dxForm({
       formData:{!!$lembaga!!},
       colCount: 1,
@@ -94,6 +94,56 @@ $(function() {
               label:{
                 text:"Alamat",
               },
+            },{
+                dataField: "lembaga_provinsi_id",
+                label:{
+                    text:"Provinsi",
+                },  
+                validationRules: [{
+                        type: "required",
+                        message: "Provinsi harus di isi"
+                }],
+                editorType: "dxSelectBox",
+                editorOptions: {
+                    dataSource: new DevExpress.data.CustomStore({
+                        loadMode: "raw", // omit in the DataGrid, TreeList, PivotGrid, and Scheduler
+                        load: function() {
+                        return $.getJSON("{{URL::to('dashboard/kodepos/provinsi/all')}}")
+                                .fail(function() { throw "Data loading error" });
+                        }
+                    }),
+                    displayExpr: "province",
+                    valueExpr: "province_id",
+                    searchEnabled: true,
+                    onValueChanged : function (e){
+                        provinsi=e.value;
+                        var form=$('#form').dxForm('instance')
+                        var itemKota=form.getEditor('lembaga_kota_id');
+                        itemKota.getDataSource().load();
+                    }
+                },
+            },{
+                dataField: "lembaga_kota_id",
+                label:{
+                    text:"Kota",
+                },
+                validationRules: [{
+                        type: "required",
+                        message: "Provinsi harus di isi"
+                }],
+                editorType: "dxSelectBox",
+                editorOptions: {
+                    dataSource: new DevExpress.data.CustomStore({       
+                        loadMode: "raw",   
+                        cacheRawData: false,
+                        load: function() {
+                            return $.getJSON("{{URL::to('dashboard/kodepos/kota')}}"+"/"+encodeURIComponent(provinsi));
+                        }
+                    }),    
+                    displayExpr: "city_name",
+                    valueExpr: "city_id",
+                    searchEnabled: true,
+                },
             }],
       },{
         itemType: "group",

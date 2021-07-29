@@ -65,6 +65,9 @@ class DonaturController extends Controller
             'donatur_nama' => ['required','string','max:30'],
             'donatur_telepon' => 'required|string',
             'donatur_alamat'=>'required|string',
+            'donatur_provinsi_id'=>'required|string',
+            'donatur_kota_id'=>'required|string',
+            'donatur_kecamatan_id'=>'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -92,6 +95,16 @@ class DonaturController extends Controller
         $user->password=Hash::make($donaturkode);
         $exec=$user->save();
 
+        #ambil data provinsi, kota dan kecamatan dari raja ongkir
+        $donaturprovinsiid=$request->get("donatur_provinsi_id");
+        $donaturkotaid=$request->get('donatur_kota_id');
+        $donaturkecamatanid=$request->get("donatur_kecamatan_id");
+        $kodeposapi=new KodePosAPI;
+        $provinsi=$kodeposapi->getProvisiById($donaturprovinsiid);
+        $kota=$kodeposapi->getKotaById($donaturkotaid);
+        $kecamatan=$kodeposapi->getKecamatanById($donaturkecamatanid);
+        $kodepos=$kodeposapi->getKodePosByKotaId($donaturkotaid);
+
         $donatur=new Donatur;
         $donatur->donatur_kode=$donaturkode;
         $donatur->donatur_email=$request->get("donatur_email"); 
@@ -104,11 +117,14 @@ class DonaturController extends Controller
         $donatur->donatur_tmp_lahir=$request->get("donatur_tmp_lahir");
         $donatur->donatur_tgl_lahir=$request->get("donatur_tgl_lahir");
         $donatur->donatur_alamat=$request->get("donatur_alamat");
-        $donatur->donatur_provinsi=$request->get("donatur_provinsi");
-        $donatur->donatur_kota=$request->get("donatur_kota");
-        $donatur->donatur_kecamatan=$request->get("donatur_kecamatan");
-        $donatur->donatur_kelurahan=$request->get("donatur_kelurahan");
-        $donatur->donatur_kode_pos=$request->get("donatur_kode_pos");
+        $donatur->donatur_provinsi_id=$donaturprovinsiid;
+        $donatur->donatur_kota_id=$donaturkotaid;
+        $donatur->donatur_kecamatan_id=$donaturkecamatanid;
+        $donatur->donatur_provinsi=$provinsi;
+        $donatur->donatur_kota=$kota;
+        $donatur->donatur_kecamatan=$kecamatan;
+        $donatur->donatur_kelurahan='';
+        $donatur->donatur_kode_pos=$kodepos;
         $donatur->donatur_status='1'; //aktif belum melengkapi data
         $donatur->save();
 
@@ -159,11 +175,23 @@ class DonaturController extends Controller
             'donatur_nama' => 'required|string',
             'donatur_telepon' => 'required|string',
             'donatur_alamat' => 'required|string',
+            'donatur_provinsi_id'=>'required|string',
+            'donatur_kota_id'=>'required|string',
+            'donatur_kecamatan_id'=>'required|string',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['status' => 'error', 'message' => $validator->messages()->first(), 'code' => 404]);
         }
+        #ambil data provinsi, kota dan kecamatan dari raja ongkir
+        $donaturprovinsiid=$request->get("donatur_provinsi_id");
+        $donaturkotaid=$request->get('donatur_kota_id');
+        $donaturkecamatanid=$request->get("donatur_kecamatan_id");
+        $kodeposapi=new KodePosAPI;
+        $provinsi=$kodeposapi->getProvisiById($donaturprovinsiid);
+        $kota=$kodeposapi->getKotaById($donaturkotaid);
+        $kecamatan=$kodeposapi->getKecamatanById($donaturkecamatanid);
+        $kodepos=$kodeposapi->getKodePosByKotaId($donaturkotaid);
 
         $exec=Donatur::where('id','=' ,$id)
             ->update(['donatur_nid'=>$request->get('donatur_nid'),
@@ -176,11 +204,14 @@ class DonaturController extends Controller
                     'donatur_kerja'=>$request->get('donatur_kerja'),
                     'donatur_alamat'=>$request->get('donatur_alamat'), 
                     'donatur_kode_pos'=>$request->get('donatur_kode_pos'),
-                    'donatur_kelurahan'=>$request->get('donatur_kelurahan'),
-                    'donatur_kecamatan'=>$request->get('donatur_kecamatan'),
-                    'donatur_kota'=>$request->get('donatur_kota'),
-                    'donatur_provinsi'=>$request->get('donatur_provinsi'),
-                    'donatur_kode_pos' =>$request->get('donatur_kode_pos'),
+                    'donatur_kelurahan'=>'',
+                    'donatur_kecamatan_id'=>$donaturkecamatanid,
+                    'donatur_kota_id'=>$donaturkotaid,
+                    'donatur_provinsi_id'=>$donaturprovinsiid,
+                    'donatur_kecamatan'=>$kecamatan,
+                    'donatur_kota'=>$kota,
+                    'donatur_provinsi'=>$provinsi,
+                    'donatur_kode_pos' =>$kodepos,
                     'donatur_status' => '2', //data sudah lengkap
                 ]);
         return redirect()->action('DonaturController@donaturRenewIndex');

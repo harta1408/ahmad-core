@@ -76,6 +76,9 @@ class PendampingController extends Controller
             'pendamping_nama' => ['required','string','max:30'],
             'pendamping_telepon' => 'required|string',
             'pendamping_alamat'=>'required|string',
+            'pendamping_provinsi_id'=>'required|string',
+            'pendamping_kota_id'=>'required|string',
+            'pendamping_kecamatan_id'=>'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -103,6 +106,16 @@ class PendampingController extends Controller
         $user->password=Hash::make($pendampingkode);
         $exec=$user->save();
 
+        #ambil data provinsi, kota dan kecamatan dari raja ongkir
+        $pendampingprovinsiid=$request->get("pendamping_provinsi_id");
+        $pendampingkotaid=$request->get('pendamping_kota_id');
+        $pendampingkecamatanid=$request->get("pendamping_kecamatan_id");
+        $kodeposapi=new KodePosAPI;
+        $provinsi=$kodeposapi->getProvisiById($pendampingprovinsiid);
+        $kota=$kodeposapi->getKotaById($pendampingkotaid);
+        $kecamatan=$kodeposapi->getKecamatanById($pendampingkecamatanid);
+        $kodepos=$kodeposapi->getKodePosByKotaId($pendampingkotaid);
+
         $pendamping=new Pendamping;
         $pendamping->pendamping_kode=$pendampingkode;
         $pendamping->pendamping_email=$request->get("pendamping_email"); 
@@ -117,11 +130,14 @@ class PendampingController extends Controller
         $pendamping->pendamping_honor=$request->get("pendamping_honor");
         $pendamping->pendamping_status_pegawai=$request->get("pendamping_status_pegawai");
         $pendamping->pendamping_alamat=$request->get("pendamping_alamat");
-        $pendamping->pendamping_provinsi=$request->get("pendamping_provinsi");
-        $pendamping->pendamping_kota=$request->get("pendamping_kota");
-        $pendamping->pendamping_kecamatan=$request->get("pendamping_kecamatan");
-        $pendamping->pendamping_kelurahan=$request->get("pendamping_kelurahan");
-        $pendamping->pendamping_kode_pos=$request->get("pendamping_kode_pos");
+        $pendamping->pendamping_provinsi_id=$pendampingprovinsiid;
+        $pendamping->pendamping_kota_id=$pendampingkotaid;
+        $pendamping->pendamping_kecamatan_id=$pendampingkecamatanid;
+        $pendamping->pendamping_provinsi=$provinsi;
+        $pendamping->pendamping_kota=$kota;
+        $pendamping->pendamping_kecamatan=$kecamatan;
+        $pendamping->pendamping_kelurahan='';
+        $pendamping->pendamping_kode_pos=$kodepos;
         $pendamping->pendamping_status='1'; //aktif belum melengkapi data
         $pendamping->save();
 
@@ -172,11 +188,24 @@ class PendampingController extends Controller
             'pendamping_nama' => 'required|string',
             'pendamping_telepon' => 'required|string',
             'pendamping_alamat' => 'required|string',
+            'pendamping_provinsi_id'=>'required|string',
+            'pendamping_kota_id'=>'required|string',
+            'pendamping_kecamatan_id'=>'required|string',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['status' => 'error', 'message' => $validator->messages()->first(), 'code' => 404]);
         }
+
+        #ambil data provinsi, kota dan kecamatan dari raja ongkir
+        $pendampingprovinsiid=$request->get("pendamping_provinsi_id");
+        $pendampingkotaid=$request->get('pendamping_kota_id');
+        $pendampingkecamatanid=$request->get("pendamping_kecamatan_id");
+        $kodeposapi=new KodePosAPI;
+        $provinsi=$kodeposapi->getProvisiById($pendampingprovinsiid);
+        $kota=$kodeposapi->getKotaById($pendampingkotaid);
+        $kecamatan=$kodeposapi->getKecamatanById($pendampingkecamatanid);
+        $kodepos=$kodeposapi->getKodePosByKotaId($pendampingkotaid);
 
         $exec=Pendamping::where('id','=' ,$id)
             ->update(['pendamping_nid'=>$request->get('pendamping_nid'),
@@ -188,12 +217,13 @@ class PendampingController extends Controller
                     'pendamping_telepon'=>$request->get('pendamping_telepon'), 
                     'pendamping_kerja'=>$request->get('pendamping_kerja'),
                     'pendamping_alamat'=>$request->get('pendamping_alamat'), 
-                    'pendamping_kode_pos'=>$request->get('pendamping_kode_pos'),
-                    'pendamping_kelurahan'=>$request->get('pendamping_kelurahan'),
-                    'pendamping_kecamatan'=>$request->get('pendamping_kecamatan'),
-                    'pendamping_kota'=>$request->get('pendamping_kota'),
-                    'pendamping_provinsi'=>$request->get('pendamping_provinsi'),
-                    'pendamping_kode_pos' =>$request->get('pendamping_kode_pos'),
+                    'pendamping_kecamatan_id'=>$pendampingkecamatanid,
+                    'pendamping_kota_id'=>$pendampingkotaid,
+                    'pendamping_provinsi_id'=>$pendampingprovinsiid,
+                    'pendamping_kecamatan'=>$kecamatan,
+                    'pendamping_kota'=>$kota,
+                    'pendamping_provinsi'=>$provinsi,
+                    'pendamping_kode_pos' =>$kodepos,
                     'pendamping_status' => '4', //data sudah lengkap
                 ]);
         return redirect()->action('PendampingController@pendampingRenewIndex');

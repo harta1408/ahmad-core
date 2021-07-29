@@ -24,6 +24,9 @@ class Pendamping extends Model
         'pendamping_kecamatan', //kecamatan
         'pendamping_kota', //kota
         'pendamping_provinsi', //provinsi
+        'pendamping_kecamatan_id', //subdistrict_id
+        'pendamping_kota_id', //city_id
+        'pendamping_provinsi_id', //province_id
         'pendamping_lokasi_photo',//lokasi photo di server
         'pendamping_status_pegawai', //status kepegawaian pendampung
         'pendamping_honor', //honor yang diterima

@@ -79,6 +79,9 @@ class SantriController extends Controller
             'santri_nama' => ['required','string','max:30'],
             'santri_telepon' => 'required|string',
             'santri_alamat'=>'required|string',
+            'santri_provinsi_id'=>'required|string',
+            'santri_kota_id'=>'required|string',
+            'santri_kecamatan_id'=>'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -106,6 +109,16 @@ class SantriController extends Controller
         $user->password=Hash::make($santrikode);
         $exec=$user->save();
 
+        #ambil data provinsi, kota dan kecamatan dari raja ongkir
+        $santriprovinsiid=$request->get("santri_provinsi_id");
+        $santrikotaid=$request->get('santri_kota_id');
+        $santrikecamatanid=$request->get("santri_kecamatan_id");
+        $kodeposapi=new KodePosAPI;
+        $provinsi=$kodeposapi->getProvisiById($santriprovinsiid);
+        $kota=$kodeposapi->getKotaById($santrikotaid);
+        $kecamatan=$kodeposapi->getKecamatanById($santrikecamatanid);
+        $kodepos=$kodeposapi->getKodePosByKotaId($santrikotaid);
+
         $santri=new santri;
         $santri->santri_kode=$santrikode;
         $santri->santri_email=$request->get("santri_email"); 
@@ -118,11 +131,14 @@ class SantriController extends Controller
         $santri->santri_tmp_lahir=$request->get("santri_tmp_lahir");
         $santri->santri_tgl_lahir=$request->get("santri_tgl_lahir");
         $santri->santri_alamat=$request->get("santri_alamat");
-        $santri->santri_provinsi=$request->get("santri_provinsi");
-        $santri->santri_kota=$request->get("santri_kota");
-        $santri->santri_kecamatan=$request->get("santri_kecamatan");
-        $santri->santri_kelurahan=$request->get("santri_kelurahan");
-        $santri->santri_kode_pos=$request->get("santri_kode_pos");
+        $santri->santri_provinsi_id=$santriprovinsiid;
+        $santri->santri_kota_id=$santrikotaid;
+        $santri->santri_kecamatan_id=$santrikecamatanid;
+        $santri->santri_provinsi=$provinsi;
+        $santri->santri_kota=$kota;
+        $santri->santri_kecamatan=$kecamatan;
+        $santri->santri_kelurahan='';
+        $santri->santri_kode_pos=$kodepos;
         $santri->santri_status='1'; //aktif belum melengkapi data
         $santri->save();
 
@@ -173,11 +189,23 @@ class SantriController extends Controller
             'santri_nama' => 'required|string',
             'santri_telepon' => 'required|string',
             'santri_alamat' => 'required|string',
+            'santri_provinsi_id'=>'required|string',
+            'santri_kota_id'=>'required|string',
+            'santri_kecamatan_id'=>'required|string',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['status' => 'error', 'message' => $validator->messages()->first(), 'code' => 404]);
         }
+        #ambil data provinsi, kota dan kecamatan dari raja ongkir
+        $santriprovinsiid=$request->get("santri_provinsi_id");
+        $santrikotaid=$request->get('santri_kota_id');
+        $santrikecamatanid=$request->get("santri_kecamatan_id");
+        $kodeposapi=new KodePosAPI;
+        $provinsi=$kodeposapi->getProvisiById($santriprovinsiid);
+        $kota=$kodeposapi->getKotaById($santrikotaid);
+        $kecamatan=$kodeposapi->getKecamatanById($santrikecamatanid);
+        $kodepos=$kodeposapi->getKodePosByKotaId($santrikotaid);
 
         $exec=santri::where('id','=' ,$id)
             ->update(['santri_nid'=>$request->get('santri_nid'),
@@ -189,12 +217,13 @@ class SantriController extends Controller
                     'santri_telepon'=>$request->get('santri_telepon'), 
                     'santri_kerja'=>$request->get('santri_kerja'),
                     'santri_alamat'=>$request->get('santri_alamat'), 
-                    'santri_kode_pos'=>$request->get('santri_kode_pos'),
-                    'santri_kelurahan'=>$request->get('santri_kelurahan'),
-                    'santri_kecamatan'=>$request->get('santri_kecamatan'),
-                    'santri_kota'=>$request->get('santri_kota'),
-                    'santri_provinsi'=>$request->get('santri_provinsi'),
-                    'santri_kode_pos' =>$request->get('santri_kode_pos'),
+                    'santri_kecamatan_id'=>$santrikecamatanid,
+                    'santri_kota_id'=>$santrikotaid,
+                    'santri_provinsi_id'=>$santriprovinsiid,
+                    'santri_kecamatan'=>$kecamatan,
+                    'santri_kota'=>$kota,
+                    'santri_provinsi'=>$provinsi,
+                    'santri_kode_pos' =>$kodepos,
                     // 'santri_status' => '2', //data sudah lengkap
                 ]);
         return redirect()->action('SantriController@santriRenewIndex');

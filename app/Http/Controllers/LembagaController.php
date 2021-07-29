@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Lembaga;
 use App\Models\FAQ;
+use App\Http\Controllers\KodePosAPI;
+
 
 class LembagaController extends Controller
 {
@@ -86,6 +88,15 @@ class LembagaController extends Controller
         if (!$res) {
             return response()->json(['status' => 'error', 'message' => 'System Error', 'code' => 404]);
         }
+        
+        $provinsiid=$request->get('lembaga_provinsi_id');
+        $kotaid=$request->get('lembaga_kota_id');
+        $kodeposapi=new KodePosAPI;
+        $provinsi=$kodeposapi->getProvisiById($provinsiid);
+        $kota=$kodeposapi->getKotaById($kotaid);
+
+        Lembaga::where('lembaga_id',$id)->update(['lembaga_kota'=>$kota,'lembaga_provinsi'=>$provinsi]);
+        
         return redirect()->action('LembagaController@index');
     }
 

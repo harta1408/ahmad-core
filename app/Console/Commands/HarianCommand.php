@@ -11,7 +11,7 @@ class HarianCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'donasi:harian';
+    protected $signature = 'pengingat:harian';
 
     /**
      * The console command description.

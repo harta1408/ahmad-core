@@ -15,6 +15,7 @@ class Produk extends Model
         'produk_lokasi_video', //lokasi video produk
         'produk_masa_bimbingan', //masa bimbingan dalam hari
         'produk_harga',  //harga produk
+        'produk_berat', //berat produk dalam gram
         'produk_discount', //discount
         'produk_stok', // jumlah stok
         'produk_status',  //0=aktif 1=non aktif

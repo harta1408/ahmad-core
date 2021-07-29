@@ -24,7 +24,7 @@ return [
         'santri' => 'http://ahmadproject.org/daftar/santri/',
         'pedamping' => 'http://ahmadproject.org/daftar/pedamping/',
     ],
-],
+    ],
     #konfiguasi woola messanger
     'woowa' => [
         'whatsapp' => [
@@ -63,5 +63,20 @@ return [
                 'group_produk' => "rajabiller.group_produk",
             ]
         ],
-    ]
+    ],
+    #url base untuk raja ongkir
+    'rajaongkir' =>[
+        'key'=>'be17fa82d624c2bc97621dc4a20dd67d',
+        'url'=>[
+            'province' => 'https://pro.rajaongkir.com/api/province',
+            'city' => 'https://pro.rajaongkir.com/api/city',
+            'subdistrict' => 'https://pro.rajaongkir.com/api/subdistrict',
+            'cost'=>'https://pro.rajaongkir.com/api/cost',
+            'intorigin' => 'https://pro.rajaongkir.com/api/v2/internationalOrigin',
+            'intdest' => 'https://pro.rajaongkir.com/api/v2/internationalDestination',
+            'intcost' => 'https://pro.rajaongkir.com/api/v2/internationalCost',
+            'currency' => 'https://pro.rajaongkir.com/api/currency',
+            'waybill' => 'https://pro.rajaongkir.com/api/waybill',
+        ],
+    ],
 ];

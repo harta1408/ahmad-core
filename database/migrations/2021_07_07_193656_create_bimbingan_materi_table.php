@@ -14,7 +14,7 @@ class CreateBimbinganMateriTable extends Migration
     public function up()
     {
         Schema::create('bimbingan_materi', function (Blueprint $table) {
-            $table->integer('bimbingan_id')->unsigned();
+            $table->bigInteger('bimbingan_id')->unsigned();
             $table->foreign('bimbingan_id')->references('id')->on('bimbingan');
             $table->integer('materi_id')->unsigned();
             $table->foreign('materi_id')->references('id')->on('materi');

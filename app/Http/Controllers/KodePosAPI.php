@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\KodePos;
-
+use GuzzleHttp\Client;
+use Config;
 class KodePosAPI extends Controller
 {
     public function __construct()
@@ -11,16 +12,91 @@ class KodePosAPI extends Controller
         $this->middleware('cors');
 	}
     public function kodeposProvinsiAll(){
-        $kodepos=KodePos::groupBy('provinsi')->get('provinsi');
-        return response()->json($kodepos,200);
+        $url = Config::get('ahmad.rajaongkir.url.province');
+    	$key = Config::get('ahmad.rajaongkir.key');
+        $client = new Client([
+            'headers' => [
+                'Content-Type' => 'application/json',
+                'key' => $key,
+            ]
+        ]);
+		try {
+            $response = $client->get($url,
+                [
+                    'verify' => true
+                ]
+            );
+            $result = json_decode($response->getBody()->getContents());
+           
+        } catch (\Exception $e) {
+            return response()->json(['STATUS' => 'ER', 'MSG' => $e->getMessage()]);
+        }
+        if(!$result){
+            return response()->json(['STATUS' => 'UN', 'KET' => 'Tidak Mendapat Respon dari Server']);
+        }
+        if($result->rajaongkir->status->code=="200"){
+            $result=$result->rajaongkir->results;
+        }
+
+        return response()->json($result,200);
     }
     public function kodeposProvinsi($provinsi){
-        $kodepos=KodePos::where('provinsi',$provinsi)->get();
-        return response()->json($kodepos,200);
+        $url = Config::get('ahmad.rajaongkir.url.city');
+    	$key = Config::get('ahmad.rajaongkir.key');
+        $client = new Client([
+            'headers' => [
+                'Content-Type' => 'application/json',
+                'key' => $key,
+            ]
+        ]);
+		try {
+            $response = $client->get($url.'?province='.$provinsi,
+                [
+                    'verify' => true
+                ]
+            );
+            $result = json_decode($response->getBody()->getContents());
+           
+        } catch (\Exception $e) {
+            return response()->json(['STATUS' => 'ER', 'MSG' => $e->getMessage()]);
+        }
+        if(!$result){
+            return response()->json(['STATUS' => 'UN', 'KET' => 'Tidak Mendapat Respon dari Server']);
+        }
+        if($result->rajaongkir->status->code=="200"){
+            $result=$result->rajaongkir->results;
+        }
+
+        return response()->json($result,200);
     }
     public function kodeposKota($kota){
-        $kodepos=KodePos::where('kota',$kota)->get();
-        return response()->json($kodepos,200);
+        $url = Config::get('ahmad.rajaongkir.url.subdistrict');
+    	$key = Config::get('ahmad.rajaongkir.key');
+        $client = new Client([
+            'headers' => [
+                'Content-Type' => 'application/json',
+                'key' => $key,
+            ]
+        ]);
+		try {
+            $response = $client->get($url.'?city='.$kota,
+                [
+                    'verify' => true
+                ]
+            );
+            $result = json_decode($response->getBody()->getContents());
+           
+        } catch (\Exception $e) {
+            return response()->json(['STATUS' => 'ER', 'MSG' => $e->getMessage()]);
+        }
+        if(!$result){
+            return response()->json(['STATUS' => 'UN', 'KET' => 'Tidak Mendapat Respon dari Server']);
+        }
+        if($result->rajaongkir->status->code=="200"){
+            $result=$result->rajaongkir->results;
+        }
+
+        return response()->json($result,200);
     }
     public function kodeposKecamatan($kecamatan){
         $kodepos=KodePos::where('kecamatan',$kecamatan)->get();
@@ -50,5 +126,126 @@ class KodePosAPI extends Controller
         $kodepos=KodePos::where('kelurahan',$kelurahan)->groupBy('kode_pos')->get('kode_pos');
         // $kodepos=KodePos::where('kelurahan',$kelurahan)->groupBy('kode_pos')->pluck('kode_pos');
         return response()->json($kodepos,200);
+    }
+
+    public function getProvisiById($idpropinsi){
+        $url = Config::get('ahmad.rajaongkir.url.province');
+    	$key = Config::get('ahmad.rajaongkir.key');
+        $client = new Client([
+            'headers' => [
+                'Content-Type' => 'application/json',
+                'key' => $key,
+            ]
+        ]);
+		try {
+            $response = $client->get($url.'?id='.$idpropinsi,
+                [
+                    'verify' => true
+                ]
+            );
+            $result = json_decode($response->getBody()->getContents());
+           
+        } catch (\Exception $e) {
+            return response()->json(['STATUS' => 'ER', 'MSG' => $e->getMessage()]);
+        }
+        if(!$result){
+            return response()->json(['STATUS' => 'UN', 'KET' => 'Tidak Mendapat Respon dari Server']);
+        }
+  
+        if($result->rajaongkir->status->code=="200"){
+            $provinsi=$result->rajaongkir->results->province;
+            return $provinsi;
+        }
+        return response()->json(['STATUS' => 'ER', 'MSG' => 'Error']);
+    }
+    public function getKotaById($idkota){
+        $url = Config::get('ahmad.rajaongkir.url.city');
+    	$key = Config::get('ahmad.rajaongkir.key');
+        $client = new Client([
+            'headers' => [
+                'Content-Type' => 'application/json',
+                'key' => $key,
+            ]
+        ]);
+		try {
+            $response = $client->get($url.'?id='.$idkota,
+                [
+                    'verify' => true
+                ]
+            );
+            $result = json_decode($response->getBody()->getContents());
+           
+        } catch (\Exception $e) {
+            return response()->json(['STATUS' => 'ER', 'MSG' => $e->getMessage()]);
+        }
+        if(!$result){
+            return response()->json(['STATUS' => 'UN', 'KET' => 'Tidak Mendapat Respon dari Server']);
+        }
+  
+        if($result->rajaongkir->status->code=="200"){
+            $kota=$result->rajaongkir->results->city_name;
+            return $kota;
+        }
+        return response()->json(['STATUS' => 'ER', 'MSG' => 'Error']);
+    }
+    public function getKecamatanById($idkecamatan){
+        $url = Config::get('ahmad.rajaongkir.url.subdistrict');
+    	$key = Config::get('ahmad.rajaongkir.key');
+        $client = new Client([
+            'headers' => [
+                'Content-Type' => 'application/json',
+                'key' => $key,
+            ]
+        ]);
+		try {
+            $response = $client->get($url.'?id='.$idkecamatan,
+                [
+                    'verify' => true
+                ]
+            );
+            $result = json_decode($response->getBody()->getContents());
+           
+        } catch (\Exception $e) {
+            return response()->json(['STATUS' => 'ER', 'MSG' => $e->getMessage()]);
+        }
+        if(!$result){
+            return response()->json(['STATUS' => 'UN', 'KET' => 'Tidak Mendapat Respon dari Server']);
+        }
+
+        if($result->rajaongkir->status->code=="200"){
+            $kecamatan=$result->rajaongkir->results->subdistrict_name;
+            return $kecamatan;
+        }
+        return response()->json(['STATUS' => 'ER', 'MSG' => 'Error']);
+    }
+    public function getKodePosByKotaId($idkota){
+        $url = Config::get('ahmad.rajaongkir.url.city');
+    	$key = Config::get('ahmad.rajaongkir.key');
+        $client = new Client([
+            'headers' => [
+                'Content-Type' => 'application/json',
+                'key' => $key,
+            ]
+        ]);
+		try {
+            $response = $client->get($url.'?id='.$idkota,
+                [
+                    'verify' => true
+                ]
+            );
+            $result = json_decode($response->getBody()->getContents());
+           
+        } catch (\Exception $e) {
+            return response()->json(['STATUS' => 'ER', 'MSG' => $e->getMessage()]);
+        }
+        if(!$result){
+            return response()->json(['STATUS' => 'UN', 'KET' => 'Tidak Mendapat Respon dari Server']);
+        }
+  
+        if($result->rajaongkir->status->code=="200"){
+            $kodepos=$result->rajaongkir->results->postal_code;
+            return $kodepos;
+        }
+        return response()->json(['STATUS' => 'ER', 'MSG' => 'Error']);
     }
 }

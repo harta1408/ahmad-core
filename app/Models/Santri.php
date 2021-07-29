@@ -26,6 +26,9 @@ class Santri extends Model
         'santri_kecamatan', //kecamatan
         'santri_kota', //kota
         'santri_provinsi',// propinsi
+        'santri_kecamatan_id', //subdistrict_id
+        'santri_kota_id', //city_id
+        'santri_provinsi_id',// province_id
         'santri_rangkap', // untuk memeriksa apakah santri merangkap entitas lain (donatur/pendamping)
         'santri_min_referral', //hitungan minimal refferal untuk selalu mengingatkan
         'santri_status', //0=tidak aktif 1=aktif data belum lengkap 2=belum isi kuesioner 3=belum otorisasi, data belum lengkap 

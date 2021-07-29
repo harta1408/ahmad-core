@@ -2,24 +2,24 @@
 
 namespace App\Console\Commands;
 use Illuminate\Console\Command;
-use App\Models\Donasi;
+use App\Http\Controllers\Service\KirimProdukService;
 
 
-class DonasiCommand extends Command
+class KirimProdukCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'periksa:rekeningdonasi';
+    protected $signature = 'kirimproduk:lacak';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Memeriksa Rekening Donasi';
+    protected $description = 'Melacak Pengiriman Produk';
 
     /**
      * Create a new command instance.
@@ -38,7 +38,7 @@ class DonasiCommand extends Command
      */
     public function handle()
     {
-        #di matikan dulu, nanti di ganti dengan proses dari moota
-        // Donasi::where('donasi_status','1')->update(['donasi_status'=>'2']);
+        $kirim=new KirimProdukService;
+        $kirim->lacakPengirimanHarian();
     }
 }
