@@ -130,13 +130,17 @@ class DonaturAPI extends Controller
         $donatur->donatur_status='1'; //aktif belum melengkapi data
         $donatur->save();
 
+        //ambil kode unikkalau di taruh di bawah pindahkan donasi keburu di hapus
+        $kodeunik=DonasiTemp::where('temp_donasi_no',$temp_donasi_no)->first()->temp_donasi_kode_unik;
+
         //jika sudah ada pemesanan produk
         $donaturid=Donatur::where('donatur_email',$useremail)->first()->id;
         $donasiAPI=new DonasiAPI;
         $donasiAPI->pindahkanDonasi($temp_donasi_no,$donaturid);
         
-        #ambil user berdasarkan email
+        #ambil user berdasarkan email, di titipkan kode unik dari tabel donasi temp
         $user=User::with('donatur.donasi')->where('email',$useremail)->first();
+        $user->donatur->donasi->donasi_kode_unik=$kodeunik;
 
         $msg=new MessageService;
 
@@ -261,8 +265,10 @@ class DonaturAPI extends Controller
         $refAPI=new ReferralAPI;
         $refAPI->referralUpdateMinimal($referralid,$donaturkode);
 
-        #ambil user berdasarkan email
-        $user=User::with('donatur')->where('email',$useremail)->first();
+        #ambil user berdasarkan email, di titipkan kode unik dari tabel donasi temp
+        $kodeunik=DonasiTemp::where('temp_donasi_no',$temp_donasi_no)->first()->temp_donasi_kode_unik;
+        $user=User::with('donatur.donasi')->where('email',$useremail)->first();
+        $user->donatur->donasi->donasi_kode_unik=$kodeunik;
 
         $msg=new MessageService;
         #kirim email verifikasi
@@ -440,6 +446,8 @@ class DonaturAPI extends Controller
                         'donatur_paket_donasi' => $jmldonasi,
                         'donatur_paket_tersalurkan' => $jmltersalurkan,
                         'donatur_santri_selesai' => $jmlsantriselesai,
+                        'donatur_min_referral' => $donatur->donatur_min_referral,
+                        'donatur_max_referral' => '7',
                         'bimbingan_santri_progress'=>$progresbelajar];
 
         return response()->json($dashdonatur,200);

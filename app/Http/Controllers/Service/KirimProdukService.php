@@ -7,6 +7,7 @@ use App\Models\KirimProduk;
 use App\Models\KirimManifest;
 use App\Models\KodePos;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Service\BimbinganService;
 use GuzzleHttp\Client;
 use Config;
 class KirimProdukService extends Controller
@@ -108,9 +109,13 @@ class KirimProdukService extends Controller
                 $kirimmanifest->save();
             }
         }
+
         if($delivered==true){
             $tanggalterima=KirimManifest::where('kirim_produk_id',$kirimid)->orderBy('kirim_manifest_tanggal','desc')->first()->kirim_manifest_tanggal;
             KirimProduk::where('id',$kirimid)->update(['kirim_status'=>'2','kirim_tanggal_terima'=>$tanggalterima]);
+            $santriid=$kirimproduk->santri_id;
+            $bimbingancontrol=new BimbinganService;
+            $bimbingancontrol->bimbinganSantriMulai($santriid,$tanggalterima);
         }
     }
 

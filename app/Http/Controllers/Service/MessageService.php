@@ -83,7 +83,10 @@ class MessageService extends Controller
         $cicilanke=$donasicicilan->cicilan_ke;
         try{                
             $pdf = PDF::loadView('email/pdfinvoice', compact('donasicicilan'))
-                    ->setPaper([0, 0, 650, 900], 'potrait'); //dalam point unit(bukan mm)
+                    ->setPaper([0, 0, 650, 900], 'potrait')->setOptions([
+                        'tempDir' => public_path(),
+                        'chroot'  => realpath(base_path()),
+                    ]); //dalam point unit(bukan mm)
             $filename=$donasino.'-'.$cicilanke.'.pdf';
             $data = array('name'=>$username,'filename'=>$filename);
             Mail::send('email/invoice', $data, function($message) use($useremail, $username,$pdf,$filename) {

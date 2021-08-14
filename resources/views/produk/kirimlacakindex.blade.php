@@ -83,7 +83,7 @@ $(function(){
         widget: 'dxButton',
         locateInMenu: 'auto',
         options: {
-            icon: "search",
+            icon: "directions",
             hint: 'lacak pengiriman',
             onClick: function(e) {   
                 var txtKirimId=document.getElementById("txtKirimId").value;

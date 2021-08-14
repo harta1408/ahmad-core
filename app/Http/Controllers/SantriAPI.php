@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Santri;
+use App\Models\Donatur;
+use App\Models\Pendamping;
 use App\Models\User;
 use App\Models\Materi;
 use App\Models\KirimProduk;
@@ -297,6 +299,11 @@ class SantriAPI extends Controller
         $waktubelajar=1-($berjalan/$jangkawaktu);
 
         $santri=Santri::where('id',$santriid)->first();
+        $pendampingnama=Pendamping::where('id',$bimbingan->pendamping_id)->first()->pendamping_nama;
+        $santridonatur=function ($query) use ($santriid){
+            $query->where('id',$santriid);
+        };
+        $donaturnama=Donatur::whereHas('santri',$santridonatur)->first()->donatur_nama;
 
         $dashsantri=['santri'=> $santri,
                      'bimbingan_hari_ini' => date("Y-m-d"),
@@ -304,7 +311,12 @@ class SantriAPI extends Controller
                      'bimbingan_akhir' => $bimbingan->bimbingan_berakhir,
                      'santri_progress_belajar'=>$progresbelajar,
                      'santri_progress_waktu'=>$waktubelajar,
-                     'santri_sisa_bulan'=>$sisabulan];
+                     'santri_sisa_bulan'=>$sisabulan,
+                     'santri_min_referral' => $santri->santri_min_referral,
+                     'santri_max_referral' => '7',
+                     'pendamping' => $pendampingnama,
+                     'donatur'=>$donaturnama];
+                     
 
         return response()->json($dashsantri,200);
     }

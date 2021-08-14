@@ -15,6 +15,7 @@ class DonasiTemp extends Model
         'temp_donasi_tagih', //nilai yang di tagihkan sesuai cara bayar
         'temp_donasi_total_harga', //total harga
         'temp_donasi_cara_bayar', // 1=harian, 2=mingguan, 3=bulanan 4=tunai
+        'temp_donasi_kode_unik', //kode unik
         'temp_donasi_status',
     ];
     public function produk(){

@@ -40,5 +40,6 @@ class HarianCommand extends Command
         $donasi=new DonasiService;
         $donasi->pengingatDonasi();
         $donasi->pesanJatuhTempo();
+        $donasi->randomSantri();
     }
 }

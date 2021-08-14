@@ -3,14 +3,14 @@
 <div class="row justify-content-center">
     <div class="col-md-6">
         <div class="card">
-            <div class="card-header">Pilih Donasi</div>
+            <div class="card-header">Pilih Donatur</div>
             <div class="card-body">
-                {!! Form::open(['id' => 'frm','route' => 'donatur.donasi.cicilan.main','class' => 'form-horizontal']) !!}
-                    <label>Pilih Nomor Donasi dari Daftar</label>
+                {!! Form::open(['id' => 'frm','route' => 'report.donasi.cicilan.donatur','class' => 'form-horizontal']) !!}
+                    <label>Pilih Donatur dari Daftar</label>
                     <div id="simpleList"></div>
                     <div id="btnLanjut"></div>
                     <!-- <div id="selectedStores"></div> -->
-                    <input id="txtID" type="text" name="id_donasi"
+                    <input id="txtID" type="text" name="id_entitas"
                             class="form-control" placeholder="ID" hidden>
                 {!! Form::close()!!}
             </div>
@@ -27,13 +27,13 @@ $(function(){
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-    var donaturid='{!!$donaturid!!}';
+
     var listDataSource = new DevExpress.data.DataSource({
         loadMode: "raw",
         key: "id",
         load: function (key) {
           return $.ajax({
-            url: "{{URL::to('dashboard/donasi/donatur/byid')}}"+"/"+donaturid,
+              url: "{{route('donatur.simple.list')}}"
           })
       },
     });
@@ -42,11 +42,11 @@ $(function(){
     var listWidget = $("#simpleList").dxList({
         dataSource: listDataSource, 
         itemTemplate: function(data, index) {
-            return data.donasi_no;
+            return data.donatur_nama;
         },
         editEnabled: true,
         height: 300,
-        searchExpr: "donasi_no",
+        searchExpr: "donatur_nama",
         allowItemDeleting: false,
         itemDeleteMode: "toggle",
         showSelectionControls: true,

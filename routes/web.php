@@ -50,9 +50,6 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['role:manajer|helpdesk|s
     Route::get('donatur/pembaharuan/index','DonaturController@donaturRenewIndex')->name('donatur.pembaharuan.index');
     Route::post('donatur/pembaharuan/main','DonaturController@donaturRenewMain')->name('donatur.pembaharuan.main');
     Route::get('donatur/simple/list','DonaturController@donaturSimpleList')->name('donatur.simple.list');
-    Route::get('donatur/donasi/index','DonaturController@donaturDonasiIndex')->name('donatur.donasi.index');
-    Route::post('donatur/donasi/main','DonaturController@donaturDonasiMain')->name('donatur.donasi.main');
-    Route::post('donatur/donasi/cicilan/main','DonaturController@donaturDonasiCicilanmain')->name('donatur.donasi.cicilan.main');
 
     Route::resource('santri', 'SantriController');
     Route::get('santri/pembaharuan/index','SantriController@santriRenewIndex')->name('santri.pembaharuan.index');
@@ -70,7 +67,6 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['role:manajer|helpdesk|s
     Route::get('pendamping/otoriasasi/index','PendampingController@pendampingOtorisasiIndex')->name('pendamping.otorisasi.index');
     Route::get('pendamping/simple/list','PendampingController@pendampingSimpleList')->name('pendamping.simple.list');
 
-    
     Route::resource('produk', 'ProdukController');
     Route::get('kirimproduk/load','KirimProdukController@load')->name('kirimproduk.load');
     Route::post('kirimproduk/main','KirimProdukController@main')->name('kirimproduk.main');
@@ -124,7 +120,6 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['role:manajer|helpdesk|s
 
     Route::resource('materi','MateriController');
     Route::resource('kuesioner', 'KuesionerController');
-    Route::resource('bimbingan', 'BimbinganController');
     
     Route::resource('soal','SoalController');
     Route::post('soal/main','SoalController@main')->name('soal.main');
@@ -132,6 +127,7 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['role:manajer|helpdesk|s
 
     Route::resource('donasi', 'DonasiController');
     Route::get('donasi/donatur/byid/{donaturid}','DonasiController@donasiByDonaturId')->name('donasi.donatur.id');
+    Route::get('donasi/pending/index','DonasiController@donasiPendingIndex')->name('donasi.pending.index');
     Route::get('donasi/pending/list','DonasiController@donasiPendingList')->name('donasi.pending.list');
     Route::get('donasi/pending/load','DonasiController@donasiPendingLoad')->name('donasi.pending.load');
     Route::put('donasi/pending/update/{id}','DonasiController@donasiPendingUpdate')->name('donasi.pending.update');
@@ -139,6 +135,17 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['role:manajer|helpdesk|s
     Route::get('donasi/random/load','DonasiController@donasiRandomLoad')->name('donasi.random.load');
     Route::post('donasi/random/main','DonasiController@donasiRandomMain')->name('donasi.random.main');
     Route::post('donasi/random/save','DonasiController@donasiRandomSave')->name('donasi.random.save');
+
+    Route::get('report/donasi','ReportController@reportDonasi')->name('report.donasi');
+    Route::get('report/donasi/harian','ReportController@reportDonasiHarian')->name('report.donasi.harian');
+    Route::get('report/donasi/cicilan/outstanding','ReportController@reportOutStandingCicilan')->name('report.donasi.cicilan.outstanding');
+    Route::get('report/donasi/cicilan/index','ReportController@reportDonaturDonasiIndex')->name('report.donasi.cicilan.index');
+    Route::post('report/donasi/cicilan/donatur','ReportController@reportDonaturDonasiMain')->name('report.donasi.cicilan.donatur');
+    Route::post('report/donasi/cicilan/main','ReportController@reportDonaturDonasiCicilanMain')->name('report.donasi.cicilan.main');
+    Route::post('report/donasi/cicilan/cetak','ReportController@reportDonaturDonasiCicilanCetak')->name('report.donasi.cicilan.cetak');
+    Route::get('report/santri/bimbingan','ReportController@reportSantriBimbingan')->name('report.santri.bimbingan');
+    Route::get('report/santri/baru','ReportController@reportSantriBaru')->name('report.santri.baru');
+
 
     Route::get('kodepos/provinsi/all','KodePosController@kodeposProvinsiAll');
     Route::get('kodepos/kota/{provinsi}','KodePosController@kodeposKotaByProvinsi');

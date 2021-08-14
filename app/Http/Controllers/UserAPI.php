@@ -43,13 +43,19 @@ class UserAPI extends Controller
         $validator = Validator::make($request->all(), [ 
             'email' => 'required|email', 
             'password' => 'required', 
+            'remember_token' => 'required',
         ]);
         if ($validator->fails()) { 
             return response()->json(['status' => 'error', 'message' => $validator->messages()->first(), 'code' => 404]);
         }
         
+
         $email=$request->email;
         $password=$request->password;
+        $remember_token=$request->get('remember_token');
+
+        User::where('email',$email)->update(['remember_token'=>$remember_token]);
+
         $user= User::where('email',$email)->first();
         if(!$user){
             return response()->json(['status' => 'error', 'message' => 'User not found', 'code' => 404]);
@@ -139,7 +145,7 @@ class UserAPI extends Controller
         $userid=$user->id;
         $tipe=$user->tipe; // 1=donatur 2=santri, 3=pendamping 
         if($tipe=='1'){ //donatur, bisa jadi sudah berdonasi
-                $user=User::with('donatur.donasi.produk','donatur.donasi.rekeningbank')->where('id',$userid)->first();
+                $user=User::with('donatur.donasi.produk','donatur.donasi.rekeningbank','donatur.donasi.cicilan.bayar')->where('id',$userid)->first();
         }
         if($tipe=='2'){ //santri
             $user= User::with('santri')->where('id',$userid)->first();

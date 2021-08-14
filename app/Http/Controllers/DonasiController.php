@@ -10,6 +10,7 @@ use App\Models\Pendamping;
 use App\Models\DonasiCicilan;
 use App\Http\Controllers\Service\DonasiService;
 use App\Http\Controllers\Service\MessageService;
+use App\Http\Controllers\Service\AccountService;
 use DB;
 
 class DonasiController extends Controller
@@ -96,9 +97,23 @@ class DonasiController extends Controller
 
     #daftar donasi yang sedang menunggu pembayaran, bisa di override jika
     #pembayaran otomatis gagal
-    public function donasiPendingList(){
+    public function donasiPendingIndex(){
+        // echo ("Tunggu sedang proses data \n");
+        // $accservice=new AccountService;
+        // $result=$accservice->mootaDaftarBank();
+        // $norekening=$result->data[0]->account_number; 
+        // $atasnama=$result->data[0]->atas_nama;
+        // $saldo=$result->data[0]->balance;
 
-        return view('donasi/donasipendingindex');
+        // echo ("Nomor Rekening    :".$norekening." \n");
+        // echo ("Pemiliki Rekening :".$atasnama." \n");
+        // echo ("Saldo             :".$saldo." \n");
+
+        return view('donasi/donasipending');
+ 
+    }
+    public function donasiPendingList(){
+        return view('donasi/donasipending');
     }
     public function donasiPendingLoad(){
         $todaydate=date("Y-m-d").' 00:00:00';

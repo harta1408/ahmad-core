@@ -12,7 +12,7 @@ use App\Models\Lembaga;
 use App\Models\DonaturSantri;
 use App\Models\Bimbingan;
 use App\Models\User;
-use App\Http\Controllers\BimbinganController;
+use App\Http\Controllers\bimbinganservler;
 use App\Http\Controllers\Service\MessageService;
 use App\Http\Controllers\Service\KirimProdukService;
 use Validator;
@@ -223,8 +223,8 @@ class KirimProdukController extends Controller
             $kirimproduk=KirimProduk::where('id',$id)->first();
             $santriid=$kirimproduk->santri_id;
 
-            $bimbingancontrol=new BimbinganController;
-            $bimbingancontrol->bimbinganSantriMulai($santriid,$tglterima);
+            $bimbinganserv=new BimbinganService;
+            $bimbinganserv->bimbinganSantriMulai($santriid,$tglterima);
             KirimProduk::where('id',$id)->update(['kirim_tanggal_terima'=>$tglterima,'kirim_status'=>'2']);
 
         }
@@ -336,6 +336,9 @@ class KirimProdukController extends Controller
         if($delivered==true){
             $tanggalterima=KirimManifest::where('kirim_produk_id',$kirimid)->orderBy('kirim_manifest_tanggal','desc')->first()->kirim_manifest_tanggal;
             KirimProduk::where('id',$kirimid)->update(['kirim_status'=>'2','kirim_tanggal_terima'=>$tanggalterima]);
+            $santriid=$kirimproduk->santri_id;
+            $bimbinganserv=new BimbinganService;
+            $bimbinganserv->bimbinganSantriMulai($santriid,$tanggalterima);
         }
         return response()->json(['status' => 'success', 'message' => 'Berhasil di perbaharui', 'code' => 200]);
     }

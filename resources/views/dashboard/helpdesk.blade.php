@@ -7,13 +7,13 @@
       <!-- small box -->
       <div class="small-box bg-warning">
         <div class="inner">
-          <div class="long-title"><h4>Rp. {!!number_format($dashboard->dash_donasi_nilai)!!}</h4></div>
+          <div class="long-title"><h4>Rp. {!!number_format($dashboard->dash_donasi_harian)!!}</h4></div>
             <p>Donasi Harian</p>
           </div>
           <div class="icon">
             <i class="ion ion-pie-graph"></i>
           </div>
-        <a href="{{route('donasi.index')}}" class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
+        <a href="{{route('report.donasi.harian')}}" class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
       </div>
     </div>
     <!-- ./col -->
@@ -21,13 +21,13 @@
       <!-- small box -->
       <div class="small-box bg-warning">
         <div class="inner">
-          <div class="long-title"><h4>Rp. {!!number_format($dashboard->dash_donasi_nilai)!!}</h4></div>
+          <div class="long-title"><h4>Rp. {!!number_format($dashboard->dash_donasi_tagihan)!!}</h4></div>
             <p>Outstanding Cicilan</p>
           </div>
           <div class="icon">
             <i class="ion ion-stats-bars"></i>
           </div>
-        <a href="#" class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
+        <a href="{{route('report.donasi.cicilan.outstanding')}}"  class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
       </div>
     </div>
     <!-- ./col -->
@@ -41,7 +41,7 @@
           <div class="icon">
             <i class="fas fa-chalkboard-teacher"></i>
           </div>
-        <a href="#" class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
+        <a href="{{route('report.santri.bimbingan')}}"  class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
       </div>
     </div>
     <!-- ./col -->
@@ -49,13 +49,13 @@
       <!-- small box -->
       <div class="small-box bg-warning">
         <div class="inner">
-          <div class="long-title"><h4>{!!number_format($dashboard->dash_santri_otorisasi)!!}</h4></div>
-            <p>Pengajuan Santri</p>
+          <div class="long-title"><h4>{!!number_format($dashboard->dash_donasi_santri_nambah)!!}</h4></div>
+            <p>Penambahan Santri</p>
           </div>
           <div class="icon">
             <i class="ion ion-person-add"></i>
           </div>
-        <a href="{{route('santri.otorisasi.index')}}" class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
+        <a href="{{route('report.santri.baru')}}" class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
       </div>
     </div>
     <!-- ./col -->
@@ -63,104 +63,111 @@
   <!-- /.row -->
 <!-- Custom tabs (Charts with tabs)-->
 <div class="card">
-    <div class="card-header">
-        <h3 class="card-title">
-        <i class="fas fa-chart-bar mr-1"></i>
-        Total Donasi Bulanan 
-        </h3>
-        <div class="card-tools">
-        {{-- <ul class="nav nav-pills ml-auto"> --}}
-            {{-- <li class="nav-item"> --}}
-              {{-- <a class="nav-link active" href="#chartmonthlysales_bar" data-toggle="tab">Bar</a> --}}
-            {{-- </li> --}}
-            {{-- <li class="nav-item">
-              <a class="nav-link" href="#chartmonthlysales_area" data-toggle="tab">Area</a>
-            </li> --}}
-        {{-- </ul> --}}
-        </div>
-    </div><!-- /.card-header -->
-    <div class="card-body">
-        <div class="tab-content p-0">
-        <!-- Morris chart - Sales -->
-        <div class="chart tab-pane active" id="chartmonthlysales_bar" style="position: relative; height: 300px;">
-            {{-- <div id="chartmonthlysales_bar"  height="300" style="height: 300px;" ></div>                       --}}
-        </div>
-        {{-- <div class="chart tab-pane" id="chartmonthlysales_area" style="position: relative; height: 300px;"> --}}
-          {{-- <div id="chartmonthlysales_area"  height="300" style="height: 300px;" ></div>                           --}}
-        {{-- </div>   --}}
-        </div>
-    </div> 
-    <div class="card-footer">
-      <div class="row">
-        <div class="col-sm-3 col-6">
-          <div class="description-block border-right">
-            {{-- @if($dashboard->dash_revenue_last===$dashboard->dash_revenue_month)
-              <span class="description-percentage text-warning"><i class="fas fa-caret-left"></i> </span>
-            @elseif($dashboard->dash_revenue_last<$dashboard->dash_revenue_month)
-              <span class="description-percentage text-success"><i class="fas fa-caret-up"></i> </span>
-            @else
-              <span class="description-percentage text-danger"><i class="fas fa-caret-down"></i> </span> 
-            @endif --}}
-            <h5 class="description-header">Rp. </h5>  
-            <span class="description-text">TOTAL DONASI</span>
+  <div class="card-header">
+      <h3 class="card-title">
+      <i class="fas fa-chart-line mr-1"></i>
+      Grafik
+      </h3>
+      <div class="card-tools">
+        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+          <i class="fas fa-minus"></i>
+        </button>
+        <div class="btn-group">
+          <button type="button" class="btn btn-tool dropdown-toggle" data-toggle="dropdown">
+            <i class="fas fa-wrench"></i>
+          </button>
+          <div class="dropdown-menu dropdown-menu-right" role="menu">
+            <a href="#" class="dropdown-item">Action</a>
+            <a href="#" class="dropdown-item">Another action</a>
+            <a href="#" class="dropdown-item">Something else here</a>
+            <a class="dropdown-divider"></a>
+            <a href="#" class="dropdown-item">Separated link</a>
           </div>
-          <!-- /.description-block -->
         </div>
-        <!-- /.col -->
-        <div class="col-sm-3 col-6">
-          <div class="description-block border-right">
-            {{-- @if($dashboard->dash_cost_last===$dashboard->dash_cost_month)
-              <span class="description-percentage text-warning"><i class="fas fa-caret-left"></i> </span>
-            @elseif($dashboard->dash_cost_last<$dashboard->dash_cost_month)
-              <span class="description-percentage text-success"><i class="fas fa-caret-up"></i> </span>
-            @else
-              <span class="description-percentage text-danger"><i class="fas fa-caret-down"></i> </span> 
-            @endif             --}}
-            <h5 class="description-header"> </h5>
-            <span class="description-text">TOTAL PRODUK</span>
-          </div>
-          <!-- /.description-block -->
-        </div>
-        <!-- /.col -->
-        <div class="col-sm-3 col-6">
-          <div class="description-block border-right">
-            {{-- @if($dashboard->dash_profit_last===$dashboard->dash_profit_month)
-              <span class="description-percentage text-warning"><i class="fas fa-caret-left"></i> </span>
-            @elseif($dashboard->dash_profit_last<$dashboard->dash_profit_month)
-              <span class="description-percentage text-success"><i class="fas fa-caret-up"></i> </span>
-            @else
-              <span class="description-percentage text-danger"><i class="fas fa-caret-down"></i> </span> 
-            @endif             --}}
-            <h5 class="description-header"> </h5>
-            <span class="description-text">TOTAL BIMBINGAN</span>
-          </div>
-          <!-- /.description-block -->
-        </div>
-        <!-- /.col -->
-        <div class="col-sm-3 col-6">
-          <div class="description-block">
-            {{-- @if($dashboard->dash_cust_last===$dashboard->dash_cust_month)
-              <span class="description-percentage text-warning"><i class="fas fa-caret-left"></i> {!!number_format($dashboard->dash_cust_last-$dashboard->dash_cust_month)!!}</span>
-            @elseif($dashboard->dash_cust_last<$dashboard->dash_cust_month)
-              <span class="description-percentage text-success"><i class="fas fa-caret-up"></i> {!!number_format($dashboard->dash_cust_month-$dashboard->dash_cust_last)!!}</span>
-            @else
-              <span class="description-percentage text-danger"><i class="fas fa-caret-down"></i> {!!number_format($dashboard->dash_cust_last-$dashboard->dash_cust_month)!!}</span> 
-            @endif            --}}
-             <h5 class="description-header"></h5>
-            <span class="description-text">TOTAL SANTRI</span>
-          </div>
-          <!-- /.description-block -->
-        </div>
+        <button type="button" class="btn btn-tool" data-card-widget="remove">
+          <i class="fas fa-times"></i>
+        </button>
       </div>
-      <!-- /.row -->
+  </div><!-- /.card-header -->
+  <div class="card-body">
+    <div class="row">
+    <div class="col-md-6">
+      <div id="chartdonasistatus"></div>
     </div>
-    <!-- /.card-footer -->
+    <div class="col-md-6">
+      <div id="chartsantristatus"></div>
+    </div>
+  </div> 
+  </div>
+
+  <!-- /.card-footer -->
 </div>
 <!-- /.card -->
  
 @endsection
 
 @section('script')
+<script type="text/javascript">
+  $(function(){
+    var donasistatus={!!$dashboard->dash_chart_donasi_status!!}; 
+    var santristatus={!!$dashboard->dash_chart_santri_status!!}; 
+    $("#chartdonasistatus").dxPieChart({
+        palette: "bright",
+        dataSource: donasistatus,
+        title: {
+              text: "Kondisi Donasi",
+        },
+        series: [{
+            argumentField: "donasi_status",
+            valueField: "jumlah",
+            label: {
+                visible: true,
+                font: {
+                    size: 16
+                },
+                connector: {
+                    visible: true,
+                    width: 0.5
+                },
+                position: "columns",
+                customizeText: function(arg) {
+                    return arg.valueText + " (" + arg.percentText + ")";
+                }
+            }
+        }],
+        "export": {
+            enabled: true
+        },
+      });
+      $("#chartsantristatus").dxPieChart({
+        palette: "material",
+        dataSource: santristatus,
+        title: {
+              text: "Komposisi Santri",
+        },
+        series: [{
+            argumentField: "santri_status",
+            valueField: "jumlah",
+            label: {
+                visible: true,
+                font: {
+                    size: 16
+                },
+                connector: {
+                    visible: true,
+                    width: 0.5
+                },
+                position: "columns",
+                customizeText: function(arg) {
+                    return arg.valueText + " (" + arg.percentText + ")";
+                }
+            }
+        }],
+        "export": {
+            enabled: true
+        },
+      });
+  });
 
-
+  </script>
 @endsection

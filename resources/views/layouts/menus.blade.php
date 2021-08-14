@@ -131,37 +131,19 @@
         <li class="nav-item">
           <a class="nav-link" href="{{ route('login') }}" data-toggle="tooltip" data-placement="bottom" title="Home">
             <i class="fas fa-home"></i>
-                  {{-- <img src="{{asset('images/ic_home_white_24dp.png')}}"
-                       class="media-object" style="width:20px;height:20px"></i> --}}
-                  <span class="sr-only">(current)</span>
+            <span class="sr-only">(current)</span>
           </a>
         </li>
-        {{-- <div class="short-titlediv">Tanggal</div> --}}
-        
-        {{-- @role(array('storeleader','cashier'));
-        <li>
-          <a class="nav-link" href="{{route('sales.create')}}"
-                    data-toggle="tooltip" data-placement="bottom" title="Poin of Sales">
-                    <img src="{{asset('images/ic_shopping_cart_white_24dp.png')}}"
-                         class="media-object" style="width:20px;height:20px"></i>
-          </a>
-        </li>
-        @endrole --}}
-        {{-- @role('superadmin') --}}
-        {{-- <li class="nav-item">
-          <a href="#" class="nav-link" data-toggle="tooltip" data-placement="bottom" title="Dashboard Store">
-            <i class="fas fa-store"></i></a> 
-        </li> --}}
-        {{-- @endrole --}}
-        {{-- <li class="nav-item d-none d-sm-inline-block">
-          <a href="#" class="nav-link"><i class="fas fa-store"></i></a>
-        </li> --}}
+      
       </ul>
-
-
-
       <!-- Right navbar links -->
       <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('login') }}" data-toggle="tooltip" data-placement="bottom" title="Pesan">
+            <i class="fas fa-envelope"></i>
+            <span class="sr-only">(current)</span>
+          </a>
+        </li>  
         <li class="nav-item">
           <a class="nav-link" href="{{ route('logout')}}"
                     data-toggle="tooltip" data-placement="left" title="Sign Out"
@@ -302,7 +284,7 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="{{route('donasi.pending.list')}}" class="nav-link">
+                  <a href="{{route('donasi.pending.index')}}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Daftar Pending</p>
                   </a>
@@ -343,12 +325,6 @@
                   <a href="{{route('donatur.pembaharuan.index')}}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Pembaharuan</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="{{route('donatur.donasi.index')}}" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Daftar Cicilan</p>
                   </a>
                 </li>
               </ul>
@@ -497,12 +473,6 @@
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="{{route('bimbingan.index')}}" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Bimbingan</p>
-                  </a>
-                </li>
-                <li class="nav-item">
                   <a href="#" class="nav-link">
                       <i class="far fa-circle nav-icon"></i>
                   <p>Daftar Nilai</p>
@@ -631,32 +601,56 @@
             <li class="nav-header">LAPORAN</li>
             <li class="nav-item has-treeview">
               <a href="#" class="nav-link">
-                <i class="nav-icon 	fas fa-gift"></i>
+                <i class="nav-icon fas fa-coins"></i>
                 <p>
-                  Produk
+                  Donasi
                   <i class="fas fa-angle-left right"></i>
                   {{-- <span class="badge badge-info right">6</span> --}}
                 </p>
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="{{route('produk.index')}}" class="nav-link">
+                    <a href="{{route('report.donasi.harian')}}" class="nav-link">
                       <i class="far fa-circle nav-icon"></i>
-                    <p>Buat Baru</p>
+                    <p>Donasi Harian</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="{{route('produk.edit','1')}}" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                  <p>Perbaharui</p>
-                </a>
-              </li>
+                  <a href="{{route('report.donasi.cicilan.index')}}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Daftar Cicilan</p>
+                  </a>
+                </li>
                 <li class="nav-item">
-                  <a href="{{route('kirimproduk.create')}}"  class="nav-link">
+                    <a href="{{route('report.donasi.cicilan.outstanding')}}" class="nav-link">
                       <i class="far fa-circle nav-icon"></i>
-                  <p>Pengiriman</p>
-                </a>
-              </li>  
+                    <p>Outstanding Cicilan</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-book-reader"></i>
+                <p>
+                  Santri
+                  <i class="fas fa-angle-left right"></i>
+                  {{-- <span class="badge badge-info right">6</span> --}}
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="{{route('report.santri.bimbingan')}}" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                    <p>Dalam Bimbingan</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{route('report.santri.baru')}}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Penambahan Santri</p>
+                  </a>
+                </li>
               </ul>
             </li>
             @endrole
@@ -860,12 +854,12 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="{{route('produk.index')}}" class="nav-link">
+                    <a href="{{route('pesan.index')}}" class="nav-link">
                       <i class="far fa-circle nav-icon"></i>
-                    <p>Buat Baru</p>
+                    <p>Daftar</p>
                   </a>
                 </li>
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                   <a href="{{route('produk.edit','1')}}" class="nav-link">
                       <i class="far fa-circle nav-icon"></i>
                   <p>Perbaharui</p>
@@ -876,7 +870,7 @@
                       <i class="far fa-circle nav-icon"></i>
                   <p>Pengiriman</p>
                 </a>
-              </li>  
+              </li>   --}}
               </ul>
             </li>
             @endrole
@@ -907,7 +901,7 @@
       <strong>Copyright &copy; 2021 <a href="http://agile.co.id">AHMaD Project</a></strong>
       All rights reserved.
       <div class="float-right d-none d-sm-inline-block">
-        {{ Auth::user()->name}} - <b>Version</b> BETA 1.10
+        {{ Auth::user()->name}} - <b>Version </b>1.00
       </div>
     </footer>
 

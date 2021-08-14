@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Models\ProdukLacak;
 use App\Models\KirimProduk;
-use App\Http\Controllers\BimbinganController;
+use App\Http\Controllers\Service\DonasiService;
 
 class ProdukCommand extends Command
 {
@@ -13,14 +13,14 @@ class ProdukCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'periksa:kirimproduk {noresi}';
+    protected $signature = 'debug:eksekusi';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Pemeriksaan Pengiriman Produk';
+    protected $description = 'debugin purpose only';
 
     /**
      * Create a new command instance.
@@ -39,49 +39,7 @@ class ProdukCommand extends Command
      */
     public function handle()
     {
-        $noresi = $this->argument('noresi');
-
-        ProdukLacak::create(['no_resi' => $noresi,
-            'kurir' => 'TEKE',
-            'tanggal' => date("Y-m-d H:i:s"),
-            'deskripsi' => 'Terima permintaan pick up dari [AHMaD]',
-        ]);
-        ProdukLacak::create(['no_resi' => $noresi,
-            'kurir' => 'TEKE',
-            'tanggal' => date("Y-m-d H:i:s"),
-            'deskripsi' => 'Paket di Input Kurir',
-        ]);
-        ProdukLacak::create(['no_resi' => $noresi,
-            'kurir' => 'TEKE',
-            'tanggal' => date("Y-m-d H:i:s"),
-            'deskripsi' => 'Paket sampe Gudang Pengirim',
-        ]);
-        ProdukLacak::create(['no_resi' => $noresi,
-            'kurir' => 'TEKE',
-            'tanggal' => date("Y-m-d H:i:s"),
-            'deskripsi' => 'Paket dalam perjalan ke Gudang Kota Penerima',
-        ]);
-        ProdukLacak::create(['no_resi' => $noresi,
-            'kurir' => 'TEKE',
-            'tanggal' => date("Y-m-d H:i:s"),
-            'deskripsi' => 'Paket sampai gudang kota penerima',
-        ]);
-        ProdukLacak::create(['no_resi' => $noresi,
-            'kurir' => 'TEKE',
-            'tanggal' => date("Y-m-d H:i:s"),
-            'deskripsi' => 'Paket dikirimkan ke alamat tujuan',
-        ]);
-        ProdukLacak::create(['no_resi' => $noresi,
-            'kurir' => 'TEKE',
-            'tanggal' => date("Y-m-d H:i:s"),
-            'deskripsi' => 'Paket diterima oleh Keluarga',
-        ]);
-
-
-        #update bimbingan produk telah diterima santri
-        $mulai=date("Y-m-d H:i:s");
-        $santriid=KirimProduk::where('kirim_no_resi',$noresi)->first()->santri_id;
-        $bimbingancontrol=new BimbinganController;
-        $bimbingancontrol->bimbinganSantriMulai($santriid,$mulai);
+       $ds=new DonasiService;
+       $ds->randomSantri();
     }
 }

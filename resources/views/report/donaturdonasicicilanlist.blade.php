@@ -1,8 +1,14 @@
 @extends('layouts.menus')
 @section('content')
     <div class="long-title"><h3>Daftar Cicilan Donasi</h3></div>
-    <div id="form"></div>
-    <div id="gridData"></div>
+    {!! Form::open(['id' => 'frm','route' => 'report.donasi.cicilan.cetak', 'class' => 'form-horizontal']) !!}
+      <div id="toolbar"></div>
+      <div id="form"></div>
+      <div id="gridData"></div>
+      <input id="txtDonasiId" type="text" name="donasi_id" value={!!$donasi->id!!} class="form-control" hidden >
+      <input id="txtDonasiCicilanId" type="text" name="donasi_cicilan_id" class="form-control" hidden >
+      <input id="txtDonasiCicilanState" type="text" name="donasi_cicilan_state" class="form-control" hidden>
+  {!! Form::close()!!}
 @endsection
 
 @section('script')
@@ -121,11 +127,72 @@ $(function(){
             },
             
         ],
-        onEditingStart: function(e){
-        if (e.column.dataField != "donasi_tanggal_bayar" && e.column.dataField != "donasi_status") {
-             e.cancel = true;
-          }
+        onSelectionChanged: function (selectedItems) {
+            var data = selectedItems.selectedRowsData[0];
+            $("#txtDonasiCicilanId").val(data.id);
+            $("#txtDonasiCicilanState").val(data.cicilan_status);
         },
+    });
+    $("#toolbar").dxToolbar({
+    items: [{
+        location: 'center',
+        locateInMenu: 'never',
+        template: function() {
+            return $("<div class='toolbar-label'><b>Cetak Cicilan & Invoice</b></div>");
+        }
+    },{
+        location: 'after',
+        widget: 'dxButton',
+        locateInMenu: 'auto',
+        options: {
+            icon: "exportselected",
+            hint: 'Cetak Daftar Cicilan',
+            useSubmitBehavior: true,
+            onClick: function(e) {      
+                $("#txtDonasiCicilanState").val("CICILAN"); //kirim perintah tambah ke server
+            }
+        }
+    },{
+        location: 'after',
+        widget: 'dxButton',
+        locateInMenu: 'auto',
+        options: {
+            icon: "money",
+            hint: 'Cetak Invoice',
+            useSubmitBehavior: true,
+            onClick: function(e) {      
+            var txtDonasiCicilanId=document.getElementById("txtDonasiCicilanId").value;
+            var txtDonasiCicilanState=document.getElementById("txtDonasiCicilanState").value;
+            if(txtDonasiCicilanId==""){
+                swal({
+                    title: "Pilih Cicilan",
+                    icon: 'error',
+                    text: 'Silakan Pilih Cicilan yang akan Cetak Invoice',
+                    value: true,
+                    visible: true,
+                    className: "",
+                    closeModal: true,
+                });
+                e.preventDefault();
+                return false;
+            }
+            if(txtDonasiCicilanState=="1"){
+                swal({
+                    title: "Belum Bayar",
+                    icon: 'error',
+                    text: 'Pembayaran belum diterima, Tidak Dapat Cetak Invoice',
+                    value: true,
+                    visible: true,
+                    className: "",
+                    closeModal: true,
+                });
+                e.preventDefault();
+                return false;
+            }
+            $("#txtDonasiCicilanState").val("INVOICE"); //kirim perintah update ke server
+            }
+        }
+        }]
     });
 });
 </script>

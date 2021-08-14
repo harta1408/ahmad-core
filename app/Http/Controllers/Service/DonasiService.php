@@ -7,6 +7,8 @@ use App\Models\Bayar;
 use App\Models\Donasi;
 use App\Models\DonasiCicilan;
 use App\Models\Donatur;
+use App\Models\Santri;
+use App\Models\Pendamping;
 use App\Models\Pengingat;
 use App\Models\User;
 use App\Models\RekeningBank;
@@ -193,12 +195,188 @@ class DonasiService extends Controller
         }
     }
 
+
+
     public function randomSantri(){
         #proses ini dilakukan setiap hari dengan memeriksa apakah ada donasi yang sudah mencapai >=200rb
         #atau dengan memeriksan flag pada tabel donasi, donasi_status=2 atau donasi TUNAI (cara bayar 4)
         #dengan flag donasi_random_santri=0
         #setelah itu dilakukan pemeriksanaan juga pada tabel donatur_santri, apakah donasi telah disalurkan
+
+        #update status  donasi_status=1 (sudah mencapai 200rb)
+        echo("==============Update 200K================\n");
+        $donasi=Donasi::where('donasi_status','1')->get();
+        foreach ($donasi as $key => $d) {
+            $donasiid=$d->id;
+            $tercapai=$this->status200Ribu($donasiid);
+            if($tercapai==true){
+                Donasi::where('id',$donasiid)->update(['donasi_status'=>'2']);
+            }
+        }
+
+        #ambil donasi dengan status 2 dan 3 dan flag donasi_random_santri=0
+        echo("==============Random================\n");
+        $donasi=Donasi::where('donasi_random_santri','0')->whereIn('donasi_status',['2','3'])->get();
+        #hitung jumlah santri yang di butuhkan
+        $jmlsantridonasi=0;
+        foreach ($donasi as $key => $d) {
+            $donasiid=$d->id;
+            $jmlsantridonasi=$jmlsantridonasi+$d->donasi_jumlah_santri;
+        }
+
+        #hitung jumlah santri yang ada
+        $jmlsantri=Santri::where('santri_status',4)->count();
+        if($jmlsantri<$jmlsantridonasi){
+            //kekurangan santri
+            echo('Santri Kurang');
+            return;
+        }
+        #ambil pendamping aktif dengan data lengkap, baik belum membimbing maupun
+        #sedang membimbing
+        $pendamping=Pendamping::whereIn('pendamping_status',['4','5'])->pluck('id')->toArray();
+        if(!$pendamping){
+            echo('Pendamping Tidak Tersedia');
+            return;
+        }
+
+
+        #ambil secara acak santri aktif dengan data lengkap dan belum pernah
+        #mengikuti bimbingan
+        $santri=Santri::where('santri_status','4')->pluck('id')->toArray();
+        $randomsantri=array_rand($santri,$jmlsantridonasi);
+
+        echo($jmlsantridonasi);
+        return;
+
+        $msg=new MessageService;
+        $pengirim='0'; //dari sistem
+
+        #jika hanya satu record returnya bukan array
+        if($jmlsantridonasi==1){
+            #simpan data donasi santri
+            $randompendamping=array_rand($pendamping,1);
+            $pendampingid=Pendamping::where('id',$pendamping[$randompendamping])->first()->id;
+            $santriid=Santri::where('id',$santri[$randomsantri])->first()->id;
+
+            $donasi=Donasi::where('donasi_random_santri','0')->whereIn('donasi_status',['2','3'])->first(); //satu record
+            $donaturid=$donasi->donatur_id;
+
+            $donatur=Donatur::where('id',$donaturid)->first();
+            $donatur->santri()->attach(['donatur_id'=>$donaturid],[
+                'santri_id' =>$santriid,
+                'pendamping_id' => $pendampingid,
+                'donasi_id' =>$donasi['id'],
+                'donatur_santri_status' =>'1', //aktif
+            ]);
+            #update status santri sudah menerima donasi
+            Santri::where('id',$santriid)->update(['santri_status'=>'5']);
+            $santri=Santri::where('id',$santriid)->first();
+            #update donasi sudah tersalurkan ke santri
+            Donasi::where('id',$donasi['id'])->update(['donasi_status'=>'5','donasi_sisa_santri'=>0]);
+            $donasi=Donasi::where('id',$donasi['id'])->first();
+            #update pendamping dalam bimbingan
+            Pendamping::where('id',$pendampingid)->update(['pendamping_status'=>'5']);
+            $pendamping=Pendamping::where('id',$pendampingid)->first();
+
+            #kirimkan pesan
+            #kirim pesan ke donatur, santri dan pendamping bahwa produk telah diterima (belum aktif)
+            $santrinama=$santri->santri_nama;
+            $donaturemail=$donatur->donatur_email;
+            $santriemail=$santri->santri_email;
+            $pendampingemail=$pendamping->pendamping_email;
+
+            #pesan untuk donatur
+            $tujuan=User::where('email',$donaturemail)->first()->id;
+            $isi='Donasi anda No '.$donasi->donasi_no.' telah disalurkan kepada Santri '.$santrinama;
+            $msg->saveNotification($pengirim,$tujuan,$isi);
+
+            #pesan untuk santri
+            $tujuan=User::where('email',$santriemail)->first()->id;
+            $isi='Selamat, anda telah terpilih menjadi Santri, Produk segera kami kirimkan' ;
+            $msg->saveNotification($pengirim,$tujuan,$isi);
+
+            #pesan untuk pendamping
+            $tujuan=User::where('email',$pendampingemail)->first()->id;
+            $isi='Santri atas nama '.$santrinama.' telah terpilih di bawah bimbingan Anda, produk segera dikirimkan';
+            $msg->saveNotification($pengirim,$tujuan,$isi);
+        }else{
+            $j=0;
+            foreach ($donasi as $key => $dns) {
+                $randompendamping=array_rand($pendamping,1);
+                $pendampingid=Pendamping::where('id',$pendamping[$randompendamping])->first()->id;
+
+                $jumlahdonasi=$dns->donasi_sisa_santri;  //ambil santri yang belum mendapat produk
+                $donaturid=$dns->donatur_id;
+                for ($i=0; $i < $jumlahdonasi; $i++) { 
+                    //pilih pendamping secara acak
+                    $randompendamping=array_rand($pendamping,1);
+                    $pendampingid=Pendamping::where('id',$pendamping[$randompendamping])->first()->id;
+                    $santriid=Santri::where('id',$santri[$randomsantri[$j]])->first()->id;
+                    $donatur=Donatur::where('id',$donaturid)->first();
+                    $donatur->santri()->attach(['donatur_id'=>$donaturid],[
+                        'santri_id' =>$santriid,
+                        'donasi_id' =>$id,
+                        'pendamping_id' => $pendampingid,
+                        'donatur_santri_status' =>'1', //aktif
+                    ]);
+
+                    #update status santri sudah menerima donasi
+                    Santri::where('id',$santriid)->update(['santri_status'=>'5']);
+                    #update donasi sudah tersalurkan ke santri
+                    $sisasantri=Donasi::where('id',$id)->first()->donasi_sisa_santri-1;
+                    $donasistatus='3';
+                    if($sisasantri==0){
+                        $donasistatus='5'; //jika sudah tidak ada santri berarti sudah selesai
+                    }
+                    Donasi::where('id',$id)->update(['donasi_status'=>$donasistatus,'donasi_sisa_santri'=>$sisasantri]);
+                    
+                    $santri=Santri::where('id',$santriid)->first();
+                    $donasi=Donasi::where('id',$id)->first();
+                    $pendamping=Pendamping::where('id',$pendampingid)->first();
+    
+                    #kirimkan pesan
+                    #kirim pesan ke donatur, santri dan pendamping bahwa produk telah diterima (belum aktif)
+                    $santrinama=$santri->santri_nama;
+                    $donaturemail=$donatur->donatur_email;
+                    $santriemail=$santri->santri_email;
+                    $pendampingemail=$pendamping->pendamping_email;
+    
+                    #pesan untuk donatur
+                    $tujuan=User::where('email',$donaturemail)->first()->id;
+                    $isi='Donasi anda No '.$donasi->donasi_no.' telah disalurkan kepada Santri '.$santrinama;
+                    $msg->saveNotification($pengirim,$tujuan,$isi);
         
+                    #pesan untuk santri
+                    $tujuan=User::where('email',$santriemail)->first()->id;
+                    $isi='Selamat, anda telah terpilih menjadi Santri, Produk segera kami kirimkan' ;
+                    $msg->saveNotification($pengirim,$tujuan,$isi);
+        
+                    #pesan untuk pendamping
+                    $tujuan=User::where('email',$pendampingemail)->first()->id;
+                    $isi='Santri atas nama '.$santrinama.' telah terpilih di bawah bimbingan Anda, produk segera dikirimkan';
+                    $msg->saveNotification($pengirim,$tujuan,$isi);
+                }
+            };
+        }
+
+
+
+
+
+
+      
+    }
+    private function status200Ribu($donasiid){
+        #proses perubahan status donasi yang sudah mencapai 200rb, dengan status sebelumnya 1
+        $donasicicilan=DonasiCicilan::where([['donasi_id',$donasiid],['cicilan_status','2']])->get();
+        $cicilannominal=0;
+        foreach ($donasicicilan as $key => $dc) {
+            $cicilannominal=$cicilannominal+$dc->cicilan_nominal;
+        }
+        if($cicilannominal>=200000){
+            return true;
+        }
+        return false;
     }
     public function donasiCicilanPDF($id){
         $donasi=Donasi::with('donatur','rekeningbank','cicilan')->where('id',$id)->first();

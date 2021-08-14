@@ -254,19 +254,7 @@ class DonaturController extends Controller
 
 
     }
-    #modul yang menanangani cicilan donatur
-    public function donaturDonasiIndex(){
-        return view('donatur/donaturdonasiindex');
-    }
-    public function donaturDonasiMain(Request $request){
-        $donaturid=$request->get('id_entitas');
-        return view('donatur/donaturdonasimain',compact('donaturid'));
-    }
-    public function donaturDonasiCicilanmain(Request $request){
-        $donasiid=$request->get('id_donasi');
-        $donasi=Donasi::with('donatur','cicilan')->where('id',$donasiid)->first();
-        return view('donatur/donaturdonasicicilanlist',compact('donasi'));
-    }
+  
     #------------utility
     public function donaturSimpleList(){
         $donatur=Donatur::where('donatur_status','!=','0')->get();

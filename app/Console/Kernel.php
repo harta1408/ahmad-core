@@ -29,7 +29,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('periksa:rekeningdonasi')
         // ->cron('* * * * * *');
         ->everyMinute(); 
-        $schedule->command('kirimproduk:lacak')->everySixHours();; 
+        $schedule->command('kirimproduk:lacak')->hourly();; 
         $schedule->command('pengingat:harian')->daily();
     }
 

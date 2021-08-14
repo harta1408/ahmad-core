@@ -34,6 +34,7 @@ class DonasiAPI extends Controller
         $donasitemp->temp_donasi_total_harga=$request->get('donasi_total_harga');
         $donasitemp->temp_donasi_cara_bayar=$request->get('donasi_cara_bayar'); 
         $donasitemp->temp_donasi_random_santri=$request->get('donasi_random_santri'); 
+        $donasitemp->temp_donasi_kode_unik=$request->get("temp_donasi_kode_unik");
         $donasitemp->save();
 
         // $donasino=DonasiTemp::where('temp_donasi_no',$tempdonasino)->first()->id;
@@ -59,6 +60,7 @@ class DonasiAPI extends Controller
             'donasi_cara_bayar' => 'required|integer',
             'donasi_nominal' => 'required|integer',
             'donasi_random_santri' =>'required|string',
+            'donasi_kode_unik' =>'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -69,6 +71,7 @@ class DonasiAPI extends Controller
         $totalharga=$request->get('donasi_total_harga');
         $carabayar=$request->get('donasi_cara_bayar'); 
         $nominal=$request->get('donasi_nominal');
+        $kodeunik=$request->get('donasi_kode_unik');
 
         $donasi=new Donasi();
         $donasi->donasi_no=$donasino;
@@ -140,7 +143,8 @@ class DonasiAPI extends Controller
                     if(strlen($blnhijr)==1){
                         $blnhijr='0'.$blnhijr;
                     }
-                    $randhijrdate=rand(13,15); //pilih tanggal yaumil bidh secara acak
+                    //karena ada plus minus tanggal hijriah lebih aman pilih yang tengah
+                    $randhijrdate='14'; //rand(13,15); //pilih tanggal yaumil bidh secara acak 
             
                     $yaumilbidh=$randhijrdate.'-'.$blnhijr.'-'.$thnhijr;
                     $date=Hijri::convertToGregorian(13,$blnhijr,$thnhijr);
@@ -161,7 +165,7 @@ class DonasiAPI extends Controller
         //ambil cicilan pertama
         $cicilan=DonasiCicilan::where([['donasi_id',$donasiid],['cicilan_ke','1']])->first();
 
-        $kodeunik=rand(0,100);
+        // $kodeunik=rand(0,100); di handle UI
         $bayar=new Bayar;
         $bayar->cicilan_id=$cicilan->id;
         // $bayar->bayar_tanggal=$todaydate; //di isi pada saat status bayar 2
@@ -180,7 +184,7 @@ class DonasiAPI extends Controller
         $donaturemail=$donatur->donatur_email;
         $msg->kirimEmailDonasiCicilan($donaturemail,$donaturnama,$donasiid);
 
-        $donasi=Donasi::with('produk','cicilan')->where('donasi_no',$donasino)->first();
+        $donasi=Donasi::with('produk','cicilan.bayar')->where('donasi_no',$donasino)->first();
         return response()->json($donasi,200);
     }
  
@@ -206,7 +210,7 @@ class DonasiAPI extends Controller
         $donatur=function ($query) use ($id){
             $query->where('id',$id);
         };
-        $donasi=Donasi::with(['donatur'=>$donatur, 'cicilan'])->whereHas('donatur',$donatur)->get();
+        $donasi=Donasi::with(['donatur'=>$donatur, 'cicilan.bayar'])->whereHas('donatur',$donatur)->get();
         return response()->json($donasi,200);
     }
     public function donasiSantriById($id){
@@ -223,6 +227,7 @@ class DonasiAPI extends Controller
         $totalharga=$donasiTemp->temp_donasi_total_harga;
         $carabayar=$donasiTemp->temp_donasi_cara_bayar; 
         $nominal=$donasiTemp->temp_donasi_nominal;
+        $kodeunik=$donasiTemp->temp_donasi_kode_unik;
 
         $donasi=new Donasi;
         $donasi->donasi_no=$donasino;
@@ -298,7 +303,8 @@ class DonasiAPI extends Controller
                     if(strlen($blnhijr)==1){
                         $blnhijr='0'.$blnhijr;
                     }
-                    $randhijrdate=rand(13,15); //pilih tanggal yaumil bidh secara acak
+                    //karena ada plus minus tanggal hijriah lebih aman pilih yang tengah
+                    $randhijrdate='14'; //rand(13,15); //pilih tanggal yaumil bidh secara acak 
             
                     $yaumilbidh=$randhijrdate.'-'.$blnhijr.'-'.$thnhijr;
                     $date=Hijri::convertToGregorian(13,$blnhijr,$thnhijr);
@@ -319,7 +325,7 @@ class DonasiAPI extends Controller
         //ambil cicilan pertama
         $cicilan=DonasiCicilan::where([['donasi_id',$donasiid],['cicilan_ke','1']])->first();
 
-        $kodeunik=rand(0,100);
+        // $kodeunik=rand(0,100); /di handle UI
         $bayar=new Bayar;
         $bayar->cicilan_id=$cicilan->id;
 

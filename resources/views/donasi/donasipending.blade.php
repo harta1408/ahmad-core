@@ -70,6 +70,8 @@ $(function(){
             return false;
         },
     });
+
+ 
     $("#gridData").dxDataGrid({
         dataSource: gridDataSource,
         keyExpr: "id",

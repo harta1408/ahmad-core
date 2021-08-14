@@ -31,13 +31,15 @@ class Donasi extends Model
         'donasi_pengingat_bulanan', //donatur menginginkan notifikasi bulanan
         'donasi_cara_bayar', //cara pembayaran 1=harian, 2=mingguan, 3=bulanan 4=tunai
         'donasi_random_santri', //0=random santri by system, 1=random santro by helpdesk, request by donatur
-        'donasi_status', //0=tidak aktif/batal  1=aktif belum lunas 2=sudah lebih dari 200rb(eligible untuk random santri) 3=sudah lunas bayar TUNAI  4=macet(khusus cicilan) 5=sudah Lunas selesai tersalurkan ke santri
-                         //jika status=3 dan cara bayar 4 ->eligible untuk random santri
+        'donasi_status', //0=tidak aktif/batal  1=aktif belum lunas 2=sudah lebih dari 200rb(eligible untuk random santri) 3=sudah lunas bayar TUNAI  
+                        //4=macet(khusus cicilan) 5=sudah Lunas selesai tersalurkan ke santri
         #dummy 
+        'donasi_kode_unik',
         'donasi_donatur_nama',
         'donasi_santri_id',
         'donasi_santri_nama',
         'donasi_tanggal_akhir',
+        'donasi_durasi',
     ];
     public function produk(){
         return $this->belongsToMany('App\Models\Produk','donasi_produk','donasi_id','produk_id','id','id')

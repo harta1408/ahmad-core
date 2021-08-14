@@ -51,13 +51,14 @@ Route::middleware(['cors'])->group(function () {
     Route::get('santri/lacak/produk/{id}','SantriAPI@santriLacakProduk');
     Route::get('santri/dashboard/{id}','SantriAPI@santriDashboard');
 
-
     Route::post('pendamping/register','PendampingAPI@pendampingRegister');
     Route::post('pendamping/register/referral','PendampingAPI@pendampingRegisterReferral');
     Route::post('pendamping/register/gmail','PendampingAPI@pendampingRegisterGMail');
+    Route::put('pendamping/update/profile/{id}','PendampingAPI@pendampingUpadateProfile');
     Route::get('pendamping/byid/{id}','PendampingAPI@pendampingById');
     Route::get('pendamping/santri/byid/{id}','PendampingAPI@pendampingSantriById');
     Route::post('pendamping/upload/photo','PendampingAPI@pendampingUploadImage');
+    Route::get('pendamping/dashboard/{id}','PendampingAPI@pendampingDashboard');
 
     Route::post('produk/save','ProdukAPI@produkSimpan');
     Route::get('produk/byid/{id}','ProdukAPI@produkById');

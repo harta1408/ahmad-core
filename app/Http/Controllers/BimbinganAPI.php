@@ -100,7 +100,7 @@ class BimbinganAPI extends Controller
             $query->where('id',$donaturid);
         };
         $santriids=Santri::whereHas('donatur',$donatursantri)->pluck('id')->toArray();
-        $bimbingan=Bimbingan::with('santri')->whereIn('santri_id',$santriids)->get();
+        $bimbingan=Bimbingan::with('santri.kirimproduk')->whereIn('santri_id',$santriids)->get();
 
         foreach ($bimbingan as $key => $bm) {
             $materiselesai=BimbinganMateri::where('bimbingan_id',$bm->bimbingan_id)->count();
