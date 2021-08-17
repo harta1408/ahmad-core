@@ -370,6 +370,22 @@ class DonasiController extends Controller
         }
         return response()->json(['status' => 'success', 'message' => 'Produk Berhasil di Distribusikan', 'code' => 200]);
     }
+
+    #mutasi bank
+    public function mutasiBankIndex(){
+        $accserv=new AccountService;
+        $daftarbank=$accserv->mootaDaftarBank()->data;
+        return view('donasi/mutasibankindex',compact('daftarbank'));
+    }
+    public function mutasiBankDetail(Request $request){
+        $bankid=$request->bank_id;
+        $accserv=new AccountService;
+        $mutasi=$accserv->mootaGetMutasiByBank($bankid)->data;
+
+        return view('donasi/mutasibankdetail',compact('mutasi'));
+
+        
+    }
     #------------utility
     public function donasiByDonaturId($donaturid){
         $donasi=Donasi::where('donatur_id',$donaturid)->get();

@@ -72,9 +72,13 @@ Route::middleware(['cors'])->group(function () {
     Route::post('donasi/save','DonasiAPI@donasiSimpan');
     Route::get('donasi/byid/{id}','DonasiAPI@donasiById');
     Route::get('donasi/donasiid/{donasiid}/donaturid/{donaturid}','DonasiAPI@donasiDonaturById');
+    Route::get('donasi/donatur/{id}','DonasiAPI@donasiByDonaturId');
+    Route::get('donasi/outstanding/donatur/{donaturid}','DonasiAPI@donasiOutstandingByDonaturId');
+    Route::get('donasi/paid/donatur/{donaturid}','DonasiAPI@donasiPaidByDonaturId');
     Route::get('donasi/cicilan/donatur/{donaturid}','DonasiAPI@donasiCicilanByDonaturId');
     Route::get('donasi/santri/{id}','DonasiAPI@donasiSantriById');
     Route::put('donasi/update/rekening/{id}','DonasiAPI@donasiUpdateRekening');
+    Route::post('donasi/periksa/bayar/donasi','DonasiAPI@donasiPeriksaPembayaran');
 
     Route::post('berita/save','BeritaAPI@beritaSimpan');
     Route::put('berita/update/{id}','BeritaAPI@beritaUpdate');

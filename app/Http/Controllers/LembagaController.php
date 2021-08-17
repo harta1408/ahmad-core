@@ -5,7 +5,9 @@ use Illuminate\Http\Request;
 use App\Models\Lembaga;
 use App\Models\FAQ;
 use App\Http\Controllers\KodePosAPI;
-
+use GeniusTS\HijriDate\Date;
+use GeniusTS\HijriDate\Hijri;
+use GeniusTS\HijriDate\Translations\Indonesian;
 
 class LembagaController extends Controller
 {
@@ -109,5 +111,41 @@ class LembagaController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    #penyesuaian tanggal hijriah
+    public function hijriahIndex(){
+        $lembaga=Lembaga::first();
+        if(!$lembaga){
+            $lembaga=new Lembaga;
+            $lembaga->lembaga_id='ahmad';
+            $lembaga->lembaga_email='helpdesk@ahmadproject.com';
+            $lembaga->save();
+        }
+
+        $adjhijr=$lembaga->lembaga_adjust_hijr;
+        Hijri::setDefaultAdjustment($adjhijr);
+        Date::setTranslation(new Indonesian);
+        $today = Date::today();
+        $hariini=$today->format('d F o');
+
+        Hijri::setDefaultAdjustment(0);
+        $today = Date::today();
+        $haridefault=$today->format('d F o');
+
+        return view('master/hijriah',compact('lembaga','hariini','haridefault'));
+    }
+
+    public function hijriahUpdate($adjhijr){
+        Hijri::setDefaultAdjustment($adjhijr);
+        Date::setTranslation(new Indonesian);
+        $today = Date::today();
+        $hijrbaru=$today->format('d F o');
+        return $hijrbaru;
+    }
+    public function hijriahSave(Request $request){
+        $adjust=$request->get('adjust');
+        Lembaga::where('lembaga_id','ahmad')->update(['lembaga_adjust_hijr'=>$adjust]);
+        return response()->json(['status' => 'success', 'message' => 'Berhasil di perbaharui', 'code' => 200]);
     }
 }

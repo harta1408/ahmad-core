@@ -104,31 +104,31 @@ $(function(){
                     data: JSON.stringify({kirim_id:txtKirimId}),
                     contentType: "application/json; charset=utf-8",
                     success: function (data) {
-                    if(data.code != 200) {
-                        swal({
-                            title: "Validation Error",
-                            icon: data.status,
-                            text: data.message,
-                            value: true,
-                            visible: true,
-                            className: "",
-                            closeModal: true,
-                        });
-                    }else{
-                        swal({
-                            title: "OK",
-                            icon: data.status,
-                            text: data.message,
-                            value: true,
-                            visible: true,
-                            className: "",
-                            closeModal: true,
-                        })
-                        .then((value) => {
-                            window.location = "{{URL::to('dashboard/kirimprodtuk/lacak/hasil')}}"+"/"+txtKirimId;
-                        });
-                    }
-                    return false;
+                        if(data.code != 200) {
+                            swal({
+                                title: "Validation Error",
+                                icon: data.status,
+                                text: data.message,
+                                value: true,
+                                visible: true,
+                                className: "",
+                                closeModal: true,
+                            });
+                        }else{
+                            swal({
+                                title: "OK",
+                                icon: data.status,
+                                text: data.message,
+                                value: true,
+                                visible: true,
+                                className: "",
+                                closeModal: true,
+                            })
+                            .then((value) => {
+                                window.location = "{{URL::to('dashboard/kirimprodtuk/lacak/hasil')}}"+"/"+txtKirimId;
+                            });
+                        }
+                        return false;
                     }, 
                     error: function(jqXHR, textStatus, errorThrown) {
                         swal({

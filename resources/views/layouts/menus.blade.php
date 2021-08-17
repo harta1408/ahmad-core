@@ -11,10 +11,10 @@
 
 
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:200,600" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="{{asset('/css/dx.common.css')}}"  type="text/css">
     <link rel="stylesheet" href="{{asset('/css/dx.greenmist.css')}}"  type="text/css">
-    <link rel="icon" type="image/png" sizes="16x16" href="{{asset('images/logo_ahmad.png')}}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{asset('images/favicon.png')}}">
     {{-- <link rel="stylesheet" href="{{asset('/css/jquery-ui.css')}}" type="text/css"> --}}
     <link rel="stylesheet" href="{{asset('/css/bootstrap.min.css')}}" type="text/css">
     <link rel="stylesheet" href="{{asset('/css/datepicker3.css')}}" type="text/css">
@@ -163,7 +163,7 @@
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
       <!-- Brand Logo -->
       <a href="{{ route('login') }}" class="brand-link">
-        <img src="{{asset('images/logo_ahmad.jpg')}}" alt="Agile" class="brand-image img-circle elevation-3"
+        <img src="{{asset('images/logo.png')}}" alt="Agile" class="brand-image img-circle elevation-3"
              style="opacity: .8">
              @guest
                <span class="brand-text font-weight-light">AHMaD Dashboard</span>
@@ -177,7 +177,7 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
           <div class="image">
-            <img src="{{asset('images/logo_ahmad.png')}}" class="img-circle elevation-2" alt="User">
+            <img src="{{asset('images/favicon.png')}}" class="img-circle elevation-2" alt="User">
           </div>
           <div class="info">
             <a href="#" class="d-block"><span class="text-muted">{{ Auth::user()->name }}</span></a>
@@ -272,6 +272,12 @@
                     <p>Hadiah</p>
                   </a>
                 </li>
+                <li class="nav-item">
+                  <a href="{{route('lembaga.hijriah.index')}}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Penyesuaian Hijriah</p>
+                  </a>
+                </li>
               </ul>
             </li>
             <li class="nav-item has-treeview">
@@ -293,6 +299,12 @@
                   <a href="{{route('donasi.random.index')}}"  class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Pemilihan Santri</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{route('donasi.mutasi.bank.index')}}"  class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Mutasi Rekening Bank</p>
                   </a>
                 </li>
               </ul>

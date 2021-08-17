@@ -26,10 +26,14 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
-        $schedule->command('periksa:rekeningdonasi')
+        // $schedule->command('periksa:rekeningdonasi')
         // ->cron('* * * * * *');
-        ->everyMinute(); 
-        $schedule->command('kirimproduk:lacak')->hourly();; 
+        // ->everyMinute(); 
+        #periksa pembayaran harian dan pengiriman produk setiap jam
+        $schedule->command('periksa:bayardonasi')->hourly(); 
+        $schedule->command('kirimproduk:lacak')->hourly(); 
+
+        #kirim pengingat harian
         $schedule->command('pengingat:harian')->daily();
     }
 

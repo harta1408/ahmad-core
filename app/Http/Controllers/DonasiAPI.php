@@ -9,11 +9,13 @@ use App\Models\DonasiCicilan;
 use App\Models\Produk;
 use App\Models\Bayar;
 use App\Models\Donatur;
+use App\Models\Lembaga;
 use Validator;
 use GeniusTS\HijriDate\Date;
 use GeniusTS\HijriDate\Hijri;
 use GeniusTS\HijriDate\Translations\Indonesian;
 use App\Http\Controllers\Service\MessageService;
+use App\Http\Controllers\Service\AccountService;
 class DonasiAPI extends Controller
 {
     public function __construct()
@@ -66,6 +68,11 @@ class DonasiAPI extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 'error', 'message' => $validator->messages()->first(), 'code' => 404]);
         }
+
+        #penyesuaian tanggal hijriah
+        $adjhijr=Lembaga::first()->lembaga_adjust_hijr;
+        Hijri::setDefaultAdjustment($adjhijr);
+
         $donasino=$this->donasino();
         $jumlah=$request->get('donasi_jumlah_santri');
         $totalharga=$request->get('donasi_total_harga');
@@ -206,11 +213,29 @@ class DonasiAPI extends Controller
         $donasi=Donasi::with('donatur','produk')->where('id',$id)->first();
         return response()->json($donasi,200);
     }
-    public function donasiCicilanByDonaturId($id){
-        $donatur=function ($query) use ($id){
-            $query->where('id',$id);
+    public function donasiByDonaturId($donaturid){
+        $donasi=Donasi::where('donatur_id',$donaturid)->get();
+        return response()->json($donasi,200);
+    }
+    public function donasiCicilanByDonaturId($donaturid){
+        $donatur=function ($query) use ($donaturid){
+            $query->where('id',$donaturid);
         };
         $donasi=Donasi::with(['donatur'=>$donatur, 'cicilan.bayar'])->whereHas('donatur',$donatur)->get();
+        return response()->json($donasi,200);
+    }
+    public function donasiOutstandingByDonaturId($donaturid){
+        $cicilan=function ($query) {
+            $query->with('bayar')->where('cicilan_status','1');
+        };
+        $donasi=Donasi::with(['cicilan'=>$cicilan])->whereHas('cicilan',$cicilan)->get();
+        return response()->json($donasi,200);
+    }
+    public function donasiPaidByDonaturId($donaturid){
+        $cicilan=function ($query) {
+            $query->with('bayar')->where('cicilan_status','2');
+        };
+        $donasi=Donasi::with(['cicilan'=>$cicilan])->whereHas('cicilan',$cicilan)->get();
         return response()->json($donasi,200);
     }
     public function donasiSantriById($id){
@@ -219,6 +244,10 @@ class DonasiAPI extends Controller
     }
 
     public function pindahkanDonasi($temp_donasi_no,$donaturid){
+        #penyesuaian tanggal hijriah
+        $adjhijr=Lembaga::first()->lembaga_adjust_hijr;
+        Hijri::setDefaultAdjustment($adjhijr);
+
         $donasiTemp=DonasiTemp::with('produk')->where('temp_donasi_no',$temp_donasi_no)->first();
         $donasiapi=new DonasiAPI;
 
@@ -404,6 +433,28 @@ class DonasiAPI extends Controller
         $donasitemp=DonasiTemp::where('temp_donasi_no',$temp_donasi_no)->first()->produk()->detach();
         $donasitemp=DonasiTemp::where('temp_donasi_no',$temp_donasi_no)->delete();
         return $donasi;
+    }
+
+    #modul untuk memeriksa pembayaran donasi berdasarkan id donasi, pengecekan melalui aplikasi
+    #dilakukan sesuai dengan waktu yang di minta (timer ada di sisi UI)
+    public function donasiPeriksaPembayaran(Request $request){
+        $cicilanid=$request->get('cicilan_id');
+        $tglbayar=$request->get('tanggal_bayar'); //format YYYY-MM-DD;
+
+        $donasicicilan=DonasiCicilan::where('id',$cicilanid)->first();
+        $cicilanstatus=$donasicicilan->cicilan_status;
+        if($cicilanstatus=='2'){
+            return response()->json(['status' => 'error', 'message' => 'Cicilan Sudah di Bayar', 'code' => 404]);
+        }
+        $datestart=$tglbayar;
+        $dateend=$tglbayar;
+
+        $accservice=new AccountService;
+        $result=$accservice->mootaCekBayarDonasiByCicilanId($cicilanid,$datestart,$dateend);
+        if($result==false){
+            return response()->json(['status' => 'error', 'message' => 'Tidak ada data yang di proses', 'code' => 404]);
+        }
+        return response()->json(['status' => 'success', 'message' => 'Pembayaran Berhasil di Verifikasi', 'code' => 404]);
     }
     
     public function donasino()

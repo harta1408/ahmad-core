@@ -3,12 +3,12 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=yes">
     <title>Tabel Cicilan</title>
     <link rel="stylesheet" href="{{public_path('css/bootstrap.min.css') }}" type="text/css">
     <link rel="stylesheet" href="{{asset('/css/bootstrap.min.css')}}" type="text/css">
 
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins&amp;display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins;display=swap">
 </head>
 
 <body>

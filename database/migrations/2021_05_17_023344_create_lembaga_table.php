@@ -34,7 +34,8 @@ class CreateLembagaTable extends Migration
             $table->string('lembaga_landing_mitra_judul',50)->nullable(); 
             $table->text('lembaga_landing_mitra_isi')->nullable();
             $table->string('lembaga_landing_produk_judul',50)->nullable(); 
-            $table->text('lembaga_landing_produk_isi')->nullable();       
+            $table->text('lembaga_landing_produk_isi')->nullable();  
+            $table->integer('lembaga_adjust_hijr',1)->default(0);     
             $table->timestamps(); 
         });
     }

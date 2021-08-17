@@ -30,6 +30,7 @@ class Lembaga extends Model
         'lembaga_landing_mitra_isi', 
         'lembaga_landing_produk_judul', 
         'lembaga_landing_produk_isi',
+        'lembaga_adjust_hijr',
     ];
     public function faq()
     {

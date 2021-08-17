@@ -17,12 +17,6 @@ use PDF;
 
 class DonasiService extends Controller
 {
-    public function bayarPeriksaHarian(Request $request){
-        #periksan cicilan yang sesuai dengan tanggal aktif
-        #jika sesuai lakukan pemeriksaan kedalam rekening
-        #jika ditemukan update status pembayaran cicilan
-    }
-
     public function bayarCicilan($cicilanid,$tglbayar){
         #ambil donasi id dari tabel cicilan
         $donasicicilan=DonasiCicilan::where('id',$cicilanid)->first();
@@ -32,6 +26,8 @@ class DonasiService extends Controller
         #jika cicilan pertama maka update bayar, jika cicilan berikutnya maka 
         #isi tabel bayar dengan status telah terbauar
         Bayar::where('cicilan_id',$cicilanid)->update(['bayar_tanggal'=>$tglbayar,'bayar_status'=>'2']);
+        #update cicilan menjadi telah bayar
+        DonasiCicilan::where('id',$cicilanid)->update(['cicilan_status'=>'2']);
 
         $msg=new MessageService;
         $pengirim='0'; //dari sistem
@@ -107,7 +103,7 @@ class DonasiService extends Controller
 
         //simpan pembayaran dengan status belum dibayar, pembayaran akan berubah status menjadi 
         //sudah di bayar ketika melakukan pengecekan ke rekening bank
-        $kodeunik=rand(0,100);
+        $kodeunik=rand(0,999);
         $bayartotal=$cicilan->cicilan_nominal+$kodeunik;
         $bayar=new Bayar;
         $bayar->cicilan_id=$cicilan->id;
@@ -132,6 +128,7 @@ class DonasiService extends Controller
         $msg->saveNotification($pengirim,$tujuan,$isi);
         return $bayartotal;
     }
+
 
     public function pengingatDonasi(){
         #mengirimkan pengingat sesuai dengan pilihan pembayaran
@@ -358,10 +355,6 @@ class DonasiService extends Controller
                 }
             };
         }
-
-
-
-
 
 
       

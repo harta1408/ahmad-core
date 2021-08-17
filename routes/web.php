@@ -42,7 +42,9 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['role:manajer|helpdesk|s
     Route::resource('lembaga', 'LembagaController');
     Route::resource('faq', 'FAQController');
     Route::resource('rekeningbank', 'RekeningBankController');
-
+    Route::get('lembaga/hijriah/index','LembagaController@hijriahIndex')->name('lembaga.hijriah.index');
+    Route::get('lembaga/hijriah/update/{adjust}','LembagaController@hijriahUpdate')->name('lembaga.hijriah.update');
+    Route::post('lembaga/hijriah/save','LembagaController@hijriahSave')->name('lembaga.hijriah.save');
     Route::resource('hadiah', 'HadiahController');
     Route::post('hadiah/main','HadiahController@main')->name('hadiah.main');
 
@@ -135,6 +137,8 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['role:manajer|helpdesk|s
     Route::get('donasi/random/load','DonasiController@donasiRandomLoad')->name('donasi.random.load');
     Route::post('donasi/random/main','DonasiController@donasiRandomMain')->name('donasi.random.main');
     Route::post('donasi/random/save','DonasiController@donasiRandomSave')->name('donasi.random.save');
+    Route::get('donasi/mutasi/bank/index','DonasiController@mutasiBankIndex')->name('donasi.mutasi.bank.index');
+    Route::post('donasi/mutasi/bank/detail','DonasiController@mutasiBankDetail')->name('donasi.mutasi.bank.detail');
 
     Route::get('report/donasi','ReportController@reportDonasi')->name('report.donasi');
     Route::get('report/donasi/harian','ReportController@reportDonasiHarian')->name('report.donasi.harian');

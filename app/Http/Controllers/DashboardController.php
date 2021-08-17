@@ -7,6 +7,7 @@ use App\Models\DonasiCicilan;
 use App\Models\Dashboard;
 use App\Models\Bimbingan;
 use App\Models\Santri;
+use App\Models\Lembaga;
 use GeniusTS\HijriDate\Date;
 use GeniusTS\HijriDate\Hijri;
 use GeniusTS\HijriDate\Translations\Indonesian;
@@ -19,6 +20,8 @@ class DashboardController extends Controller
         $this->middleware('auth');
     }
     public function dashHelpDeskIndex(){
+        $adjhijr=Lembaga::first()->lembaga_adjust_hijr;
+        Hijri::setDefaultAdjustment($adjhijr);
         Date::setTranslation(new Indonesian);
         $today = Date::today();
         $tanggal=$today->format('l d F o', Date::INDIAN_NUMBERS);
