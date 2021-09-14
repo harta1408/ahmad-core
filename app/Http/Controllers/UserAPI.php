@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\Service\MessageService;
 use App\Models\User;
 use Validator;
 class UserAPI extends Controller
@@ -183,4 +184,46 @@ class UserAPI extends Controller
         }       
         return response()->json($user,200);   
    }
+   public function userResetPassword($email){
+        $user= User::where('email',$email)->first();
+        if (!$user) { 
+            return response()->json(['status' => 'error', 'message' => 'User Not Found', 'code' => 404]);
+        }
+        $userid=$user->id;
+        $username=$user->name;
+        $useremail=$user->email;
+
+        $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+        $newpass = array(); //remember to declare $pass as an array
+        $alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
+        for ($i = 0; $i < 8; $i++) {
+            $n = rand(0, $alphaLength);
+            $newpass[] = $alphabet[$n];
+        }
+        $newpass=implode('',$newpass);
+
+        $password=Hash::make($newpass); 
+        User::where('id',$userid)->update(['password'=>$password]);
+
+        #kirimkan pesan via email untuk donasi yang di maksud
+        $msg=new MessageService;
+        $msg->kirimEmailResetPassword($username,$useremail,$newpass);
+
+        // return response()->json($user,200);
+        return response()->json(['status' => 'success', 'message' => 'Password Has Been Reset', 'code' => 200]);
+    }
+    public function userById($id){
+        $user=User::where('id',$id)->first();
+        $tipe=$user->tipe; // 1=donatur 2=santri, 3=pendamping 
+        if($tipe=='1'){ //donatur
+            $user= User::with('donatur')->where('id',$id)->first();
+        }
+        if($tipe=='2'){ //santri
+            $user= User::with('santri')->where('id',$id)->first();
+        }
+        if($tipe=='3'){ //pendamping
+            $user= User::with('pendamping')->where('id',$id)->first();
+        }  
+        return $user;
+    }
 }

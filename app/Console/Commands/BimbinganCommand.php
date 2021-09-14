@@ -2,25 +2,24 @@
 
 namespace App\Console\Commands;
 use Illuminate\Console\Command;
-use App\Http\Controllers\Service\DonasiService;
-use App\Http\Controllers\Service\MessageService;
+use App\Http\Controllers\Service\BimbinganService;
 
 
-class HarianCommand extends Command
+class BimbinganCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'pengingat:harian';
+    protected $signature = 'bimbingan:pengingat';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'mengirimkan pengingat ke santri';
 
     /**
      * Create a new command instance.
@@ -39,12 +38,7 @@ class HarianCommand extends Command
      */
     public function handle()
     {
-        $donasi=new DonasiService;
-        $donasi->pengingatDonasi();
-        $donasi->pesanJatuhTempo();
-        $donasi->randomSantri();
-
-        $msg=new MessageService;
-        $msg->hapusNotifikasi();
+        $bimservice=new BimbinganService;
+        $bimservice->pengingatBimbingan();
     }
 }

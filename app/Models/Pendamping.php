@@ -28,6 +28,7 @@ class Pendamping extends Model
         'pendamping_kota_id', //city_id
         'pendamping_provinsi_id', //province_id
         'pendamping_lokasi_photo',//lokasi photo di server
+        'pendamping_lokasi_cv', //lokasi file cv
         'pendamping_status_pegawai', //status kepegawaian pendampung
         'pendamping_honor', //honor yang diterima
         'pendamping_komisi', //komisi yang diterima
@@ -60,6 +61,12 @@ class Pendamping extends Model
         return $this->belongsToMany('App\Models\Pengingat','pengingat_pendamping','pendamping_id','pengingat_id','id','id')
                     ->as('pendampingpengingat')
                     ->withPivot('pengingat_pendamping_santri_respon','pengingat_pendamping_status')
+                    ->withTimestamps();
+    }
+    public function kuesioner(){
+        return $this->belongsToMany('App\Models\Kuesioner','kuesioner_pendamping','pendamping_id','kuesioner_id','id','id')
+                    ->as('pendampingkuesioner')
+                    ->withPivot('kuesioner_jawab','kuesioner_nilai')
                     ->withTimestamps();
     }
 }

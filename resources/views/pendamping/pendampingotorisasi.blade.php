@@ -1,6 +1,7 @@
 @extends('layouts.menus')
 @section('content')
     <div class="long-title"><h3>Daftar Pendamping Belum Di Otorisasi</h3></div>
+    <span>Untuk Melihat Detail Silakan Gunakan Menu Pendamping->Pembaharuan</span>
     <div id="gridData"></div>
 @endsection
 
@@ -50,13 +51,14 @@ $(function(){
         dataSource: gridDataSource,
         keyExpr: "id",
         showBorders: true,
-        "export": {
-            enabled: true,
-            fileName: "pendampinglist",
+        // "export": {
+        //     enabled: true,
+        //     fileName: "pendampinglist",
+        // },
+        selection: {
+            mode: "single"
         },
-        columnChooser: {
-            enabled: true
-        },
+        hoverStateEnabled: true,
         searchPanel: {
             visible: true
         },
@@ -93,20 +95,26 @@ $(function(){
               },  
             },
         ],
+        onSelectionChanged: function (selectedItems) {
+            var data = selectedItems.selectedRowsData[0];
+            $("#txtPendampingId").val(data.id);
+        },
         onEditorPreparing: function (e) {  
             if (e.parentType == "dataRow" && e.dataField == "pendamping_status")  {
                 e.editorName = "dxSwitch"; 
             }
         },
-      onEditingStart: function(e){
+        onEditingStart: function(e){
           if (e.column.dataField != "pendamping_status" ) {
              e.cancel = true;
           }
-       },
-       onRowUpdated:function(e){
-            DevExpress.ui.notify("pendamping Berhasil di Aktifasi"); 
-       },
+        },
+        onRowUpdated:function(e){
+                DevExpress.ui.notify("pendamping Berhasil di Aktifasi"); 
+        },
+
     });
+
 });
 </script>
 @endsection

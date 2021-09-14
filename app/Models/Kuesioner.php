@@ -17,8 +17,14 @@ class Kuesioner extends Model
         'kuesioner_status', //0=tidak aktif 1=aktif 2=sudah dapat produk 3=dalam bimbingan
     ];
     public function santri(){
-        return $this->belongsToMany('App\Models\Kuesioner','kuesioner_santri','kuesioner_id','santri_id','id','id')
+        return $this->belongsToMany('App\Models\Santri','kuesioner_santri','kuesioner_id','santri_id','id','id')
                     ->as('kuesionersantri')
+                    ->withPivot('kuesioner_jawab','kuesioner_nilai')
+                    ->withTimestamps();
+    }
+    public function pendamping(){
+        return $this->belongsToMany('App\Models\Pendamping','kuesioner_pendamping','kuesioner_id','pendamping_id','id','id')
+                    ->as('kuesionerpendamping')
                     ->withPivot('kuesioner_jawab','kuesioner_nilai')
                     ->withTimestamps();
     }

@@ -26,13 +26,13 @@ class MessageService extends Controller
         $tipe=User::where('email',$useremail)->first()->tipe;
         $url="";
         if($tipe=='1'){
-            $url=Config::get('ahmad.register.development.donatur');
+            $url=Config::get('ahmad.register.live.donatur');
         }
         if($tipe=='2'){
-            $url=Config::get('ahmad.register.development.santri');
+            $url=Config::get('ahmad.register.live.santri');
         }
         if($tipe=='3'){
-            $url=Config::get('ahmad.register.development.pendamping');
+            $url=Config::get('ahmad.register.live.pendamping');
         }
         $url=$url.$hashcode;
         $data = array('name'=>$username,'url'=>$url);
@@ -42,6 +42,33 @@ class MessageService extends Controller
            $message->from('noreply@ahmadproject.org','AHMaD Project');
         });
         // echo "HTML Email Sent. Check your inbox.";
+        return;
+    }
+    public function kirimEmailRegistrasiPendamping($useremail,$username){
+
+        // return; //sementara program dibuat agar tidak mengirim email
+
+        // kirim email registrasi
+        $tipe=User::where('email',$useremail)->first()->tipe;
+        $url="https://ahmadproject.org/public/dashboard/pendamping/pembaharuan/index";
+
+        $data = array('nama'=>$username,'url'=>$url);
+        Mail::send('email/registerpendamping', $data, function($message) use($useremail, $username) {
+           $message->to($useremail, $username)->subject
+              ('no-reply : Pengajuan Pendamping AHMaD Project');
+           $message->from('noreply@ahmadproject.org','AHMaD Project');
+        });
+        // echo "HTML Email Sent. Check your inbox.";
+        return;
+    }    
+
+    public function kirimEmailResetPassword($username,$useremail,$newpass){
+        $data = array('name'=>$username,'email'=>$useremail,'newpass'=>$newpass);
+        Mail::send('email/resetpassword', $data, function($message) use($useremail, $username) {
+           $message->to($useremail, $username)->subject
+              ('no-reply : Reset Password AHMaD Project');
+           $message->from('noreply@ahmadproject.org','AHMaD Project');
+        });
         return;
     }
     public function kirimEmailDonasiCicilan($useremail,$username,$id){
@@ -76,6 +103,7 @@ class MessageService extends Controller
         }
         return response()->json(compact('this'));
     }
+
     public function kirimEmailInvoice($useremail,$username,$idcicilan){
         // return; //sementara program dibuat agar tidak mengirim email
         $donasicicilan=DonasiCicilan::with('donasi.donatur','bayar')->where('id',$idcicilan)->first();
@@ -129,6 +157,31 @@ class MessageService extends Controller
         $pesan->pesan_status="1";
         $pesan->save();
     }
+    public function simpanNotifikasiPendampingRegister($tujuan,$namapendamping){
+        $isi="Pengajuan Pendamping Atas Nama ".$namapendamping." silakan ditindaklanjuti";
+        $tipe=User::where('id',$tujuan)->first()->tipe;
+     
+        $pesan=new Pesan;
+        $pesan->pesan_pembuat_id="0";
+        $pesan->pesan_tujuan_id=$tujuan;
+        $pesan->pesan_tujuan_entitas=$tipe;
+        $pesan->pesan_isi=$isi;
+        $pesan->pesan_waktu_kirim=date("Y-m-d H:i:s");
+        $pesan->pesan_status="1";
+        $pesan->save();
+    }
+
+    public function simpanNotifikasiErrorSistem($tujuan,$isi){
+        $tipe=User::where('id',$tujuan)->first()->tipe;
+        $pesan=new Pesan;
+        $pesan->pesan_pembuat_id="0";
+        $pesan->pesan_tujuan_id=$tujuan;
+        $pesan->pesan_tujuan_entitas=$tipe;
+        $pesan->pesan_isi=$isi;
+        $pesan->pesan_waktu_kirim=date("Y-m-d H:i:s");
+        $pesan->pesan_status="1";
+        $pesan->save();
+    }
 
     public function saveNotification($pengirim,$tujuan,$isi){
         $tipe=User::where('id',$tujuan)->first()->tipe;
@@ -140,6 +193,11 @@ class MessageService extends Controller
         $pesan->pesan_waktu_kirim=date("Y-m-d H:i:s");
         $pesan->pesan_status='1'; //belum di baca
         $pesan->save();
+    }
+    public function hapusNotifikasi(){
+        $deletedate=date("Y-m-d",strtotime('last weeks'));
+        Pesan::where('pesan_waktu_kirim','<=',$deletedate)->update(['pesan_status'=>'3']);
+        echo("===================Hapus Pesan===============\n");
     }
 
     public function sendWhatsApp(Request $request){

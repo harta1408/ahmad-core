@@ -92,10 +92,18 @@ class PengingatController extends Controller
         }
         $entitas=$request->get('pengingat_entitas');
         try {
+            $pengingatjenis=$request->get('pengingat_jenis'); 
+            $index=1;
+            if($entitas=='2'){
+                if($pengingatjenis=='4' || $pengingatjenis=='5' || $pengingatjenis=='6' ){
+                    $index=$this->createindex();
+                }
+            }
             $pengingat=new Pengingat;
-            $pengingat->pengingat_jenis=$request->get('pengingat_jenis'); 
+            $pengingat->pengingat_jenis=$pengingatjenis;
             $pengingat->pengingat_judul=$request->get('pengingat_judul'); 
             $pengingat->pengingat_entitas=$entitas;
+            $pengingat->pengingat_index=$index;
             $pengingat->pengingat_isi=$request->get('pengingat_isi' ); 
             $pengingat->pengingat_lokasi_video=$request->get('pengingat_lokasi_video' ); 
             $pengingat->pengingat_isi_singkat=substr($request->get('pengingat_isi_singkat'),0,255); 
@@ -116,7 +124,14 @@ class PengingatController extends Controller
         return response()->json(['status' => 'error', 'message' => 'System error', 'code' => 404]);
   
     }
-
+    private function createindex(){
+        for ($i=1; $i <100 ; $i++) { 
+            $pengingat=Pengingat::where('pengingat_index',$i)->whereIn('pengingat_jenis',['4','5','6'])->first();
+            if(!$pengingat){
+                return $i;
+            }
+        }
+    }
     /**
      * Display the specified resource.
      *
@@ -214,7 +229,7 @@ class PengingatController extends Controller
     #modul untuk pengaturan pengingan santri
     public function pengingatSantriLoad(){
         $pengingat=Pengingat::where([['pengingat_entitas','2'],['pengingat_status','1']])
-            ->orderBy('created_at','desc')->get();
+            ->whereIn('pengingat_jenis',['4','5','6'])->orderBy('created_at','desc')->get();
         foreach ($pengingat as $key => $pngt) {
             if($pngt->pengingat_jenis=='4'){
                 $pngt->pengingat_jenis="Sunnah Senin";
@@ -252,6 +267,49 @@ class PengingatController extends Controller
         if($pengingatstatus=="UPDATE"){
             return view("pengingat/pengingatsantriupdate",compact('pengingat'));
         }
+    }
+    #modul untuk daftar pengingat dari pendamping untuk santri
+    public function pengingatPendampingIndex(){
+        return view('pengingat/pengingatpendampingindex');
+    }
+    public function pengingatPendampingMain(Request $request){
+        $pendampingid=$request->get('id_entitas');
+        $pendamping=function ($query) use ($pendampingid){
+            $query->where('id',$pendampingid);
+        };
+        $pengingat=Pengingat::with(['pendamping'=>$pendamping,'santri'])->whereHas('pendamping',$pendamping)
+            ->whereIn('pengingat_jenis',['7','8','9'])->get();
+            foreach ($pengingat as $key => $pngt) {
+                if($pngt->pengingat_jenis=='1'){
+                    $pngt->pengingat_jenis="Sedekah Shubuh";
+                }
+                if($pngt->pengingat_jenis=='2'){
+                    $pngt->pengingat_jenis="Sedekah Jum'at";
+                }
+                if($pngt->pengingat_jenis=='3'){
+                    $pngt->pengingat_jenis="Sedekah Yaumul Bidh";
+                }
+                if($pngt->pengingat_jenis=='4'){
+                    $pngt->pengingat_jenis="Sunnah Senin";
+                }
+                if($pngt->pengingat_jenis=='5'){
+                    $pngt->pengingat_jenis="Sunnah Kamis";
+                }
+                if($pngt->pengingat_jenis=='6'){
+                    $pngt->pengingat_jenis="Sunnah Jum'at";
+                }
+                if($pngt->pengingat_jenis=='7'){
+                    $pngt->pengingat_jenis="Pertemuan Online";
+                }
+                if($pngt->pengingat_jenis=='8'){
+                    $pngt->pengingat_jenis="Pertemuan Offline";
+                }
+                if($pngt->pengingat_jenis=='9'){
+                    $pngt->pengingat_jenis="Talkin Dzikir";
+                }
+            }
+        return view("pengingat/pengingatpendampingmain",compact('pengingat'));
+
     }
     #modul untuk daftar video
     public function pengingatVideoIndex(){

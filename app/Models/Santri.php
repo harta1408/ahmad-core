@@ -33,6 +33,9 @@ class Santri extends Model
         'santri_min_referral', //hitungan minimal refferal untuk selalu mengingatkan
         'santri_status', //0=tidak aktif 1=aktif data belum lengkap 2=belum isi kuesioner 3=belum otorisasi, data belum lengkap 
                          //4=aktif data sudah lengkap, menunggu produk  5=terpilih, menunggu produk 6=sudah dapat produk, dalam, dalam bimbingan 7=lulus
+
+        //dummy
+        'santri_progress_bimbingan',
     ];
 
     public function donatur(){

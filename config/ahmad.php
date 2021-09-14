@@ -3,7 +3,7 @@
 return [
     #url base untuk referral
     'referral' =>[
-        'development'=>[
+        'live'=>[
             'donatur' => 'http://dev.ahmadproject.org/gabung/donatur/',
             'santri' => 'http://dev.ahmadproject.org/gabung/santri/',
         ],
@@ -14,15 +14,15 @@ return [
     ],
     #url base untuk registrasi
     'register' =>[
-    'development'=>[
+    'live'=>[
         'donatur' => 'http://dev.ahmadproject.org/daftar/donatur/',
         'santri' => 'http://dev.ahmadproject.org/daftar/santri/',
-        'pedamping' => 'http://dev.ahmadproject.org/daftar/pedamping/',
+        'pendamping' => 'http://dev.ahmadproject.org/daftar/pendamping/',
     ],
     'production'=>[
         'donatur' => 'http://ahmadproject.org/daftar/donatur/',
         'santri' => 'http://ahmadproject.org/daftar/santri/',
-        'pedamping' => 'http://ahmadproject.org/daftar/pedamping/',
+        'pendamping' => 'http://ahmadproject.org/daftar/pendamping/',
     ],
     ],
     #konfiguasi woola messanger

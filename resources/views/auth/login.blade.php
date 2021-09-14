@@ -5,7 +5,8 @@
     <div class="row no-gutter">
         <!-- The image half -->
         <div class="col-md-6 d-none d-md-flex bg-image">
-            <img src="https://dev.ahmadproject.org/assets/images/image-paket.webp" class="media-object" >
+            <img src="https://ahmadproject.org/assets/images/pexels-alena-darmel-8164742-1.jpg" class="media-object" >
+            <img src="https://ahmadproject.org/assets/images/logo-white.svg" style="position: absolute;margin-top: 500px;margin-bottom: 131px;margin-right: 185px;margin-left: 175px;" />
         </div>
 
         <!-- The content half -->

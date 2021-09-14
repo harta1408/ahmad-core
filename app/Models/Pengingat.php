@@ -17,9 +17,9 @@ class Pengingat extends Model
     #undangan offline meeting/pengajian, dikirimkan sebanyak 2 kali selama masa bimbingan
     #undangan talkin dzikir sebanyak 1 atau 2 kali selama bimbingan
 
-    #pembuatan pengingat baru di tangani oleh modulpengingat controller
+    #pembuatan pengingat baru di tangani oleh modul pengingat controller
     #pengiriman pesan update ke pengingat donatur dan pengingat santri ditangani oleh modul
-    #pengingat service
+    #donasi service
     protected $table='pengingat';
     protected $fillable=[
         'pengingat_jenis', //1=sedekah subuh, 2=sedekah jumat 3=sedekah yaumul bidh 

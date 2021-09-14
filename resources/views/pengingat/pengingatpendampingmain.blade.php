@@ -1,8 +1,7 @@
 @extends('layouts.menus')
 @section('content')
-    <div class="long-title"><h3>Daftar Pengingat Santri</h3></div>
+    <div class="long-title"><h3>Daftar Pengingat Santri Dari Pendamping</h3></div>
     {!! Form::open(['id' => 'frm','route' => 'pengingat.santri.main', 'class' => 'form-horizontal']) !!}
-        <div id="toolbar"></div>
         <div class="second-group">
             <div id="gridData"></div>
         </div>
@@ -19,15 +18,11 @@ $(function(){
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       }
     });
-    var gridDataSource = new DevExpress.data.DataSource({
-        load: function (loadOptions) {
-            return $.ajax({
-                url: "{{route('pengingat.santri.load')}}"
-            })
-        },
-    });
+    var pengingat={!!$pengingat!!};
+    console.log(pengingat);
+
     $("#gridData").dxDataGrid({
-        dataSource: gridDataSource,
+        dataSource: pengingat,
         keyExpr: "id",
         showBorders: true,
         selection: {
@@ -45,8 +40,11 @@ $(function(){
               dataField: "pengingat_jenis",
               caption: "Jenis",
             },{
-              dataField: "pengingat_index",
-              caption: "No Urut",
+              dataField: "pendamping.0.pendamping_nama",
+              caption: "Pengirim",  
+            },{
+              dataField: "santri.0.santri_nama",
+              caption: "Santri",  
             },{
               dataField: "pengingat_judul",
               caption: "Judul",
@@ -99,42 +97,6 @@ $(function(){
                 return false;
             }
             $("#txtPengingatState").val("UPDATE"); //kirim perintah update ke server
-            }
-        }
-    },{
-        location: 'after',
-        widget: 'dxButton',
-        locateInMenu: 'auto',
-        options: {
-            icon: "trash",
-            hint: 'Hapus Data pendamping',
-            useSubmitBehavior: true,
-            onClick: function(e) {      
-            var txtPengingatId=document.getElementById("txtPengingatId").value;
-            var txtPengingatState=document.getElementById("txtPengingatState").value;
-            if(txtPengingatId==""){
-                DevExpress.ui.notify({
-                    message: "Silakan Pilih pendamping.",
-                    position: {
-                        my: "center top",
-                        at: "center top"
-                    }
-                }, "warning", 3000);
-                e.preventDefault();
-                return false;
-            }
-            if(txtPengingatState!="0"){
-                DevExpress.ui.notify({
-                    message: "Proses Hapus pendamping",
-                    position: {
-                        my: "center top",
-                        at: "center top"
-                    }
-                }, "error", 3000);
-                e.preventDefault();
-                return false;
-            }
-            $("#txtPengingatState").val("DELETE"); //kirim perintah hapus ke server
             }
         }
         }]

@@ -246,6 +246,9 @@ class SantriController extends Controller
                 $snt->santri_status="Belum Konfirmasi Email";
             }else{
                 switch ($snt->santri_status) {
+                    case '1':
+                        $snt->santri_status="Data Belum Lengkap";
+                        break;
                     case '2':
                         $snt->santri_status="Belum Otorisasi";
                         break;

@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Models;
-
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
@@ -20,4 +19,7 @@ class PengingatPendamping extends Pivot
         'pengingat_pendamping_santri_respon', //0=no respon 1=di baca, bersedia ikut, 2=di baca, tidak bersedia
         'pengingat_pendamping_status', //0=non aktif 1=aktif
     ];
+    public function santri(){
+        return $this->hasOne('App\Models\Santri','id','santri_id');
+    }
 }

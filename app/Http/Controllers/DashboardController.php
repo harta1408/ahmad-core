@@ -30,8 +30,6 @@ class DashboardController extends Controller
         // dd($tanggal);
         $todaydate=date("Y-m-d");
         $date = Hijri::convertToHijri($todaydate);
-
-
         
         $jumlahsantriotor=Santri::where('santri_status',3)->count();
 

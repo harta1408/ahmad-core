@@ -22,6 +22,8 @@ Route::middleware(['cors'])->group(function () {
     Route::put('user/change/password/{id}','UserAPI@userChangePassword');
     Route::put('user/verification/{id}','UserAPI@userVerification');
     Route::get('user/byhashcode/{hashcode}','UserAPI@userByHashCode');
+    Route::get('user/reset/password/{email}','UserAPI@userResetPassword');
+    Route::get('user/byid/{id}','UserAPI@userById');
 
     Route::get('lembaga','LembagaAPI@getLembaga');
     Route::get('lembaga/rekening/bank','LembagaAPI@getRekeningBankList');
@@ -54,10 +56,11 @@ Route::middleware(['cors'])->group(function () {
     Route::post('pendamping/register','PendampingAPI@pendampingRegister');
     Route::post('pendamping/register/referral','PendampingAPI@pendampingRegisterReferral');
     Route::post('pendamping/register/gmail','PendampingAPI@pendampingRegisterGMail');
-    Route::put('pendamping/update/profile/{id}','PendampingAPI@pendampingUpadateProfile');
+    Route::put('pendamping/update/profile/{id}','PendampingAPI@pendampingUpdateProfile');
     Route::get('pendamping/byid/{id}','PendampingAPI@pendampingById');
     Route::get('pendamping/santri/byid/{id}','PendampingAPI@pendampingSantriById');
     Route::post('pendamping/upload/photo','PendampingAPI@pendampingUploadImage');
+    Route::post('pendamping/upload/cv','PendampingAPI@pendampingUploadCV');
     Route::get('pendamping/dashboard/{id}','PendampingAPI@pendampingDashboard');
 
     Route::post('produk/save','ProdukAPI@produkSimpan');
@@ -74,6 +77,7 @@ Route::middleware(['cors'])->group(function () {
     Route::get('donasi/donasiid/{donasiid}/donaturid/{donaturid}','DonasiAPI@donasiDonaturById');
     Route::get('donasi/donatur/{id}','DonasiAPI@donasiByDonaturId');
     Route::get('donasi/outstanding/donatur/{donaturid}','DonasiAPI@donasiOutstandingByDonaturId');
+    Route::get('donasi/outstanding/today/donatur/{donaturid}','DonasiAPI@donasiOutstandingTodayByDonaturId');
     Route::get('donasi/paid/donatur/{donaturid}','DonasiAPI@donasiPaidByDonaturId');
     Route::get('donasi/cicilan/donatur/{donaturid}','DonasiAPI@donasiCicilanByDonaturId');
     Route::get('donasi/santri/{id}','DonasiAPI@donasiSantriById');
@@ -87,6 +91,7 @@ Route::middleware(['cors'])->group(function () {
     Route::get('berita/kampanye','BeritaAPI@beritaKampanye');
     Route::get('berita/kampanye/donatur/{nourut2digit}','BeritaAPI@beritaKampanyeDonatur');
     Route::get('berita/kampanye/santri/{nourut2digit}','BeritaAPI@beritaKampanyeSantri');
+    Route::get('berita/kampanye/pendamping/{nourut2digit}','BeritaAPI@beritaKampanyePendamping');
 
     Route::get('hadist/entitas/donatur/{id}','HadistAPI@hadistByDonaturId');
     Route::get('hadist/entitas/santri/{id}','HadistAPI@hadistBySantriId');
@@ -115,6 +120,7 @@ Route::middleware(['cors'])->group(function () {
     Route::get('kuesioner/list','KuesionerAPI@kuesionerList');
     Route::get('kuesioner/entitas/{entitas}','KuesionerAPI@kuesionerByEntitas');
     Route::post('kuesioner/santri/simpan','KuesionerAPI@kuesionerSantriSimpan');
+    Route::post('kuesioner/pendamping/simpan','KuesionerAPI@kuesionerPendampingSimpan');
 
     Route::post('message/send/wa','MessageAPI@sendWhatsApp');
 

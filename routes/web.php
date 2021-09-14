@@ -62,11 +62,11 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['role:manajer|helpdesk|s
     Route::get('santri/simple/list','SantriController@santriSimpleList')->name('santri.simple.list');
 
     Route::resource('pendamping', 'PendampingController');
-    Route::get('pendamping/pembaharuan/index','PendampingController@pendampingRenewIndex')->name('pendamping.pembaharuan.index');
-    Route::post('pendamping/pembaharuan/main','PendampingController@pendampingRenewMain')->name('pendamping.pembaharuan.main');
+    Route::get('pendamping/pembaharuan/index','PendampingController@pendampingUpdateIndex')->name('pendamping.pembaharuan.index');
+    Route::post('pendamping/pembaharuan/main','PendampingController@pendampingUpdateMain')->name('pendamping.pembaharuan.main');
     Route::get('pendamping/otorisasi/load','PendampingController@pendampingOtorisasiLoad')->name('pendamping.otorisasi.load');
     Route::put('pendamping/otorisasi/update/{id}','PendampingController@pendampingOtorisasiUpdate')->name('pendamping.otorisasi.update');
-    Route::get('pendamping/otoriasasi/index','PendampingController@pendampingOtorisasiIndex')->name('pendamping.otorisasi.index');
+    Route::get('pendamping/otorisasi/index','PendampingController@pendampingOtorisasiIndex')->name('pendamping.otorisasi.index');
     Route::get('pendamping/simple/list','PendampingController@pendampingSimpleList')->name('pendamping.simple.list');
 
     Route::resource('produk', 'ProdukController');
@@ -86,6 +86,8 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['role:manajer|helpdesk|s
     Route::get('pengingat/santri/index','PengingatController@pengingatSantriIndex')->name('pengingat.santri.index');
     Route::get('pengingat/santri/load','PengingatController@pengingatSantriLoad')->name('pengingat.santri.load');
     Route::post('pengingat/santri/main','PengingatController@pengingatSantriMain')->name('pengingat.santri.main');
+    Route::get('pengingat/pendamping/santri/index','PengingatController@pengingatPendampingIndex')->name('pengingat.pendamping.index');
+    Route::post('pengingat/pendamping/santri/main','PengingatController@pengingatPendampingMain')->name('pengingat.pendamping.main');
     Route::get('pengingat/video/index','PengingatController@pengingatVideoIndex')->name('pengingat.video.index');
     Route::get('pengingat/video/load','PengingatController@pengingatVideoLoad')->name('pengingat.video.load');
 

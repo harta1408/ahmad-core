@@ -163,12 +163,13 @@
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
       <!-- Brand Logo -->
       <a href="{{ route('login') }}" class="brand-link">
-        <img src="{{asset('images/logo.png')}}" alt="Agile" class="brand-image img-circle elevation-3"
+        <img src="{{asset('images/logo-white.svg')}}" alt="Agile" class="brand-image img-circle elevation-3"
              style="opacity: .8">
              @guest
                <span class="brand-text font-weight-light">AHMaD Dashboard</span>
              @else
-               <span class="brand-text font-weight-light">{{ Auth::user()->name}}</span>
+             <span class="brand-text font-weight-light">Dashboard</span>
+               {{-- <span class="brand-text font-weight-light">{{ Auth::user()->name}}</span> --}}
              @endguest
       </a>
 
@@ -507,7 +508,19 @@
                 <li class="nav-item">
                   <a href="{{route('pengingat.index')}}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Daftar Pengingat</p>
+                    <p>Donatur</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{route('pengingat.santri.index')}}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Santri</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{route('pengingat.pendamping.index')}}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Dari Pendamping</p>
                   </a>
                 </li>
                 <li class="nav-item">
@@ -857,7 +870,7 @@
             </li>
             <li class="nav-item has-treeview">
               <a href="#" class="nav-link">
-                <i class="nav-icon far fa-comments"></i>
+                <i class="nav-icon fas fa-envelope"></i>
                 <p>
                   Pesan
                   <i class="fas fa-angle-left right"></i>

@@ -3,11 +3,17 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Pengingat;
+use App\Models\DOnasi;
 use App\Models\Donatur;
 use App\Models\Santri;
 use App\Models\Pendamping;
 use App\Models\User;
+use App\Models\Lembaga;
+use App\Models\PengingatDonatur;
 use App\Http\Controllers\Service\MessageService;
+use GeniusTS\HijriDate\Hijri;
+use GeniusTS\HijriDate\Date;
+use GeniusTS\HijriDate\Translations\Indonesian;
 use Validator;
 use DB;
 
@@ -18,13 +24,49 @@ class PengingatAPI extends Controller
         $this->middleware('cors');
 	}
 
-    #pengingat berdasarkan id donatur
+    #pengingat API DOnatur berfungsi mengambil, pengingat diacak pada tabel pengingat donatur
+    #pembuatan pengingat donatur dilakukan melalui Donasi Service setiap hari secara otomatis
     public function pengingatDonaturById($donaturid){
+        $pengingatdonatur=PengingatDonatur::where([['donatur_id',$donaturid],['pengingat_donatur_status','1']])->pluck('pengingat_id');
+        $pengingat=Pengingat::whereIn('id',$pengingatdonatur)->get();
+        $todaydate=date("Y-m-d");
+
+        $adjhijr=Lembaga::first()->lembaga_adjust_hijr;
+        Hijri::setDefaultAdjustment($adjhijr);
+        Date::setTranslation(new Indonesian);
+        $dayhijr=Date::today()->format('d');
+        
+        if(date('w', strtotime($todaydate))!=5){ 
+            #jika harian tampilkan sedekah subuh
+            $pengingatid=$this->findPengingatJenis($pengingat,'1');
+        }else if(date('w', strtotime($todaydate))==5){ //5:friday
+            #jika jumat tampilkan sedekan pekanan
+            $pengingatid=$this->findPengingatJenis($pengingat,'2');
+        } 
+        
+        if($dayhijr=='13' || $dayhijr=='14' || $dayhijr=='15'){
+            #jika yaumil bidh 13,14,15 munculkan pengingat yaumil bidh
+            $pengingatid=$this->findPengingatJenis($pengingat,'3');
+        }
+
+        #tidak ada pengingat untuk ditampilkan sesuai kategori
+        if($pengingatid==""){
+            return response()->json(['status' => 'error', 'message' => 'Tidak ada pengingat untuk ditampilkan', 'code' => 404]);
+        }
+    
         $donatur=function ($query) use ($donaturid){
             $query->where([['id',$donaturid],['pengingat_donatur_status','1']]);
         };
-        $pengingat=Pengingat::with(['donatur'=>$donatur])->whereHas('donatur',$donatur)->first();
+        $pengingat=Pengingat::where('id',$pengingatid)->with(['donatur'=>$donatur])->whereHas('donatur',$donatur)->first();
         return response()->json($pengingat,200);  
+    }
+    private function findPengingatJenis($pengingat,$jenis){
+        foreach ($pengingat as $key => $pngt) {
+            if($pngt->pengingat_jenis==$jenis){
+                return $pngt->id;
+            }
+        }
+        return "";
     }
     public function pengingatDonaturRespon($id,Request $request){
         #update status donatur
@@ -40,6 +82,7 @@ class PengingatAPI extends Controller
     }
 
     #pengingat untuk keperluan santri
+    
     public function pengingatSantriById($santriid){
         $santri=function ($query) use ($santriid){
             $query->where([['id',$santriid],['pengingat_santri_status','1']]);
@@ -64,7 +107,7 @@ class PengingatAPI extends Controller
         $pendamping=function ($query) use ($pendampingid){
             $query->where('id',$pendampingid);
         };
-        $pengingat=Pengingat::with(['pendamping'=>$pendamping])->whereHas('pendamping',$pendamping)->get();
+        $pengingat=Pengingat::with(['pendamping'=>$pendamping,'santri'])->whereHas('pendamping',$pendamping)->get();
         return response()->json($pengingat,200);    
     }
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Kuesioner;
 use App\Models\Santri;
+use App\Models\Pendamping;
 
 class KuesionerAPI extends Controller
 {
@@ -41,6 +42,9 @@ class KuesionerAPI extends Controller
     public function kuesionerSantriSimpan(Request $request){
         $santriid=$request->get('santri_id');
         $santri=Santri::where('id',$santriid)->first();
+        if(!$santri){
+            return response()->json(['status' => 'error', 'message' => 'Data Santri tidak ditemukan', 'code' => 404]);
+        }  
         for ($i=0; $i < count($request->input('kuesioner')) ; $i++) {
             $kuesionerid=$request->input('kuesioner')[$i]['kuesioner_id'];
             $kuesioner=Kuesioner::where('id',$kuesionerid)->first();
@@ -62,5 +66,34 @@ class KuesionerAPI extends Controller
         Santri::where('id',$santriid)->update(['santri_status'=>'2']); //update sudah jawab kuesioner
         $santri=Santri::with('kuesioner')->where('id',$santriid)->first();
         return response()->json($santri,200);
+    }
+    public function kuesionerPendampingSimpan(Request $request){
+        $pendampingid=$request->get('pendamping_id');
+        $pendamping=Pendamping::where('id',$pendampingid)->first();
+
+        if(!$pendamping){
+            return response()->json(['status' => 'error', 'message' => 'Data Pendamping tidak ditemukan', 'code' => 404]);
+        }        
+        for ($i=0; $i < count($request->input('kuesioner')) ; $i++) {
+            $kuesionerid=$request->input('kuesioner')[$i]['kuesioner_id'];
+            $kuesioner=Kuesioner::where('id',$kuesionerid)->first();
+            $kuesionerjawab=$request->input('kuesioner')[$i]['kuesioner_jawab'];
+            $nilai=0;
+            if($kuesionerjawab=="YA"){
+                $nilai=$kuesioner->kuesioner_bobot_yes;
+            }else{
+                $nilai=$kuesioner->kuesioner_bobot_no;
+            }
+            $kuesioner->pendamping()->attach([
+                'kuesioner_id'=>$kuesionerid],
+                [
+                    'pendamping_id'=>$pendampingid, 
+                    'kuesioner_jawab'=>$kuesionerjawab,
+                    'kuesioner_nilai'=>$nilai,
+                ]);
+        }
+        Pendamping::where('id',$pendampingid)->update(['pendamping_status'=>'2']); //update sudah jawab kuesioner
+        $pendamping=Pendamping::with('kuesioner')->where('id',$pendampingid)->first();
+        return response()->json($pendamping,200);
     }
 }

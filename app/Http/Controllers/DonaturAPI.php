@@ -16,11 +16,13 @@ use App\Models\Bimbingan;
 use App\Models\BimbinganMateri;
 use App\Models\DonaturSantri;
 use App\Models\Santri;
+use App\Models\Lembaga;
 use App\Http\Controllers\DonasiAPI;
 use App\Http\Controllers\ReferralAPI;
 use App\Http\Controllers\Service\MessageService;
 use GeniusTS\HijriDate\Date;
 use GeniusTS\HijriDate\Hijri;
+use GeniusTS\HijriDate\Translations\Indonesian;
 use Config;
 use Validator;
 class DonaturAPI extends Controller
@@ -326,7 +328,6 @@ class DonaturAPI extends Controller
         $user=User::with('donatur')->where('email',$useremail)->first();
 
         $msg=new MessageService;
-
         #kirim email verifikasi
         $msg->kirimEmailVerifikasi($useremail,$username,$hashcode);
         #simpan/kirim pesan
@@ -440,9 +441,17 @@ class DonaturAPI extends Controller
             $progresbelajar=$materiselesai/$jmlmateri; //perhitungan sepertinya belum sesuai
         }
 
+        #tanggal hijriah
+        $adjhijr=Lembaga::first()->lembaga_adjust_hijr;
+        Hijri::setDefaultAdjustment($adjhijr);
+        Date::setTranslation(new Indonesian);
+        $today = Date::today();
+        $hijriah=$today->format('d F o');
+
         $donatur=Donatur::where('id',$donaturid)->first();
         $dashdonatur=['donatur'=> $donatur,
                         'donatur_tanggal' => date("Y-m-d"),
+                        'donatur_hijriah' => $hijriah,
                         'donatur_paket_donasi' => $jmldonasi,
                         'donatur_paket_tersalurkan' => $jmltersalurkan,
                         'donatur_santri_selesai' => $jmlsantriselesai,

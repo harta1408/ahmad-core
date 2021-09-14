@@ -9,6 +9,7 @@ use App\Models\KodePos;
 use App\Models\User;
 use App\Http\Controllers\KodePosAPI;
 use App\Http\Controllers\PendampingAPI;
+use App\Http\Controllers\Service\MessageService;
 use Validator;
 class PendampingController extends Controller
 {
@@ -25,29 +26,31 @@ class PendampingController extends Controller
     {
         $pendamping=Pendamping::with('user')->where('pendamping_status','!=','0')->get();
         foreach ($pendamping as $key => $pdmp) {
-            if($pdmp->user['email_verified_at']==null){
-                $pdmp->pendamping_status="Belum Konfirmasi Email";
-            }else{
-                switch ($pdmp->pendamping_status) {
-                    case '1':
-                        $pdmp->pendamping_status="Belum lengkap";
-                        break;
-                    case '2':
-                        $pdmp->pendamping_status="Belum Isi Kuesioner";
-                        break;
-                    case '3':
-                        $pdmp->pendamping_status="Belum Otorisasi";
-                        break;
-                    case '4':
-                        $pdmp->pendamping_status="Belum ada Bimbingan";
-                        break;
-                    case '5':
-                        $pdmp->pendamping_status="Membimbing Santri";
-                        break;
-                    default:
-                        $pdmp->pendamping_status="Pensiun";
-                        break;
-                }
+            switch ($pdmp->pendamping_status) {
+                case '1':
+                    $pdmp->pendamping_status="Belum Isi Kuesioner";
+                    break;
+                case '2':
+                    $pdmp->pendamping_status="Belum Otorisasi";
+                    break;
+                case '3':
+                    $pdmp->pendamping_status="Data Lengkap";
+                    if($pdmp->user['email_verified_at']==null){
+                        $pdmp->pendamping_status="Belum Konfirmasi Email";
+                    }
+                    break;
+                case '4':
+                    $pdmp->pendamping_status="Menunggu Produk";
+                    break;
+                case '5':
+                    $pdmp->pendamping_status="Dapat Produk";
+                    break;
+                case '6':
+                    $pdmp->pendamping_status="Dalam bimbingan";
+                    break;
+                default:
+                    $pdmp->pendamping_status="Lulus";
+                    break;
             }
         }
         return view('pendamping/pendampinglist',compact('pendamping'));
@@ -226,7 +229,7 @@ class PendampingController extends Controller
                     'pendamping_kode_pos' =>$kodepos,
                     'pendamping_status' => '4', //data sudah lengkap
                 ]);
-        return redirect()->action('PendampingController@pendampingRenewIndex');
+        return redirect()->action('PendampingController@pendampingUpdateIndex');
     }
 
     /**
@@ -239,37 +242,39 @@ class PendampingController extends Controller
     {
         //
     }
-    public function pendampingRenewIndex(){
+    public function pendampingUpdateIndex(){
         $pendamping=Pendamping::with('user')->where('pendamping_status','!=','0')->get();
         foreach ($pendamping as $key => $pdmp) {
-            if($pdmp->user['email_verified_at']==null){
-                $pdmp->pendamping_status="Belum Konfirmasi Email";
-            }else{
-                switch ($pdmp->pendamping_status) {
-                    case '2':
-                        $pdmp->pendamping_status="Belum Otorisasi";
-                        break;
-                    case '3':
-                        $pdmp->pendamping_status="Data Lengkap";
-                        break;
-                    case '4':
-                        $pdmp->pendamping_status="Menunggu Produk";
-                        break;
-                    case '5':
-                        $pdmp->pendamping_status="Dapat Produk";
-                        break;
-                    case '6':
-                        $pdmp->pendamping_status="Dalam bimbingan";
-                        break;
-                    default:
-                        $pdmp->pendamping_status="Lulus";
-                        break;
-                }
+            switch ($pdmp->pendamping_status) {
+                case '1':
+                    $pdmp->pendamping_status="Belum Isi Kuesioner";
+                    break;
+                case '2':
+                    $pdmp->pendamping_status="Belum Otorisasi";
+                    break;
+                case '3':
+                    $pdmp->pendamping_status="Data Lengkap";
+                    if($pdmp->user['email_verified_at']==null){
+                        $pdmp->pendamping_status="Belum Konfirmasi Email";
+                    }
+                    break;
+                case '4':
+                    $pdmp->pendamping_status="Menunggu Produk";
+                    break;
+                case '5':
+                    $pdmp->pendamping_status="Dapat Produk";
+                    break;
+                case '6':
+                    $pdmp->pendamping_status="Dalam bimbingan";
+                    break;
+                default:
+                    $pdmp->pendamping_status="Lulus";
+                    break;
             }
         }
-        return view('pendamping/pendampingrenewindex',compact('pendamping'));
+        return view('pendamping/pendampingupdateindex',compact('pendamping'));
     }
-    public function pendampingRenewMain(Request $request){
+    public function pendampingUpdateMain(Request $request){
         $id=$request->get('pendamping_id');
         $status=$request->get('pendamping_state');
 
@@ -286,6 +291,20 @@ class PendampingController extends Controller
     }
     public function pendampingOtorisasiUpdate(Request $request,$id){
         $exec=Pendamping::where('id','=' ,$id)->update(['pendamping_status' => '3']); //data di otorisasi
+
+        $pendamping=Pendamping::where('id',$id)->first();
+        $useremail=$pendamping->pendamping_email;
+        $username=$pendamping->pendamping_nama;
+
+
+        #ambil user berdasarkan email
+        $user=User::with('donatur')->where('email',$useremail)->first();
+        $hashcode=$user->hash_code;
+        $msg=new MessageService;
+        #kirim email verifikasi
+        $msg->kirimEmailVerifikasi($useremail,$username,$hashcode);
+        #simpan/kirim pesan
+        $msg->simpanNotifikasiSelamatBergabung('0',$user->id);
     }
     public function pendampingOtorisasiIndex(){
         return view('pendamping/pendampingotorisasi');

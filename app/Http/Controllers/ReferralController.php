@@ -86,7 +86,7 @@ class ReferralController extends Controller
      */
     public function store(Request $request)
     {
-        $url = Config::get('ahmad.referral.development'); 
+        $url = Config::get('ahmad.referral.live'); 
 
         if (!isset($request->get('referral')['referral_telepon'])) {
             return response()->json(['status' => 'error', 'message' => 'Telepon Harus di Isi', 'code' => 404]);

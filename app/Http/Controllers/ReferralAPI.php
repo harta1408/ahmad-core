@@ -21,8 +21,8 @@ class ReferralAPI extends Controller
         $this->middleware('cors');
 	}
     public function referralSendLink(Request $request){
-        $urldonatur = Config::get('ahmad.referral.development.donatur');
-        $urlsantri = Config::get('ahmad.referral.development.santri');
+        $urldonatur = Config::get('ahmad.referral.live.donatur');
+        $urlsantri = Config::get('ahmad.referral.live.santri');
 
 
         $validator = Validator::make($request->all(), [

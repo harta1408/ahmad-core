@@ -17,6 +17,6 @@ class PengingatSantri extends Pivot
         'pengingat_id', //id pengingat
         'pengingat_santri_index', //nomor urut yang pengingat yang telah dikirimkan ke santri
         'pengingat_santri_respon', //0=no respon 1=berterimakasih 2=biasa saja 3=tidak suka
-        'pengingat_santri_status', //0=tidak aktif 1=aktif
+        'pengingat_santri_status', //0=tidak aktif 1=aktif 2=sudah selesai
     ];
 }

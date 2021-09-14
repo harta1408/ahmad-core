@@ -197,7 +197,7 @@ class DonasiAPI extends Controller
  
     #mengambil data donasi berdasarkan id donasi
     public function donasiById($id){
-        $donasi=Donasi::with('donatur','produk')->where('id',$id)->first();
+        $donasi=Donasi::with('donatur','produk','cicilan')->where('id',$id)->first();
         return response()->json($donasi,200);
     }
     #mengambil data donasi berdasarkan id donasi dan id donatur
@@ -222,6 +222,14 @@ class DonasiAPI extends Controller
             $query->where('id',$donaturid);
         };
         $donasi=Donasi::with(['donatur'=>$donatur, 'cicilan.bayar'])->whereHas('donatur',$donatur)->get();
+        return response()->json($donasi,200);
+    }
+    public function donasiOutstandingTodayByDonaturId($donaturid){
+        $cicilan=function ($query) {
+            $jatuhtempo=date("Y-m-d").' 00:00:00';
+            $query->with('bayar')->where([['cicilan_status','1'],['cicilan_jatuh_tempo',$jatuhtempo]]);
+        };
+        $donasi=Donasi::with(['cicilan'=>$cicilan])->whereHas('cicilan',$cicilan)->get();
         return response()->json($donasi,200);
     }
     public function donasiOutstandingByDonaturId($donaturid){

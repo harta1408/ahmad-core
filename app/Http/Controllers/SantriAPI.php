@@ -11,8 +11,12 @@ use App\Models\Materi;
 use App\Models\KirimProduk;
 use App\Models\Bimbingan;
 use App\Models\BimbinganMateri;
+use App\Models\Lembaga;
 use App\Http\Controllers\ReferralAPI;
 use App\Http\Controllers\Service\MessageService;
+use GeniusTS\HijriDate\Date;
+use GeniusTS\HijriDate\Hijri;
+use GeniusTS\HijriDate\Translations\Indonesian;
 use Config;
 use Validator;
 
@@ -305,6 +309,13 @@ class SantriAPI extends Controller
         };
         $donaturnama=Donatur::whereHas('santri',$santridonatur)->first()->donatur_nama;
 
+        #tanggal hijriah
+        $adjhijr=Lembaga::first()->lembaga_adjust_hijr;
+        Hijri::setDefaultAdjustment($adjhijr);
+        Date::setTranslation(new Indonesian);
+        $today = Date::today();
+        $hijriah=$today->format('d F o');
+
         $dashsantri=['santri'=> $santri,
                      'bimbingan_hari_ini' => date("Y-m-d"),
                      'bimbingan_mulai' => $bimbingan->bimbingan_mulai,
@@ -314,11 +325,63 @@ class SantriAPI extends Controller
                      'santri_sisa_bulan'=>$sisabulan,
                      'santri_min_referral' => $santri->santri_min_referral,
                      'santri_max_referral' => '7',
+                     'santri_hijriah' => $hijriah,
                      'pendamping' => $pendampingnama,
                      'donatur'=>$donaturnama];
                      
 
         return response()->json($dashsantri,200);
+    }
+    public function santriDashboardById($santriid){
+        $jmlmateri=Materi::where('materi_status','1')->count();
+        $bimbingan=Bimbingan::where('santri_id',$santriid)->first();
+        if(!$bimbingan){
+            return response()->json(['status' => 'error', 'message' => 'santri tidak dalam bimbingan', 'code' => 404]);
+        }
+        $bimbinganid=$bimbingan->id;
+
+        $todaydate=date_create(date("Y-m-d"));
+        $bimbinganmulai=date_create($bimbingan->bimbingan_mulai);
+        $bimbinganakhir=date_create($bimbingan->bimbingan_berakhir);
+
+        $jangkawaktu=date_diff($bimbinganmulai,$bimbinganakhir)->days;;
+        $berjalan=date_diff($todaydate,$bimbinganakhir)->days;
+        $sisabulan=date_diff($todaydate,$bimbinganakhir)->m.' bulan';
+        
+        $materiselesai=BimbinganMateri::where('bimbingan_id',$bimbinganid)->count();
+
+        $progresbelajar=$materiselesai/$jmlmateri;
+        $waktubelajar=1-($berjalan/$jangkawaktu);
+
+        $santri=Santri::where('id',$santriid)->first();
+        $pendampingnama=Pendamping::where('id',$bimbingan->pendamping_id)->first()->pendamping_nama;
+        $santridonatur=function ($query) use ($santriid){
+            $query->where('id',$santriid);
+        };
+        $donaturnama=Donatur::whereHas('santri',$santridonatur)->first()->donatur_nama;
+
+        #tanggal hijriah
+        $adjhijr=Lembaga::first()->lembaga_adjust_hijr;
+        Hijri::setDefaultAdjustment($adjhijr);
+        Date::setTranslation(new Indonesian);
+        $today = Date::today();
+        $hijriah=$today->format('d F o');
+
+        $dashsantri=['santri_id'=> $santriid,
+                     'bimbingan_hari_ini' => date("Y-m-d"),
+                     'bimbingan_mulai' => $bimbingan->bimbingan_mulai,
+                     'bimbingan_akhir' => $bimbingan->bimbingan_berakhir,
+                     'santri_progress_belajar'=>$progresbelajar,
+                     'santri_progress_waktu'=>$waktubelajar,
+                     'santri_sisa_bulan'=>$sisabulan,
+                     'santri_min_referral' => $santri->santri_min_referral,
+                     'santri_max_referral' => '7',
+                     'santri_hijriah' => $hijriah,
+                     'pendamping' => $pendampingnama,
+                     'donatur'=>$donaturnama];
+                     
+
+        return $dashsantri;
     }
 
     public function santriKode()

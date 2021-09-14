@@ -129,7 +129,8 @@ class DonasiService extends Controller
         return $bayartotal;
     }
 
-
+    #pengingat berdasarkan id donatur, pengingat akan mengembalikan informasi berdasarkan cara bayar donasi
+    #yang dilakukan oleh donatur, jika jenis donasi yang aktif lebih dari satu maka akan dilakukan pengacakan
     public function pengingatDonasi(){
         #mengirimkan pengingat sesuai dengan pilihan pembayaran
         #1 Harian (setiap subuh) 2. Pekanan (setiap jumat)  3. Bulanan (yaumil bidh)
@@ -145,9 +146,19 @@ class DonasiService extends Controller
             if($carabayar!='4'){ //harian, pekanan dan bulanan
                 #jika belum ada, buat tabel pembayaran untuk ciclan tsb
                 $this->bayarBuatTagihanHarian($cicilanid);
-            
+
+                #ambil donasi dengan status 1 dan 2 (masih dalam masa cicilan) dan cara bayar non tunai 
+                #buat jenis pengingat secara acak
+                $donasicarabayar=Donasi::where([['donatur_id',$donaturid],['donasi_cara_bayar','!=','4']])->whereIn('donasi_status',['1','2'])
+                    ->groupBy('donasi_cara_bayar')->pluck('donasi_cara_bayar');
+                if(count($donasicarabayar)){
+                    $arraydcb=json_decode($donasicarabayar);
+                    $posisi=array_rand($arraydcb,1);
+                    $pengingatjenis=$arraydcb[$posisi];
+                }
+                
                 #ambil pengingat harian dengan entitas donatur
-                $pengingat=Pengingat::where([['pengingat_jenis',$carabayar],['pengingat_entitas','1']])->first();
+                $pengingat=Pengingat::where([['pengingat_jenis',$pengingatjenis],['pengingat_entitas','1']])->first();
                 if(!$pengingat){
                     echo("Tabel Pengingat dengan ketentuan donasi yang diminta tidak ditemukan\n");
                     return;
