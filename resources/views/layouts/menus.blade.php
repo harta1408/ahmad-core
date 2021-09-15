@@ -506,7 +506,7 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="{{route('pengingat.index')}}" class="nav-link">
+                  <a href="{{route('pengingat.donatur.index')}}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Donatur</p>
                   </a>

@@ -82,7 +82,6 @@ class PengingatAPI extends Controller
     }
 
     #pengingat untuk keperluan santri
-    
     public function pengingatSantriById($santriid){
         $santri=function ($query) use ($santriid){
             $query->where([['id',$santriid],['pengingat_santri_status','1']]);

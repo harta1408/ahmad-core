@@ -71,6 +71,15 @@ $(function() {
                             message: "Nomor Soal harus di isi",
                 }],
             },{
+                dataField: "pengingat_index",
+                label:{
+                    text:"No Urut",
+                },
+                validationRules: [{
+                    type: "required",
+                    message: "Masukan Pengingat",
+                }],
+            },{
                 dataField: "pengingat_lokasi_video",
                 label:{
                     text:"Lokasi Link Video",

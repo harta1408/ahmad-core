@@ -171,10 +171,11 @@ class PengingatController extends Controller
             return response()->json(['status' => 'error', 'message' => $validator->messages()->first(), 'code' => 404]);
         }
         $res = Pengingat::where('id', $id)->update($request->except(['id','_token','_method']));
-        $entitas=$request->get('pengingat_entitas');
         if (!$res) {
             return response()->json(['status' => 'error', 'message' => 'System Error', 'code' => 404]);
         }
+
+        $entitas=$request->get('pengingat_entitas');
         if($entitas=='1'){
             return redirect()->action('PengingatController@pengingatDonaturIndex');
         }else{

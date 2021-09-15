@@ -72,12 +72,11 @@ class BimbinganService extends Controller
         foreach ($santri as $key => $sntr) {
             $santriid=$sntr->id;
             $pengingat=Pengingat::whereIn('pengingat_jenis',['4','5','6'])->get();
-            $index=1;
             // echo("ID ".$index."\n");
             foreach ($pengingat as $key => $pngt) {
                 $pengingatid=$pngt->id;
+                $index=$pngt->pengingat_index;
                 $this->simpanPengingatBuatSantri($santriid,$pengingatid,$index);
-                $index++;
             }
         }
     }
@@ -106,76 +105,86 @@ class BimbinganService extends Controller
         #senin atau kamis berupa konten video dan jumat untuk konten image
         #dikirimkan sebanyak setiap bulan (10 kali) selama masa bimbingan
 
-
-        #update status sebelumnya menjadi 2=sudah selesai
-
-
-        // $kemarin=date("Y-m-d",strtotime("yesterday"));
-        // $index=DB::table('pengingat_santri')->select('pengingat_santri_index')->where([['pengingat_id',$pengingatid],['santri_id',$santriid]])->max('pengingat_santri_index');
-
-        // echo($kemarin."\n");
-        // return;
-
         $seninkamisjumat=date('w');
 
         #ambil santri dengan status dalam bimbingan
         $santri=Santri::where('santri_status','6')->get();
         foreach ($santri as $key => $sntr) {
             $santriid=$sntr->id;
-            #ambil index pengingat santri terkecil dengan status 0=tidak aktif
-            $pengingatid=DB::table('pengingat_santri')
-                ->join('pengingat','pengingat_santri.pengingat_id','=','pengingat.id')
-                ->select('pengingat_id','pengingat_santri_index')
-                ->where([['pengingat_santri_status','0'],['santri_id',$santriid]])
-                ->wherein('pengingat.pengingat_status',['4','5','6'])
-                ->orderby('pengingat_santri_index','asc')->first();
+            #ambil index pengingat untuk pengingat jenis 4=senin dan 5=kamis 
+            #kemudian update santri dengan status pengingat 0
+            if($seninkamisjumat=='1' || $seninkamisjumat=='4'){
+                $pengingat=Pengingat::whereIn('pengingat_jenis',['4','5'])->get();
+                foreach ($pengingat as $key => $value) {
+                    $pengingatindex=$value->pengingat_index;
+                    $pengingatid=$value->id;                    
+                    $status=DB::table('pengingat_santri')->select('pengingat_santri_status')
+                        ->where([['pengingat_id',$pengingatid],['santri_id',$santriid],['pengingat_santri_index',$pengingatindex]])
+                        ->first()->pengingat_santri_status;
+                    if($status=='0'){
+                        echo($status."\n");
+                        $pengingat=Pengingat::where('id',$pengingatid)->first();
+                        $pengingat->santri()->updateExistingPivot($santriid, [
+                            'pengingat_santri_status'=>'1',
+                        ]);
+                        #jika ketemu langsung keluar dari loop pengingat
+                        break;
+                    }
 
-            echo(json_encode($pengingatid)."\n");
-            // return;
-
-            // #update status menjadi 1
-            // DB::table('pengingat_santri')
-            //     ->where([['pengingat_id',$pengingatid],['santri_id',$santriid]])
-            //     ->update(['pengingat_santri_status'=>'1']);
-
-
-       
-
-
-        }
-return;
-        
-        foreach ($santri as $key => $sntr) {
-            $santriid=$sntr->id;
-
-            if($seninkamis=='1' || $seninkamis=='4'){
-                #ambil pengingat senin (4) atau kamis (5) dengan entitas santri
-                #dengan status yang belum aktif, untuk di ubah menhadi aktif
-                $pengingat=Pengingat::where([['pengingat_jenis',$seninkamis],['pengingat_entitas','2']])->first();
-                $pengingatid=$pengingat->id;
-
-                #hitung index
-                $index=DB::table('pengingat_santri')->select('pengingat_santri_index')->where([['pengingat_id',$pengingatid],['santri_id',$santriid]])->max('pengingat_santri_index');
-                if(!$index){
-                    $index=1;
-                }else{
-                    $index=$index+1;
                 }
-                #update status jika ada pengingat sebelumnya yang masih aktif
-                $santri = Santri::find($santriid);
-                $santri->pengingat()->updateExistingPivot($pengingatid, [
-                    'pengingat_santri_status' => '0',
-                ]);
-                #simpan pengingat pada santri  
-                $pengingat->santri()->attach(['pengingat_id'=>$pengingatid],
-                [
-                    'santri_id'=>$santriid, 
-                    'pengingat_santri_index'=>$index,
-                    'pengingat_santri_respon'=>'0',
-                    'pengingat_santri_status'=>'0', //aktif
-                ]);   
+            }
+            #ambil index pengingat untuk pengingat jenis 6=jumat
+            if($seninkamisjumat=='5'){
+                $pengingat=Pengingat::where('pengingat_jenis','6')->get();
+                foreach ($pengingat as $key => $value) {
+                    $pengingatindex=$value->pengingat_index;
+                    $pengingatid=$value->id;
+                    $status=DB::table('pengingat_santri')->select('pengingat_santri_status')
+                        ->where([['pengingat_id',$pengingatid],['santri_id',$santriid],['pengingat_santri_index',$pengingatindex]])
+                        ->first()->pengingat_santri_status;
+                    if($status=='0'){
+                        echo($status."\n");
+                        $pengingat=Pengingat::where('id',$pengingatid)->first();
+                        $pengingat->santri()->updateExistingPivot($santriid, [
+                            'pengingat_santri_status'=>'1',
+                        ]);
+                        #jika ketemu langsung keluar dari loop pengingat
+                        break;
+                    }
+
+                }
             }
         }
     }
  
+    public function pengingatSembunyikan(){
+        #menyembunyikan pengingat yang telah lewat hari
+        #cari pengingat santri berdasarkan tanggal kemarin
+        $kemarin=date('Y-m-d',strtotime("yesterday"));
+        // $kemarin=date('Y-m-d'); untuk test code
+
+        $kemarinawal=$kemarin.' 00:00:00';
+        $kemarinakhir=$kemarin.' 23:59:59';
+
+        #ambil santri dengan status dalam bimbingan
+        $santri=Santri::where('santri_status','6')->get();
+        foreach ($santri as $key => $sntr) {
+            $santriid=$sntr->id;
+            $pengingatsantri=DB::table('pengingat_santri')->select('pengingat_id','pengingat_santri_status')
+                ->where([['santri_id',$santriid],['pengingat_santri_status','1']])
+                ->whereBetween('updated_at',[$kemarinawal,$kemarinakhir])
+                ->first();
+            if(!$pengingatsantri){
+                continue;
+            }
+            $pengingatid=$pengingatsantri->pengingat_id;
+            $status=$pengingatsantri->pengingat_santri_status;
+
+            echo($status."\n");
+            $pengingat=Pengingat::where('id',$pengingatid)->first();
+            $pengingat->santri()->updateExistingPivot($santriid, [
+                'pengingat_santri_status'=>'2',
+            ]);
+        }
+    }
 }
