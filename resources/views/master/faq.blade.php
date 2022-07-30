@@ -65,6 +65,7 @@ $(function(){
                     return false;
                 }
                 });
+                $("#gridData").dxDataGrid("instance").refresh();
                 return false;
         },
         update: function(key, value) {

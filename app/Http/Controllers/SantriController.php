@@ -25,6 +25,10 @@ class SantriController extends Controller
     {
         $santri=Santri::with('user')->where('santri_status','!=','0')->get();
         foreach ($santri as $key => $snt) {
+            if($snt->user==null){
+                $snt->santri_status="Belum Ada Email (User Login)";
+                continue;
+            }
             if($snt->user['email_verified_at']==null){
                 $snt->santri_status="Belum Konfirmasi Email";
             }else{
@@ -79,9 +83,9 @@ class SantriController extends Controller
             'santri_nama' => ['required','string','max:30'],
             'santri_telepon' => 'required|string',
             'santri_alamat'=>'required|string',
-            'santri_provinsi_id'=>'required|string',
-            'santri_kota_id'=>'required|string',
-            'santri_kecamatan_id'=>'required|string',
+            // 'santri_provinsi_id'=>'required|string',
+            // 'santri_kota_id'=>'required|string',
+            // 'santri_kecamatan_id'=>'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -242,7 +246,10 @@ class SantriController extends Controller
     public function santriRenewIndex(){
         $santri=Santri::with('user')->where('santri_status','!=','0')->get();
         foreach ($santri as $key => $snt) {
-            if($snt->user['email_verified_at']==null){
+            if($snt->user==null){
+                $snt->santri_status="Belum Ada User";
+                continue;
+            }else if($snt->user['email_verified_at']==null){
                 $snt->santri_status="Belum Konfirmasi Email";
             }else{
                 switch ($snt->santri_status) {

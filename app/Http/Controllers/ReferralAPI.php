@@ -21,13 +21,12 @@ class ReferralAPI extends Controller
         $this->middleware('cors');
 	}
     public function referralSendLink(Request $request){
-        $urldonatur = Config::get('ahmad.referral.live.donatur');
-        $urlsantri = Config::get('ahmad.referral.live.santri');
-
+        $urldonatur = Config::get('ahmad.referral.production.donatur');
+        $urlsantri = Config::get('ahmad.referral.production.santri');
 
         $validator = Validator::make($request->all(), [
             'referral_entitas_kode' => 'required|string|',
-            'referral_telepon' => 'required|string|',
+            // 'referral_telepon' => 'required|string|',
             'referral_entitas_tujuan' => 'required|string|',
         ]);
 

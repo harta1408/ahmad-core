@@ -58,6 +58,21 @@ $(function() {
                             type: "required",
                             message: "Pilih Jenis hadist"}]
             },{
+                dataField: "hadist_status",
+                label:{
+                    text:"Jenis",
+                },
+                editorType: "dxSelectBox",
+                editorOptions: {
+                    items: [{"hadist_status":"1","hadist_status_desc":"AKTIF"}, 
+                            {"hadist_status":"0","hadist_status_desc":"TIDAK AKTIF"}],
+                    displayExpr: "hadist_status_desc",
+                    valueExpr: "hadist_status",
+                },
+                validationRules: [{
+                            type: "required",
+                            message: "Pilih Jenis hadist"}]
+            },{
                 dataField: "hadist_judul",
                 label:{
                     text:"Judul Hadist",

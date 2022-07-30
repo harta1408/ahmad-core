@@ -26,20 +26,20 @@ class MessageService extends Controller
         $tipe=User::where('email',$useremail)->first()->tipe;
         $url="";
         if($tipe=='1'){
-            $url=Config::get('ahmad.register.live.donatur');
+            $url=Config::get('ahmad.register.production.donatur');
         }
         if($tipe=='2'){
-            $url=Config::get('ahmad.register.live.santri');
+            $url=Config::get('ahmad.register.production.santri');
         }
         if($tipe=='3'){
-            $url=Config::get('ahmad.register.live.pendamping');
+            $url=Config::get('ahmad.register.production.pendamping');
         }
         $url=$url.$hashcode;
         $data = array('name'=>$username,'url'=>$url);
         Mail::send('email/register', $data, function($message) use($useremail, $username) {
            $message->to($useremail, $username)->subject
-              ('no-reply : Pendaftaran AHMaD Project');
-           $message->from('noreply@ahmadproject.org','AHMaD Project');
+              ('no-reply : Pendaftaran Gerakan Ahsoha');
+           $message->from('noreply@ahsoha.org','Gerakan Ahsoha');
         });
         // echo "HTML Email Sent. Check your inbox.";
         return;
@@ -50,13 +50,13 @@ class MessageService extends Controller
 
         // kirim email registrasi
         $tipe=User::where('email',$useremail)->first()->tipe;
-        $url="https://ahmadproject.org/public/dashboard/pendamping/pembaharuan/index";
+        $url="https://ahsoha.id/public/dashboard/pendamping/pembaharuan/index";
 
         $data = array('nama'=>$username,'url'=>$url);
         Mail::send('email/registerpendamping', $data, function($message) use($useremail, $username) {
            $message->to($useremail, $username)->subject
-              ('no-reply : Pengajuan Pendamping AHMaD Project');
-           $message->from('noreply@ahmadproject.org','AHMaD Project');
+              ('no-reply : Pengajuan Pendamping Gerakan Ahsoha');
+           $message->from('noreply@ahsoha.id','Gerakan Ahsoha');
         });
         // echo "HTML Email Sent. Check your inbox.";
         return;
@@ -66,8 +66,8 @@ class MessageService extends Controller
         $data = array('name'=>$username,'email'=>$useremail,'newpass'=>$newpass);
         Mail::send('email/resetpassword', $data, function($message) use($useremail, $username) {
            $message->to($useremail, $username)->subject
-              ('no-reply : Reset Password AHMaD Project');
-           $message->from('noreply@ahmadproject.org','AHMaD Project');
+              ('no-reply : Reset Password Gerakan Ahsoha');
+           $message->from('noreply@ahsoha.id','Gerakan Ahsoha');
         });
         return;
     }
@@ -87,7 +87,7 @@ class MessageService extends Controller
             $data = array('name'=>$username,'filename'=>$filename);
             Mail::send('email/cicilandonasi', $data, function($message) use($useremail, $username,$pdf,$filename) {
                $message->to($useremail, $username)->subject('no-reply : Cicilan Donasi');
-               $message->from('noreply@ahmadproject.org','AHMaD Project');
+               $message->from('noreply@ahsoha.id','Gerakan Ahsoha');
                $message->attachData($pdf->stream(), $filename);
             });
         }catch(JWTException $exception){
@@ -119,7 +119,7 @@ class MessageService extends Controller
             $data = array('name'=>$username,'filename'=>$filename);
             Mail::send('email/invoice', $data, function($message) use($useremail, $username,$pdf,$filename) {
                $message->to($useremail, $username)->subject('no-reply : Invoice Donasi');
-               $message->from('noreply@ahmadproject.org','AHMaD Project');
+               $message->from('noreply@ahsoha.id','Gerakan Ahsoha');
                $message->attachData($pdf->stream(), $filename);
             });
         }catch(JWTException $exception){
@@ -136,7 +136,7 @@ class MessageService extends Controller
         return response()->json(compact('this'));
     }
     public function simpanNotifikasiSelamatBergabung($pengirim,$tujuan){
-        $isi="Selamat datang, selamat bergabung di AHMaD Project sebagai ";
+        $isi="Selamat datang, selamat bergabung di Gerakan Ahsoha sebagai ";
         $tipe=User::where('id',$tujuan)->first()->tipe;
         if($tipe=='1'){
             $isi=$isi."Donatur";

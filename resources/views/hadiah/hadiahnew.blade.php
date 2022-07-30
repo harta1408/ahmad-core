@@ -1,11 +1,10 @@
 @extends('layouts.menus')
 @section('content')
-<div class="long-title"><h3>Buat Hadiah Baru</h3></div>
-{!! Form::open(['id' => 'frm','route' => 'hadiah.store','class' => 'form-horizontal']) !!}
-<div class="second-group">
-    <div id="form"></div>
-</div>
-{!! Form::close()!!}
+<form id="form-container" class="first-group">
+    @csrf
+    <div id="toolbar"></div>
+    <div id="form" style="margin-top: 10px;"></div>
+</form>
 @endsection
 
 @section('script')
@@ -32,15 +31,90 @@ $(function() {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       }
   });
-
-  $("#form").dxForm({
-      colCount: 1,
-      showColonAfterLabel: true,
-      showValidationSummary: true,
-      items:[
-      {
-        itemType:"group",
-        colCount:1,
+  $("#toolbar").dxToolbar({
+    items: [{
+        location: 'center',
+        locateInMenu: 'never',
+        template: function() {
+            return $("<div class='long-title'><h3>Buat Hadiah Baru</h3></div>");
+        }
+        },{
+            location: 'after',
+            widget: 'dxButton',
+            locateInMenu: 'auto',
+            options: {
+                icon: "save",
+                hint: 'Simpan Penerimaan', 
+                onClick: function(e) {       
+                    var form =$('#form-container').serializeObject();
+                    var data=[];
+                    $.ajax({
+                        type: "POST",
+                        url: "{{route('hadiah.store')}}",
+                        data: JSON.stringify({form:form}),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (data) {
+                            if(data.code != 200) {
+                                swal({
+                                    title: "Validation Error",
+                                    icon: data.status,
+                                    text: data.message,
+                                    value: true,
+                                    visible: true,
+                                    className: "",
+                                    closeModal: true,
+                                });
+                            }else{
+                                swal({
+                                    title: "OK",
+                                    icon: data.status,
+                                    text: data.message,
+                                    value: true,
+                                    visible: true,
+                                    className: "",
+                                    closeModal: true,
+                                })
+                                .then((value) => {
+                                    window.location = '{{route('hadiah.index')}}';
+                                });
+                            }
+                            return false;
+                        },    
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            swal({
+                                title: "Validation Error",
+                                icon: data.status,
+                                text: data.message,
+                                value: true,
+                                visible: true,
+                                className: "",
+                                closeModal: true,
+                            });
+                            return false;
+                        }            
+                    });
+                }
+            }
+        },{
+            location: 'after',
+            widget: 'dxButton',
+            locateInMenu: 'auto',
+            options: {
+                icon: "close",
+                hint: 'Keluar Tanpa Simpan',
+                useSubmitBehavior: true,
+                onClick: function(e) {      
+                    window.location = '{{route('hadiah.index')}}';
+                }
+            }
+        }]
+    });
+ 
+    $("#form").dxForm({
+        colCount: 1,
+        showColonAfterLabel: true,
+        showValidationSummary: true,
         items: [{
                 dataField: "hadiah_jenis",
                 label:{
@@ -58,7 +132,7 @@ $(function() {
                             type: "required",
                             message: "Pilih Jenis Berita"}]
             },{
-                dataField: "hadiah_judul",
+                dataField: "hadiah_nama",
                 label:{
                     text:"Nama Hadiah",
                 }, 
@@ -71,7 +145,7 @@ $(function() {
             },{
                 dataField: "hadiah_nilai",
                 label:{
-                    text:"Nilai Refferal (Poin)",
+                    text:"Nilai Hadiah (Poin)",
                 },
                 editorType: "dxNumberBox",
                 editorOptions: { 
@@ -86,7 +160,7 @@ $(function() {
             },{
                 dataField: "hadiah_nominal",
                 label:{
-                    text:"Nilai Hadiah (Rp.)",
+                    text:"Nominal Hadiah (Rp.)",
                 },
                 editorType: "dxNumberBox",
                 editorOptions: { 
@@ -106,15 +180,7 @@ $(function() {
                 }, 
                 editorOptions:{
                 },
-            },],
-      },{
-          itemType: "button",
-          horizontalAlignment: "left",
-          buttonOptions: {
-              text: "Simpan",
-              type: "success",
-              useSubmitBehavior: true
-          }
+
       },]
   }).dxForm("instance"); 
 

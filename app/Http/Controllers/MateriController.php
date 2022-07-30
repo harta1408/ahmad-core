@@ -107,7 +107,7 @@ class MateriController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $res = materi::where('id', $id)->update($request->except(['id']));
+        $res = Materi::where('id', $id)->update($request->except(['id']));
 
         if (!$res) {
             return response()->json(['status' => 'error', 'message' => 'System Error', 'code' => 404]);
@@ -124,6 +124,8 @@ class MateriController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Materi::where('id',$id)->update(['materi_status'=>'0']);
+        return response()->json(['status' => 'success', 'message' => 'Data successfully deleted', 'code' => 200]);
+
     }
 }

@@ -5,8 +5,8 @@
     <div class="row no-gutter">
         <!-- The image half -->
         <div class="col-md-6 d-none d-md-flex bg-image">
-            <img src="https://ahmadproject.org/assets/images/pexels-alena-darmel-8164742-1.jpg" class="media-object" >
-            <img src="https://ahmadproject.org/assets/images/logo-white.svg" style="position: absolute;margin-top: 500px;margin-bottom: 131px;margin-right: 185px;margin-left: 175px;" />
+            <img src="https://ahsoha.id/assets/images/pexels-alena-darmel-8164742-1.jpg" class="media-object" >
+            <img src="https://ahsoha.id/assets/images/logo-white.svg" style="position: absolute;margin-top: 500px;margin-bottom: 131px;margin-right: 185px;margin-left: 175px;" />
         </div>
 
         <!-- The content half -->
@@ -18,7 +18,7 @@
                     <div class="row">
                         <div class="col-lg-10 col-xl-7 mx-auto">
                             <h3 class="display-4">{{ __('Login') }}</h3>
-                            <p class="text-muted mb-4">AHMaD Project Dashboard Manager</p>
+                            <p class="text-muted mb-4">AHSOHA Dashboard Manager</p>
                             <form method="POST" action="{{ route('login') }}">
                                 @csrf
                                 <div class="form-group mb-3">

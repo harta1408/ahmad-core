@@ -37,8 +37,8 @@
     <h3>AHMaD Support</h3>
     <div >
         <p>
-        Terdapat Pengajuan sebagai Pendamping atas nama {!!$nama!!}, 
-        Silakan ditindaklanjuti persetujuan/ penolakan melalui menu otorisasi pada Dashboard AHMaD Project
+        Terdapat Pengajuan sebagai Penggerak atas nama {!!$nama!!}, 
+        Silakan ditindaklanjuti persetujuan/ penolakan melalui menu otorisasi pada Dashboard Gerakan AHSOHA
         </p>
     </div>
     <div class="text-center">        
@@ -56,7 +56,7 @@
     </div>
     <br><br>
     <p>
-    <a href="https://ahmadproject.org">AHMaD Project</a>
+    <a href="https://ahsoha.id">Gerakan AHSOHA</a>
     </p>
 </div>
 </body>

@@ -26,7 +26,7 @@ class UserController extends Controller
     }
     public function userMain(Request $request){
         $stat=$request->userstate;
-        $email=$request->email;
+        $id=$request->userid;
 
         // $stores=Stores::where('store_state','!=','0')->get();
         // $role=Role::where('name','!=','superadmin')->get();
@@ -35,12 +35,12 @@ class UserController extends Controller
             return view('securities/usernew');
         }
         if($stat=="UPDATES"){
-            $user=User::with('stores')->where('email',$email)->first(); 
-            return view('tools/superadmin/userupdate',compact('user','stores'));
+            $user=User::where('id',$id)->first(); 
+            return view('securities/userupdate',compact('user'));
         }
         if($stat=="RESET"){
-            $user=User::with('stores')->where('email',$email)->first(); 
-            return view('tools/superadmin/userpwdreset',compact("user"));
+            $user=User::where('id',$id)->first(); 
+            return view('securities/userpwdreset',compact("user"));
         }
     }
     /**
@@ -75,8 +75,7 @@ class UserController extends Controller
         //spatie
         $tipe=$request->input('form')['tipe'];
         $role=Role::findById($tipe);
-        
-
+    
         try{
             $user=new User;
             $user->assignRole($role);
@@ -127,7 +126,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
     }
 
     /**
@@ -140,9 +139,22 @@ class UserController extends Controller
     {
         //
     }
+    
+    public function userPasswordReset(Request $request,$id){
+        $password=Hash::make($request->input('form')['password']);
 
+        User::where('id', $id)->update(['password'=>$password]);
+
+        // $res = User::where('id', $id)->update($request->input('form')->except(['id','_method']));
+
+        // if (!$res) {
+        //     return response()->json(['status' => 'error', 'message' => 'System Error', 'code' => 404]);
+        // }
+        return response()->json(['status' => 'success', 'message' => 'Data Berhasil di Perbaharui', 'code' => 200]);
+    }
     public function userApproveIndex(){
-        return view('securities/userapproveindex',compact('user'));
+        // $user=User::where('approve','0')->get();
+        return view('securities/userapproveindex');
     }
     public function userApprovalLoad(){
         $user=User::where('approve','0')->get();
@@ -159,5 +171,23 @@ class UserController extends Controller
                 'approve' => '1',
             ]);
         }
+    }
+
+    #------------Administrasi pengaturan pengguna
+    public function admUserIndex(){
+        $user=User::where('tipe','!=','6')->get();
+        return view("securities/adm/userindex",compact('user'));
+    }
+    public function admUserMain(Request $request){
+        $status=$request->userstate;
+        $id=$request->userid;
+        $user=User::where('id',$id)->first(); 
+        return view('securities/adm/userpwdreset',compact("user"));
+    }
+
+    public function admUserResetPassword(Request $request,$id){
+        $password=Hash::make($request->input('form')['password']);
+        User::where('id', $id)->update(['password'=>$password]);
+        return response()->json(['status' => 'success', 'message' => 'Data Berhasil di Perbaharui', 'code' => 200]);
     }
 }

@@ -12,7 +12,7 @@ use App\Models\Lembaga;
 use App\Models\DonaturSantri;
 use App\Models\Bimbingan;
 use App\Models\User;
-use App\Http\Controllers\bimbinganservler;
+use App\Http\Controllers\Service\BimbinganService;
 use App\Http\Controllers\Service\MessageService;
 use App\Http\Controllers\Service\KirimProdukService;
 use Validator;

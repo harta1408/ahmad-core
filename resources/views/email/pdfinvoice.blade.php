@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Invoice AHMaD</title>
+    <title>Invoice AHSOHA</title>
     <link rel="stylesheet" href="{{public_path('css/bootstrap.min.css') }}" type="text/css">
     {{-- <link rel="stylesheet" type="text/css" href="{{ base_path().'/public/css/bootstrap.min.css' }}"> --}}
 

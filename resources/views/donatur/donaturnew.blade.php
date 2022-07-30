@@ -1,13 +1,10 @@
 @extends('layouts.menus')
-@section('content')
-<div class="long-title"><h3>Daftarkan Donatur Baru</h3></div>
-{!! Form::open(['id' => 'frm','route' => 'donatur.store','class' => 'form-horizontal']) !!}
-  <div id="form"></div>
-{!! Form::close()!!}
-
-<div class="second-group">
-    
-</div>
+@section('content') 
+<form id="form-container" class="first-group">
+  @csrf
+  <div id="toolbar"></div>
+  <div id="form" style="margin-top: 10px;"></div>
+</form>
 
 @endsection
 
@@ -36,6 +33,87 @@ $(function() {
       }
   });
 
+  $("#toolbar").dxToolbar({
+    items: [{
+        location: 'center',
+        locateInMenu: 'never',
+        template: function() {
+            return $("<div class='long-title'><h3>Daftarkan Agniya Baru</h3></div>");
+        }
+        },{
+            location: 'after',
+            widget: 'dxButton',
+            locateInMenu: 'auto',
+            options: {
+                icon: "save",
+                hint: 'Simpan Penerimaan', 
+                onClick: function(e) {       
+                    var form =$('#form-container').serializeObject();
+                    var data=[];
+                    $.ajax({
+                        type: "POST",
+                        url: "{{route('donatur.store')}}",
+                        data: JSON.stringify({form:form}),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (data) {
+                            if(data.code != 200) {
+                                swal({
+                                    title: "Validation Error",
+                                    icon: data.status,
+                                    text: data.message,
+                                    value: true,
+                                    visible: true,
+                                    className: "",
+                                    closeModal: true,
+                                });
+                            }else{
+                                swal({
+                                    title: "OK",
+                                    icon: data.status,
+                                    text: data.message,
+                                    value: true,
+                                    visible: true,
+                                    className: "",
+                                    closeModal: true,
+                                })
+                                .then((value) => {
+                                    window.location = '{{route('donatur.index')}}';
+                                });
+                            }
+                            return false;
+                        },    
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            swal({
+                                title: "Validation Error",
+                                icon: data.status,
+                                text: data.message,
+                                value: true,
+                                visible: true,
+                                className: "",
+                                closeModal: true,
+                            });
+                            return false;
+                        }            
+                    });
+                }
+            }
+        },{
+            location: 'after',
+            widget: 'dxButton',
+            locateInMenu: 'auto',
+            options: {
+                icon: "close",
+                hint: 'Keluar Tanpa Simpan',
+                onClick: function(e) {      
+                    window.location = '{{route('home')}}';
+                }
+            }
+        }]
+    });
+
+
+
   var provinsi;
   var kota;
   var kecamatan;
@@ -50,7 +128,7 @@ $(function() {
         items: [{
           dataField: "donatur_kode",
           label:{
-            text:"Kode Donatur",
+            text:"Kode Agniya",
           },
           editorOptions: { 
               value : "Penomoran Otomatis",
@@ -71,7 +149,7 @@ $(function() {
         },{
           dataField: "donatur_nama",
           label:{
-            text:"Nama Donatur",
+            text:"Nama Agniya",
           },
           validationRules: [{
               type: "required",
@@ -210,7 +288,7 @@ $(function() {
                 onValueChanged : function (e){
                     provinsi=e.value;
                     var form=$('#form').dxForm('instance')
-                    var itemKota=form.getEditor('donatur_kota');
+                    var itemKota=form.getEditor('donatur_kota_id');
                     itemKota.getDataSource().load();
                 }
             },
@@ -237,7 +315,7 @@ $(function() {
               onValueChanged : function (e){
                   kota=e.value;
                   var form=$('#form').dxForm('instance');
-                  var itemKecamatan=form.getEditor('donatur_kecamatan');
+                  var itemKecamatan=form.getEditor('donatur_kecamatan_id');
                   itemKecamatan.getDataSource().load();
               }
             }
@@ -262,14 +340,6 @@ $(function() {
               searchEnabled: true,
             }
         },]
-      },{
-          itemType: "button",
-          horizontalAlignment: "left",
-          buttonOptions: {
-              text: "Simpan",
-              type: "success",
-              useSubmitBehavior: true
-          }
       },]
   }).dxForm("instance"); 
 

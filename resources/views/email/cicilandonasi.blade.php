@@ -38,11 +38,11 @@
  <h1>{!!$name!!}</h1>
  {{-- <h1>Wawan Hartawan</h1> --}}
 <div class="teks">
-    Terimakasih telah melakukan donasi pada program AHMaD Project, berikut kami lampirkan tabel cicilan {!!$filename!!} 
+    Terimakasih telah melakukan donasi pada program Gerakan AHSOHA, berikut kami lampirkan tabel cicilan {!!$filename!!} 
 </div>
 
 <p>
-Power By <a href="http://ahmadproject.org">AHMaD Project</a>
+Power By <a href="http://ahsoha.id">Gerakan AHSOHA</a>
 </body>
 </html>
 

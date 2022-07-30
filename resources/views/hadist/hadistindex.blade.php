@@ -48,6 +48,10 @@ $(function(){
             },{
               dataField: "hadist_isi",
               caption: "Isi",
+            },{
+              dataField: "hadist_status",
+              width:80,
+              caption: "Status",
             },
             
         ],

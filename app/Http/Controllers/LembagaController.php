@@ -85,6 +85,7 @@ class LembagaController extends Controller
      */
     public function update(Request $request, $id)
     {
+        
         $res = Lembaga::where('lembaga_id', $id)->update($request->except(['lembaga_id','_token','_method']));
 
         if (!$res) {

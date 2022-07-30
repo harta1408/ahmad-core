@@ -20,7 +20,7 @@ class Berita extends Model
     protected $fillable=[
         'berita_judul', //judul berita
         'berita_isi', //isi berita
-        'hadist_isi_singkat',
+        'berita_isi_singkat',
         'berita_jenis', //1=berita 2-kampanye 3=broadcast
         'berita_entitas', //0=all 1=donatur 2=santri 3=pendamping 
         'berita_index', //nomor urut berita, khusus untuk kampanye

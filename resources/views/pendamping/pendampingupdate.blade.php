@@ -235,7 +235,7 @@ $(function() {
                 onValueChanged : function (e){
                     provinsi=e.value;
                     var form=$('#form').dxForm('instance')
-                    var itemKota=form.getEditor('pendamping_kota');
+                    var itemKota=form.getEditor('pendamping_kota_id');
                     itemKota.getDataSource().load();
                 }
             },
@@ -264,7 +264,7 @@ $(function() {
               onValueChanged : function (e){
                   kota=e.value;
                   var form=$('#form').dxForm('instance');
-                  var itemKecamatan=form.getEditor('pendamping_kecamatan');
+                  var itemKecamatan=form.getEditor('pendamping_kecamatan_id');
                   itemKecamatan.getDataSource().load();
               }
             }

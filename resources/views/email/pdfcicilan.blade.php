@@ -25,7 +25,7 @@
                                 <td>: {{date('d-m-Y',strtotime($donasi->donasi_tanggal))}}</td>
                             </tr>
                             <tr>
-                                <td>Donatur</td>
+                                <td>Agniya</td>
                                 <td>: {!!$donasi->donatur->donatur_nama!!}</td>
                                 <td>Berakhir</td>
                                 <td>: {{date('d-m-Y',strtotime($donasi->donasi_tanggal_akhir))}}</td>

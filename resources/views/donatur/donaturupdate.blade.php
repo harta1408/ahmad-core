@@ -1,6 +1,6 @@
 @extends('layouts.menus')
 @section('content')
-<div class="long-title"><h3>Pembaharuan Donatur</h3></div>
+<div class="long-title"><h3>Pembaharuan Agniya</h3></div>
 {!! Form::open(['id' => 'frm','route' => ['donatur.update',$donatur->id],'method' => 'PUT', 'class' => 'form-horizontal']) !!}
   <div id="form"></div>
 {!! Form::close()!!}
@@ -54,10 +54,10 @@ $(function() {
         items: [{
           dataField: "donatur_kode",
           label:{
-            text:"Kode Donatur",
+            text:"Kode Agniya",
           },
           editorOptions: { 
-              value : "Penomoran Otomatis",
+              // value : "Penomoran Otomatis",
               disabled: true
           }
         },{
@@ -75,7 +75,7 @@ $(function() {
         },{
           dataField: "donatur_nama",
           label:{
-            text:"Nama Donatur",
+            text:"Nama Agniya",
           },
           validationRules: [{
               type: "required",
@@ -214,7 +214,7 @@ $(function() {
                 onValueChanged : function (e){
                     provinsi=e.value;
                     var form=$('#form').dxForm('instance')
-                    var itemKota=form.getEditor('donatur_kota');
+                    var itemKota=form.getEditor('donatur_kota_id');
                     itemKota.getDataSource().load();
                 }
             },
@@ -243,7 +243,7 @@ $(function() {
               onValueChanged : function (e){
                   kota=e.value;
                   var form=$('#form').dxForm('instance');
-                  var itemKecamatan=form.getEditor('donatur_kecamatan');
+                  var itemKecamatan=form.getEditor('donatur_kecamatan_id');
                   itemKecamatan.getDataSource().load();
               }
             }

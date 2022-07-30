@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.menus')
 @section('content')
 <div class="row justify-content-center">
     <div class="col-md-6">
@@ -58,17 +58,17 @@ $(function(){
     validationGroup: "userData",
         items: [{ 
             label: {
-                    text: "User Name [Ponsel]",
+                    text: "Nama Pengguna",
                 },
-                dataField: "username", 
+                dataField: "name", 
                 editorOptions:{
                     readOnly:true,
                 }
             },{       
                 label: {
-                    text: "Toko/ Agen ",
+                    text: "Emai ",
                 },
-                dataField: "stores.store_name", 
+                dataField: "email", 
                 editorOptions:{
                     readOnly:true,
                 },
@@ -118,7 +118,7 @@ $(function(){
         var form =$('#form-container').serializeObject();
         var userid='{!! $user->id!!}';
         $.ajax({
-          url: "{{URL::to('zaida/users/password/reset')}}"+"/"+userid,
+          url: "{{URL::to('superadmin/users/password/reset')}}"+"/"+userid,
           method: "PUT",
           data: JSON.stringify({ form: form }),
           contentType: "application/json; charset=utf-8",

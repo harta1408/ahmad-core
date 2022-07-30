@@ -72,6 +72,14 @@ class BeritaAPI extends Controller
     }
     public function beritaEntitas($entitas){
         $berita=Berita::where([['berita_entitas',$entitas],['berita_status','1']])->get();
+
+        //all entitas
+        if($entitas=='0'){
+            $entitas_array=['1','2','3'];
+            $berita=Berita::whereIn('berita_entitas',$entitas_array)->where('berita_status','1')->get();
+
+        }
+
         return response()->json($berita,200);    
     }
     public function beritaList(){

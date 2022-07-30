@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.menus')
 @section('content')
 <div class="row justify-content-center">
     <div class="col-md-6">
@@ -39,8 +39,7 @@ $(function(){
       return o;
   };
 
-  var user= {!! $user!!};
-  var stores={!!$stores!!};
+  var user= {!! $user!!}; 
 
   var makeAsyncDataSource = function(jsonFile){
       return new DevExpress.data.CustomStore({
@@ -62,7 +61,7 @@ $(function(){
                 label: {
                     text: "User Name [Ponsel]",
                 },
-                dataField: "username", 
+                dataField: "name", 
                 editorOptions:{
                     readOnly:true,
                 }
@@ -70,7 +69,7 @@ $(function(){
                 label: {
                     text: "Toko/ Resto ",
                 },
-                dataField: "stores.store_name", 
+                dataField: "email", 
                 editorOptions:{
                     readOnly:true,
                 }
@@ -83,20 +82,7 @@ $(function(){
                     type: "required",
                     message: "Nama Pengguna harus di isi"
                 },]
-            },{            
-                label: {
-                    text: "Toko/ Resto Baru",
-                },
-                dataField: "storeid",
-                editorType: "dxLookup",
-                editorOptions: {
-                    dataSource: new DevExpress.data.DataSource({ 
-                        store: stores, 
-                        key: "store_id", 
-                    }),
-                    valueExpr: "store_id",
-                    displayExpr: "store_name"
-                }
+
             },{
             itemType: "button",
             horizontalAlignment: "right",

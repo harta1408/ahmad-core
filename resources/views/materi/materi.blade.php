@@ -49,7 +49,7 @@ $(function(){
                             closeModal: true,
                         });
                     }
-                    $("#gridContainer").dxDataGrid("instance").refresh();
+                    $("#gridData").dxDataGrid("instance").refresh();
                     return false;
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
@@ -115,6 +115,52 @@ $(function(){
             });
             return false;
         },
+        remove: function (key) {
+        var kunci= key.id;
+        $.ajax({
+            url: "{{URL::to('dashboard/materi')}}"+"/"+kunci,
+            method: "DELETE",
+            dataType: "json",
+            success: function (data) {
+                if(data.code != 200) {
+                    swal({
+                        title: data.status,
+                        icon: data.status,
+                        text: "Ada Kesalahan pada saat Update",
+                        value: true,
+                        visible: true,
+                        className: "",
+                        closeModal: true,
+                    });
+                }else {
+                    swal({
+                        title: data.status,
+                        icon: data.status,
+                        text: "Data berhasil diperbaharui",
+                        value: true,
+                        visible: true,
+                        className: "",
+                        closeModal: true,
+                    });
+                }
+                $("#gridContainer").dxDataGrid("instance").refresh();
+                return false;
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                swal({
+                    title: "Error",
+                    icon: "error",
+                    text: qXHR.responseText,
+                    value: true,
+                    visible: true,
+                    className: "",
+                    closeModal: true,
+                });
+                return false;
+            }
+        });
+        return false;
+      }  
   });
 
   $("#gridData").dxDataGrid({

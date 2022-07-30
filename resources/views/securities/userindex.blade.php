@@ -4,7 +4,7 @@
     <div class="long-title"><h3>Pengaturan Penggguna</h3></div>
     <div id="toolbar"></div>
     <div id="gridContainer"></div>
-    <input id="txtUserName" type="text" name="username" class="form-control" hidden >
+    <input id="txtUserID" type="text" name="userid" class="form-control" hidden>
     <input id="txtUserState" type="text" name="userstate" class="form-control" hidden>
     {!! Form::close()!!}
 @endsection
@@ -38,20 +38,16 @@ $(function(){
             {
                 dataField: "name",
                 caption: "Nama",
-                hidingPriority: 0,
-            // },{
-            //     dataField: "email",
-            //     caption: "Email",
-            //     hidingPriority: 1,
+                hidingPriority: 0, 
             },{
                 dataField: "email",
                 caption: "Email",
-                hidingPriority: 2,
+                hidingPriority: 1,
             },
         ],
         onSelectionChanged: function (selectedItems) {
             var data = selectedItems.selectedRowsData[0]; 
-            $("#txtUserName").val(data.username);
+            $("#txtUserID").val(data.id);
         }
     });
     $("#toolbar").dxToolbar({
@@ -70,10 +66,10 @@ $(function(){
                   hint: 'Tambahkan Pengguna Baru',
                   useSubmitBehavior: true,
                   onClick: function(e) {      
-                    var txtUserName=document.getElementById("txtUserName").value;
+                    var txtUserID=document.getElementById("txtUserID").value;
                     $("#txtUserState").val("NEW"); //kirim perintah buat baru ke server
-                    if(txtUserName!=""){
-                        $("#txtUserName").val(""); //supaya ke server jadi null
+                    if(txtUserID!=""){
+                        $("#txtUserID").val(""); //supaya ke server jadi null
                     }
                  }
               }
@@ -86,8 +82,8 @@ $(function(){
                   hint: 'Perbaharui ',
                   useSubmitBehavior: true,
                   onClick: function(e) {      
-                    var txtUserName=document.getElementById("txtUserName").value;
-                    if(txtUserName==""){
+                    var txtUserID=document.getElementById("txtUserID").value;
+                    if(txtUserID==""){
                         DevExpress.ui.notify({
                             message: "Silakan User Name (Nomor Ponsel User)",
                             position: {
@@ -110,8 +106,8 @@ $(function(){
                   hint: 'Reset Password ',
                   useSubmitBehavior: true,
                   onClick: function(e) {      
-                    var txtUserName=document.getElementById("txtUserName").value;
-                    if(txtUserName==""){
+                    var txtUserID=document.getElementById("txtUserID").value;
+                    if(txtUserID==""){
                         DevExpress.ui.notify({
                             message: "Silakan Pilih Pengguna",
                             position: {
@@ -134,7 +130,7 @@ $(function(){
                   hint: 'Non Aktifkan Pengguna',
                   useSubmitBehavior: true,
                   onClick: function(e) {      
-                    var txtUserName=document.getElementById("txtUserName").value;
+                    var txtUserID=document.getElementById("txtUserID").value;
                     var txtUserState=document.getElementById("txtUserState").value;
                     swal({
                         title: "Non Aktifkan Pengguna",
@@ -145,7 +141,7 @@ $(function(){
                     });
                     e.preventDefault();
                     return false;
-                    if(txtUserName==""){
+                    if(txtUserID==""){
                         DevExpress.ui.notify({
                             message: "Silakan Pilih Pengguna",
                             position: {

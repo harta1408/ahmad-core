@@ -50,9 +50,10 @@ $(function(){
         dataSource: gridDataSource,
         keyExpr: "id",
         showBorders: true,
-        "export": {
+        export: {
             enabled: true,
             fileName: "santrilist",
+            allowExportSelectedData: true,
         },
         columnChooser: {
             enabled: true

@@ -19,6 +19,8 @@ class KuesionerAPI extends Controller
         $kuesioner->kuesioner_bobot_no=$request->get('kuesioner_bobot_no');
         $kuesioner->kuesioner_status='1';
         $kuesioner->save();
+
+        
         return response()->json($kuesioner,200);
     }
     public function kuesionerUpdate($id, Request $request){
@@ -63,7 +65,7 @@ class KuesionerAPI extends Controller
                     'kuesioner_nilai'=>$nilai,
                 ]);
         }
-        Santri::where('id',$santriid)->update(['santri_status'=>'2']); //update sudah jawab kuesioner
+        Santri::where('id',$santriid)->update(['santri_status'=>'3']); //update sudah jawab kuesioner
         $santri=Santri::with('kuesioner')->where('id',$santriid)->first();
         return response()->json($santri,200);
     }

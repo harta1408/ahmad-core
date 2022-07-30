@@ -42,7 +42,9 @@ class HadistController extends Controller
      */
     public function create()
     {
-        $hadist=Hadist::where('hadist_status','1')->get();
+        // $hadist=Hadist::where('hadist_status','1')->get();
+        $hadist=Hadist::orderBy('id','desc')->get();
+
         foreach ($hadist as $key => $hdst) {
             //deskripsi jenis hadist
             if($hdst->hadist_jenis=='1'){
@@ -50,6 +52,11 @@ class HadistController extends Controller
             }
             if($hdst->hadist_jenis=='2'){
                 $hdst->hadist_jenis="DOA";
+            }
+            if($hdst->hadist_status=='0'){
+                $hdst->hadist_status="Tidak";
+            }else{
+                $hdst->hadist_status="Aktif";
             }
         }
         return $hadist;
@@ -67,7 +74,7 @@ class HadistController extends Controller
             'hadist_judul' => 'required|string',
             'hadist_jenis' => 'required|string', 
             'hadist_isi' => 'required|string', 
-            'hadist_isi_singkat' => 'required|string|max:255',
+            'hadist_isi_singkat' => 'required|string',
         ]);
 
         if ($validator->fails()) {

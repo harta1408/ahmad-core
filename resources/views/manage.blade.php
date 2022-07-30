@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>AHMaD Project</title>
+        <title>AHSOHA</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
@@ -40,7 +40,7 @@
                     <div class="row">
                         <div class="col-lg-10 col-xl-7 mx-auto">
                             <h3 class="display-4">Manage</h3>
-                            <p class="text-muted mb-4">AHMaD Project Dashboard Manager</p>
+                            <p class="text-muted mb-4">AHSOHA Dashboard Manager</p>
                             <form>
                                 <div class="form-group mb-3">
                                     <input id="inputEmail" type="email" placeholder="Email address" required="" autofocus="" class="form-control rounded-pill border-0 shadow-sm px-4">

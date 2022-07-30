@@ -29,6 +29,7 @@ Route::group(['prefix' => 'superadmin', 'middleware' => ['role:super-admin']], f
     Route::resource('users','UserController'); //crud route
 
     Route::post('users/main','UserController@userMain')->name('users.main');
+    Route::put('users/password/reset/{id}','UserController@userPasswordReset')->name('users.password.reset');
 
 
     Route::get('users/approve/index','UserController@userApproveIndex')->name('users.approve.index');
@@ -102,7 +103,6 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['role:manajer|helpdesk|s
     Route::get('berita/video/index','BeritaController@beritaVideoIndex')->name('berita.video.index');
     Route::get('berita/video/load','BeritaController@beritaVideoLoad')->name('berita.video.load');
 
-
     Route::resource('hadist', 'HadistController');
     Route::post('hadist/main','HadistController@main')->name('hadist.main');
     Route::post('hadist/send/main','HadistController@mainsend')->name('hadist.send.main');
@@ -152,11 +152,13 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['role:manajer|helpdesk|s
     Route::get('report/santri/bimbingan','ReportController@reportSantriBimbingan')->name('report.santri.bimbingan');
     Route::get('report/santri/baru','ReportController@reportSantriBaru')->name('report.santri.baru');
 
-
     Route::get('kodepos/provinsi/all','KodePosController@kodeposProvinsiAll');
     Route::get('kodepos/kota/{provinsi}','KodePosController@kodeposKotaByProvinsi');
     Route::get('kodepos/kabupaten/{kota}','KodePosController@kecamatanByKota');
     Route::get('kodepos/kelurahan/{kabupaten}','KodePosController@kelurahanByKecamatan');
 
-
+    Route::get('users/adm/index','UserController@admUserIndex')->name('users.adm.index');
+    Route::post('users/adm/main','UserController@admUserMain')->name('users.adm.main');
+    Route::put('users/adm/update/{id}','UserController@admUserResetPassword')->name('users.adm.update');
+    
 }); 

@@ -1,6 +1,6 @@
 @extends('layouts.menus')
 @section('content')
-    <div class="long-title"><h3>Daftar Donatur</h3></div>
+    <div class="long-title"><h3>Daftar Agniya</h3></div>
     {!! Form::open(['id' => 'frm','route' => 'donatur.pembaharuan.main', 'class' => 'form-horizontal']) !!}
         <div id="toolbar"></div>
         <div class="second-group">
@@ -63,7 +63,7 @@ $(function(){
         location: 'center',
         locateInMenu: 'never',
         template: function() {
-            return $("<div class='toolbar-label'><b>Pembaharuan Data Donatur</b></div>");
+            return $("<div class='toolbar-label'><b>Pembaharuan Data Agniya</b></div>");
         }
     },{
         location: 'after',
@@ -71,7 +71,7 @@ $(function(){
         locateInMenu: 'auto',
         options: {
             icon: "edit",
-            hint: 'Update Data Donatur',
+            hint: 'Update Data Agniya',
             useSubmitBehavior: true,
             onClick: function(e) {      
             var txtDonaturId=document.getElementById("txtDonaturId").value;

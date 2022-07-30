@@ -17,7 +17,7 @@ class Hadist extends Model
         'hadist_lokasi_gambar', //lokasi gambar
         'hadist_lokasi_video', //lokasi video
         'hadist_web_link', //alamat web hadist (khusud web)
-        'hadist_status', //0=hapus 1=aktif 
+        'hadist_status', //0=hapus 1=aktif (hanya aktif satu)
     ];
     public function donatur(){
         return $this->belongsToMany('App\Models\Donatur','hadist_donatur','hadist_id','donatur_id','id','id')

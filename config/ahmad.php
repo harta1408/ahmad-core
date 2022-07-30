@@ -3,33 +3,34 @@
 return [
     #url base untuk referral
     'referral' =>[
-        'live'=>[
-            'donatur' => 'http://dev.ahmadproject.org/gabung/donatur/',
-            'santri' => 'http://dev.ahmadproject.org/gabung/santri/',
+        'dev'=>[
+            'donatur' => 'https://dev.ahsoha.id/gabung/donatur/',
+            'santri' => 'https://dev.ahsoha.id/gabung/santri/',
         ],
         'production'=> [
-            'donatur' => 'http://ahmadproject.org/gabung/donatur/',
-            'santri' => 'http://ahmadproject.org/gabung/santri/',
+            'donatur' => 'https://ahsoha.id/gabung/donatur/',
+            'santri' => 'https://ahsoha.id/gabung/santri/',
         ],
     ],
     #url base untuk registrasi
     'register' =>[
-    'live'=>[
-        'donatur' => 'http://dev.ahmadproject.org/daftar/donatur/',
-        'santri' => 'http://dev.ahmadproject.org/daftar/santri/',
-        'pendamping' => 'http://dev.ahmadproject.org/daftar/pendamping/',
+    'dev'=>[
+        'donatur' => 'https://dev.ahsoha.id/daftar/donatur/',
+        'santri' => 'https://dev.ahsoha.id/daftar/santri/',
+        'pendamping' => 'https://dev.ahsoha.id/daftar/pendamping/',
     ],
     'production'=>[
-        'donatur' => 'http://ahmadproject.org/daftar/donatur/',
-        'santri' => 'http://ahmadproject.org/daftar/santri/',
-        'pendamping' => 'http://ahmadproject.org/daftar/pendamping/',
+        'donatur' => 'https://ahmadproject.org/daftar/donatur/',
+        'santri' => 'https://ahmadproject.org/daftar/santri/',
+        'pendamping' => 'https://ahmadproject.org/daftar/pendamping/',
     ],
     ],
     #konfiguasi woola messanger
     'woowa' => [
         'whatsapp' => [
             'url' => 'http://116.203.191.58/api/',
-            'key' => '5ba6e6972523b6b3805e163d36d344ed602de281d7aea489',
+            // 'key' => '5ba6e6972523b6b3805e163d36d344ed602de281d7aea489',
+            'key' => '09644f4eb9427be90dba8f5eeea45d67d067f00fcf57c3c3',
             'method' => [
                 'sync' => 'send_message',
                 'async' => 'async_send_message',

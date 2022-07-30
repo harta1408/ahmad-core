@@ -1,6 +1,6 @@
 @extends('layouts.menus')
 @section('content')
-    <div class="long-title"><h3>Daftar Pengingat Donatur</h3></div>
+    <div class="long-title"><h3>Daftar Pengingat Agniya</h3></div>
     {!! Form::open(['id' => 'frm','route' => 'pengingat.donatur.main', 'class' => 'form-horizontal']) !!}
         <div id="toolbar"></div>
         <div class="second-group">

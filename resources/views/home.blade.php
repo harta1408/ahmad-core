@@ -12,7 +12,7 @@
                             {{ session('status') }}
                         </div>
                     @endif
-                    Selamat datang di AHMaD Project, anda telah terdaftar namun demikian untuk akses
+                    Selamat datang di Gerakan AHSOHA, anda telah terdaftar namun demikian untuk akses
                     ke fasilitas, silakan hubungi Admin
                 </div>
             </div>

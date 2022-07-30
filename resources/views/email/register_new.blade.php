@@ -27,7 +27,7 @@
                                 Halo Bapak/Ibu <b>[{!!$name!!}]</b>
                             </p>
                             <p class="teks-sub-header-mobile no-bold">
-                                Hanya beberapa langkah lagi sebelum anda dapat menggunakan akun AHMaD Project
+                                Hanya beberapa langkah lagi sebelum anda dapat menggunakan akun Gerakan AHSOHA
                             </p> 
                             <p class="teks-sub-header-mobile no-bold mb-6">
                                 Gunakan tombol dibawah ini untuk aktivasi akun anda.
@@ -66,8 +66,8 @@
              <div class="justify-content-center ">
                 <a href="#paket" class="btn btn-md btn-outline-white btn-footer rounded-5">Paket Pembelajaran</a>
                 <a href="#" class="btn btn-md btn-outline-white btn-footer rounded-5">Program Santri</a>
-                <a href="#" class="btn btn-md btn-outline-white btn-footer rounded-5">Program Donatur</a>
-                <a href="#" class="btn btn-md btn-outline-white btn-footer rounded-5">Program Pendamping</a>
+                <a href="#" class="btn btn-md btn-outline-white btn-footer rounded-5">Program Agniya</a>
+                <a href="#" class="btn btn-md btn-outline-white btn-footer rounded-5">Program Penggerak</a>
              </div>
           </div>
           <!--/.row -->
@@ -94,7 +94,7 @@
         <div class="col-xl-10">
           <div class="nav justify-content-center">
             <a href="#" class="btn btn-md btn-primary rounded-6 btn-registrasi-akun mb-2">Registrasi Akun <span class="circle-icon"><i class="uil uil-angle-right"></i></span></a>
-            <a href="#" class="btn btn-md btn-outline-black rounded-6 btn-registrasi-akun mb-2">Menjadi Donatur Program<span class="circle-icon"><i class="uil uil-angle-right"></i></span></a>
+            <a href="#" class="btn btn-md btn-outline-black rounded-6 btn-registrasi-akun mb-2">Menjadi Agniya Program<span class="circle-icon"><i class="uil uil-angle-right"></i></span></a>
           </div>
         </div> 
       </div>

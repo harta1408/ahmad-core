@@ -3,7 +3,7 @@
 <head>
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
-    <link rel="stylesheet" href="https://ahmadproject.org/public/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="https://ahsoha.id/public/css/bootstrap.min.css" type="text/css">
     
     <style>
         body{
@@ -37,7 +37,7 @@
     <h3> Ahlan wa salan {!!$name!!}</h3>
     <div >
         <p>
-        Selamat datang dan Selamat Bergabung dengan AHMad Project, Untuk menindaklanjuti pendaftaran, 
+        Selamat datang dan Selamat Bergabung dengan Gerakan AHSOHA, Untuk menindaklanjuti pendaftaran, 
         Silakan lakukan aktivasi account untuk melanjutkan proses registrasi 
         dengan membuat password melalui tombol berikut ini 
         </p>
@@ -62,7 +62,7 @@
     </div>
     <br><br>
     <p>
-    <a href="https://ahmadproject.org">AHMaD Project</a>
+    <a href="https://ahsoha.id">Gerakan AHSOHA</a>
     </p>
 </div>
 </body>

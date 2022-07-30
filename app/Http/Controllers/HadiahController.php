@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Hadiah;
+use Validator;
 
 class HadiahController extends Controller
 {
@@ -29,28 +30,31 @@ class HadiahController extends Controller
 
         $hadiah=Hadiah::where('id',$hadiahid)->first();
         if($hadiahstatus=="UPDATE"){
-            return view("hadiah/hadiahupdate",compact('berita'));
+            return view("hadiah/hadiahupdate",compact('hadiah'));
         }
-        $entitas=$hadiah->hadiah_entitas;
-        if($hadiahstatus=="SEND"){
-            if($entitas=='0'){
-                $arrentitas=json_encode($this->processSendBerita('SEMUA',$hadiahid,$entitas));
-                // dd($arrentitas);
-                return view('hadiah/hadiahsendlist',compact('arrentitas'));
-            }
-            if($entitas=='1'){
-                $donatur=Donatur::where('donatur_status','1')->get();
-                return view('hadiah/hadiahdonatur',compact('beritaid'));
-            }
-            if($entitas=='2'){
-                $santri=Santri::where('santri_status','1')->get();
-                return view('hadiah/hadiahsantri',compact('beritaid'));
-            }
-            if($entitas=='3'){
-                $pendamping=Pendamping::where('pendamping_status')->get(); 
-                return view('hadiah/hadiahpendamping',compact('beritaid'));
-            }
+        if($hadiahstatus=="CLOSE"){
+            return redirect()->action('HomeController@index');
         }
+        // $entitas=$hadiah->hadiah_entitas;
+        // if($hadiahstatus=="SEND"){
+        //     if($entitas=='0'){
+        //         $arrentitas=json_encode($this->processSendBerita('SEMUA',$hadiahid,$entitas));
+        //         // dd($arrentitas);
+        //         return view('hadiah/hadiahsendlist',compact('arrentitas'));
+        //     }
+        //     if($entitas=='1'){
+        //         $donatur=Donatur::where('donatur_status','1')->get();
+        //         return view('hadiah/hadiahdonatur',compact('beritaid'));
+        //     }
+        //     if($entitas=='2'){
+        //         $santri=Santri::where('santri_status','1')->get();
+        //         return view('hadiah/hadiahsantri',compact('beritaid'));
+        //     }
+        //     if($entitas=='3'){
+        //         $pendamping=Pendamping::where('pendamping_status')->get(); 
+        //         return view('hadiah/hadiahpendamping',compact('beritaid'));
+        //     }
+        // }
     }
 
     /**
@@ -60,7 +64,7 @@ class HadiahController extends Controller
      */
     public function create()
     {
-        $hadiah=Hadiah::where('hadiah_status','1')->get();
+        $hadiah=Hadiah::where('hadiah_status','2')->get();
         foreach ($hadiah as $key => $hdh) {
             //deskripsi jenis berita
             if($hdh->hadiah_jenis=='1'){
@@ -69,6 +73,10 @@ class HadiahController extends Controller
             if($hdh->hadiah_jenis=='2'){
                 $hdh->hadiah_jenis="Produk";
             }
+            if($hdh->hadiah_status=='2'){
+                $hdh->hadiah_status="Aktif";
+            }
+
         }
         return $hadiah;
     }
@@ -81,11 +89,17 @@ class HadiahController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $validator = Validator::make($request->form, [
             'hadiah_jenis' => 'required|string',
-            'hadiah_nilai' => 'required|string', 
-            'hadiah_nominal' => 'required|string', 
             'hadiah_nama' => 'required|string',
+            'hadiah_nilai' => 'required|numeric|min:0|gt:0', 
+            'hadiah_nominal' => 'required|numeric|min:0|gt:0', 
+            
+        ],[
+            'hadiah_jenis.required' => 'Silakan Pilih Jenis Hadiah Dari Daftar',
+            'hadiah_nama.required' => 'Silakan isi Nama Hadiah',
+            'hadiah_nilai.gt' => 'Nilai Hadiah harus lebih dari nol',
+            'hadiah_nominal.gt' => 'Nominal Hadiah harus lebih dari nol',
         ]);
 
         if ($validator->fails()) {
@@ -95,22 +109,22 @@ class HadiahController extends Controller
             #hadiah baru defaultnya aktif
             #cari apakah ada data hadiah sebelumnya, jika ada maka lakukan perubahan status 
             #menjadi tidak aktif
-            $adahadiah=Hadiah::where('hadiah_status','!=','0')->count();
-            if($adahadiah>0){
+            // $adahadiah=Hadiah::where('hadiah_status','!=','0')->count();
+            // if($adahadiah>0){
                 
-            }
+            // }
 
             $hadiah=new Hadiah;
-            $hadiah->hadiah_jenis=$request->get('hadiah_jenis'); 
-            $hadiah->hadiah_nama=$request->get('hadiah_nama'); 
-            $hadiah->hadiah_nominal=$request->get('hadiah_nominal'); 
-            $hadiah->hadiah_nilai=$request->get('hadiah_nilai'); 
+            $hadiah->hadiah_jenis=$request->form['hadiah_jenis']; 
+            $hadiah->hadiah_nama=$request->form['hadiah_nama']; 
+            $hadiah->hadiah_nominal=$request->form['hadiah_nominal']; 
+            $hadiah->hadiah_nilai=$request->form['hadiah_nilai']; 
             $hadiah->hadiah_status='2'; //aktif 
             $exec = $hadiah->save();
             if (!$exec) {
                 return response()->json(['status' => 'error', 'message' => 'System error', 'code' => 404]);
             }
-            return redirect()->action('BeritaController@index');
+            return response()->json(['status' => 'success', 'message' => 'Penyimpanan Berhasil', 'code' => 200]);
         } catch (\Exception $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage(), 'code' => 404]);
         }
@@ -148,12 +162,18 @@ class HadiahController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $res = Hadiah::where('id', $id)->update($request->except(['id','_token','_method']));
+        
+        $res = Hadiah::where('id', $id)->update([
+            'hadiah_jenis' => $request->form['hadiah_jenis'],
+            'hadiah_nama' => $request->form['hadiah_nama'],
+            'hadiah_nominal' => $request->form['hadiah_nominal'],
+            'hadiah_nilai' => $request->form['hadiah_nilai'],
+        ]);
 
         if (!$res) {
             return response()->json(['status' => 'error', 'message' => 'System Error', 'code' => 404]);
         }
-        return redirect()->action('BeritaController@index');
+        return response()->json(['status' => 'success', 'message' => 'Pembaharuan Berhasil', 'code' => 200]);
     }
 
     /**

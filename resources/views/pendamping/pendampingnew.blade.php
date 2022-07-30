@@ -1,13 +1,10 @@
 @extends('layouts.menus')
 @section('content')
-<div class="long-title"><h3>Daftarkan Pendamping Baru</h3></div>
-{!! Form::open(['id' => 'frm','route' => 'pendamping.store','class' => 'form-horizontal']) !!}
-  <div id="form"></div>
-{!! Form::close()!!}
-
-<div class="second-group">
-    
-</div>
+<form id="form-container" class="first-group">
+  @csrf
+  <div id="toolbar"></div>
+  <div id="form" style="margin-top: 10px;"></div>
+</form>
 
 @endsection
 
@@ -35,6 +32,87 @@ $(function() {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       }
   });
+
+  $("#toolbar").dxToolbar({
+    items: [{
+        location: 'center',
+        locateInMenu: 'never',
+        template: function() {
+            return $("<div class='long-title'><h3>Daftarkan Pendamping Baru</h3></div>");
+        }
+        },{
+            location: 'after',
+            widget: 'dxButton',
+            locateInMenu: 'auto',
+            options: {
+                icon: "save",
+                hint: 'Simpan Penerimaan', 
+                onClick: function(e) {       
+                    var form =$('#form-container').serializeObject();
+                    var data=[];
+                    $.ajax({
+                        type: "POST",
+                        url: "{{route('pendamping.store')}}",
+                        data: JSON.stringify({form:form}),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (data) {
+                            if(data.code != 200) {
+                                swal({
+                                    title: "Validation Error",
+                                    icon: data.status,
+                                    text: data.message,
+                                    value: true,
+                                    visible: true,
+                                    className: "",
+                                    closeModal: true,
+                                });
+                            }else{
+                                swal({
+                                    title: "OK",
+                                    icon: data.status,
+                                    text: data.message,
+                                    value: true,
+                                    visible: true,
+                                    className: "",
+                                    closeModal: true,
+                                })
+                                .then((value) => {
+                                    window.location = '{{route('pendamping.index')}}';
+                                });
+                            }
+                            return false;
+                        },    
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            swal({
+                                title: "Validation Error",
+                                icon: data.status,
+                                text: data.message,
+                                value: true,
+                                visible: true,
+                                className: "",
+                                closeModal: true,
+                            });
+                            return false;
+                        }            
+                    });
+                }
+            }
+        },{
+            location: 'after',
+            widget: 'dxButton',
+            locateInMenu: 'auto',
+            options: {
+                icon: "close",
+                hint: 'Keluar Tanpa Simpan',
+                onClick: function(e) {      
+                    window.location = '{{route('home')}}';
+                }
+            }
+        }]
+    });
+
+
 
   var provinsi;
   var kota;
@@ -234,7 +312,7 @@ $(function() {
                 onValueChanged : function (e){
                     provinsi=e.value;
                     var form=$('#form').dxForm('instance')
-                    var itemKota=form.getEditor('pendamping_kota');
+                    var itemKota=form.getEditor('pendamping_kota_id');
                     itemKota.getDataSource().load();
                 }
             },
@@ -261,7 +339,7 @@ $(function() {
               onValueChanged : function (e){
                   kota=e.value;
                   var form=$('#form').dxForm('instance');
-                  var itemKecamatan=form.getEditor('pendamping_kecamatan');
+                  var itemKecamatan=form.getEditor('pendamping_kecamatan_id');
                   itemKecamatan.getDataSource().load();
               }
             }
@@ -286,14 +364,14 @@ $(function() {
               searchEnabled: true,
             }
         },]
-      },{
-          itemType: "button",
-          horizontalAlignment: "left",
-          buttonOptions: {
-              text: "Simpan",
-              type: "success",
-              useSubmitBehavior: true
-          }
+      // },{
+      //     itemType: "button",
+      //     horizontalAlignment: "left",
+      //     buttonOptions: {
+      //         text: "Simpan",
+      //         type: "success",
+      //         useSubmitBehavior: true
+      //     }
       },]
   }).dxForm("instance"); 
 

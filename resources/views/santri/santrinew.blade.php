@@ -2,12 +2,12 @@
 @section('content')
 <div class="long-title"><h3>Daftarkan Santri Baru</h3></div>
 {!! Form::open(['id' => 'frm','route' => 'santri.store','class' => 'form-horizontal']) !!}
+<div class="second-group">
   <div id="form"></div>
+</div>
 {!! Form::close()!!}
 
-<div class="second-group">
-    
-</div>
+
 
 @endsection
 

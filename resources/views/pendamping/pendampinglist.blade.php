@@ -11,9 +11,10 @@ $(function(){
         dataSource: {!! $pendamping !!},
         keyExpr: "id",
         showBorders: true,
-        "export": {
-            enabled: true,
-            fileName: "pendampinglist",
+        export: {
+          enabled: true,
+          fileName: "pendampinglist",
+          allowExportSelectedData: true,
         },
         columnChooser: {
             enabled: true

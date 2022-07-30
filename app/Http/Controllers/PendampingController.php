@@ -26,6 +26,10 @@ class PendampingController extends Controller
     {
         $pendamping=Pendamping::with('user')->where('pendamping_status','!=','0')->get();
         foreach ($pendamping as $key => $pdmp) {
+            if($pdmp->user==null){
+                $pdmp->pendamping_status="Belum Ada Email (User Login)";
+                continue;
+            }
             switch ($pdmp->pendamping_status) {
                 case '1':
                     $pdmp->pendamping_status="Belum Isi Kuesioner";
@@ -74,14 +78,24 @@ class PendampingController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $validator = Validator::make($request->form, [
             'pendamping_email' => 'required|email|unique:pendamping|max:100',
-            'pendamping_nama' => ['required','string','max:30'],
+            'pendamping_nama' => 'required|string',
             'pendamping_telepon' => 'required|string',
-            'pendamping_alamat'=>'required|string',
+            'pendamping_alamat' => 'required|string',
             'pendamping_provinsi_id'=>'required|string',
             'pendamping_kota_id'=>'required|string',
             'pendamping_kecamatan_id'=>'required|string',
+        ],[
+            'pendamping_email.required' => 'Silakan Masukan Alamat Email',
+            'pendamping_email.email' => 'Masukan dalam format Alamat Email', 
+            'pendamping_email.unique' => 'Alamat Email sudah terdaftar', 
+            'pendamping_nama.required' => 'Silakan isi Nama Agniya', 
+            'pendamping_telepon.required' => 'Silakan isi Telepon Agniya', 
+            'pendamping_alamat.required' => 'Silakan isi Alamat Agniya', 
+            'pendamping_provinsi_id.required' => 'Silakan Pilih Propinsi dari daftar', 
+            'pendamping_kota_id.required' => 'Silakan Pilih Kota dari Daftar', 
+            'pendamping_kecamatan_id.required' => 'Silakan Pilih Kecamatan dari Daftar', 
         ]);
 
         if ($validator->fails()) {
@@ -94,8 +108,8 @@ class PendampingController extends Controller
         #buat hash code acak untuk default yang harus langsung diganti
         #ketika email terverifikasi
         #link verifikasi di panggil berdasarkan user, nama dan hash code
-        $useremail=$request->get("pendamping_email"); ; 
-        $username=$request->get("pendamping_nama");
+        $useremail=$request->form["pendamping_email"]; ; 
+        $username=$request->form["pendamping_nama"];
         $url = public_path();
         $usertipe="3"; //tipe user pendamping
         $hashcode=md5(rand(100000,999999)); 
@@ -110,9 +124,9 @@ class PendampingController extends Controller
         $exec=$user->save();
 
         #ambil data provinsi, kota dan kecamatan dari raja ongkir
-        $pendampingprovinsiid=$request->get("pendamping_provinsi_id");
-        $pendampingkotaid=$request->get('pendamping_kota_id');
-        $pendampingkecamatanid=$request->get("pendamping_kecamatan_id");
+        $pendampingprovinsiid=$request->form["pendamping_provinsi_id"];
+        $pendampingkotaid=$request->form['pendamping_kota_id'];
+        $pendampingkecamatanid=$request->form["pendamping_kecamatan_id"];
         $kodeposapi=new KodePosAPI;
         $provinsi=$kodeposapi->getProvisiById($pendampingprovinsiid);
         $kota=$kodeposapi->getKotaById($pendampingkotaid);
@@ -121,18 +135,18 @@ class PendampingController extends Controller
 
         $pendamping=new Pendamping;
         $pendamping->pendamping_kode=$pendampingkode;
-        $pendamping->pendamping_email=$request->get("pendamping_email"); 
-        $pendamping->pendamping_nama=$request->get("pendamping_nama");
-        $pendamping->pendamping_nid=$request->get("pendamping_nid");
-        $pendamping->pendamping_gender=$request->get("pendamping_gender");
-        $pendamping->pendamping_agama=$request->get("pendamping_agama");
-        $pendamping->pendamping_telepon=$request->get("pendamping_telepon");
-        $pendamping->pendamping_kerja=$request->get("pendamping_kerja");
-        $pendamping->pendamping_tmp_lahir=$request->get("pendamping_tmp_lahir");
-        $pendamping->pendamping_tgl_lahir=$request->get("pendamping_tgl_lahir");
-        $pendamping->pendamping_honor=$request->get("pendamping_honor");
-        $pendamping->pendamping_status_pegawai=$request->get("pendamping_status_pegawai");
-        $pendamping->pendamping_alamat=$request->get("pendamping_alamat");
+        $pendamping->pendamping_email=$request->form["pendamping_email"]; 
+        $pendamping->pendamping_nama=$request->form["pendamping_nama"];
+        $pendamping->pendamping_nid=$request->form["pendamping_nid"];
+        $pendamping->pendamping_gender=$request->form["pendamping_gender"];
+        $pendamping->pendamping_agama=$request->form["pendamping_agama"];
+        $pendamping->pendamping_telepon=$request->form["pendamping_telepon"];
+        $pendamping->pendamping_kerja=$request->form["pendamping_kerja"];
+        $pendamping->pendamping_tmp_lahir=$request->form["pendamping_tmp_lahir"];
+        $pendamping->pendamping_tgl_lahir=$request->form["pendamping_tgl_lahir"];
+        $pendamping->pendamping_honor=$request->form["pendamping_honor"];
+        $pendamping->pendamping_status_pegawai=$request->form["pendamping_status_pegawai"];
+        $pendamping->pendamping_alamat=$request->form["pendamping_alamat"];
         $pendamping->pendamping_provinsi_id=$pendampingprovinsiid;
         $pendamping->pendamping_kota_id=$pendampingkotaid;
         $pendamping->pendamping_kecamatan_id=$pendampingkecamatanid;
@@ -153,7 +167,7 @@ class PendampingController extends Controller
         //    $message->from('ahmad@gimanamas.com','AHMaD Project');
         // });
 
-        return redirect()->action('PendampingController@index');
+        return response()->json(['status' => 'success', 'message' => 'Penyimpanan Berhasil', 'code' => 200]);
     }
 
     /**
@@ -187,14 +201,18 @@ class PendampingController extends Controller
      */
     public function update(Request $request, $id)
     {
+    
+
         $validator = Validator::make($request->all(), [
-            'pendamping_nama' => 'required|string',
+            'pendamping_nama' => ['required','string','max:30'],
             'pendamping_telepon' => 'required|string',
-            'pendamping_alamat' => 'required|string',
+            'pendamping_alamat'=>'required|string',
             'pendamping_provinsi_id'=>'required|string',
             'pendamping_kota_id'=>'required|string',
             'pendamping_kecamatan_id'=>'required|string',
         ]);
+     
+
 
         if ($validator->fails()) {
             return response()->json(['status' => 'error', 'message' => $validator->messages()->first(), 'code' => 404]);
@@ -245,6 +263,13 @@ class PendampingController extends Controller
     public function pendampingUpdateIndex(){
         $pendamping=Pendamping::with('user')->where('pendamping_status','!=','0')->get();
         foreach ($pendamping as $key => $pdmp) {
+            if($pdmp->user==null){
+                $pdmp->donatur_status="Belum Ada Email";
+                continue;
+            }
+            if($pdmp->user['email_verified_at']==null){
+                $pdmp->pendamping_status="Belum Konfirmasi Email";
+            }
             switch ($pdmp->pendamping_status) {
                 case '1':
                     $pdmp->pendamping_status="Belum Isi Kuesioner";
@@ -254,9 +279,6 @@ class PendampingController extends Controller
                     break;
                 case '3':
                     $pdmp->pendamping_status="Data Lengkap";
-                    if($pdmp->user['email_verified_at']==null){
-                        $pdmp->pendamping_status="Belum Konfirmasi Email";
-                    }
                     break;
                 case '4':
                     $pdmp->pendamping_status="Menunggu Produk";

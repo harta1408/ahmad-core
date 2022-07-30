@@ -39,13 +39,13 @@
         <p>
         Sesuai dengan permintaan anda, kami telah melakukan reset password untuk user name <strong>{!!$email!!}</strong> 
         dengan password baru <strong>{!!$newpass!!}</strong> <br>
-        Silakan lakukan penggantian password untuk memudahkan ketika login kedalam aplikasi AHMaD Project.
+        Silakan lakukan penggantian password untuk memudahkan ketika login kedalam aplikasi AHSOHA.
         </p>
     </div>
     
     <br><br>
     <p>
-    <a href="https://ahmadproject.org">AHMaD Project</a>
+    <a href="https://ahsoha.id">Gerakan AHSOHA</a>
     </p>
 </div>
 </body>

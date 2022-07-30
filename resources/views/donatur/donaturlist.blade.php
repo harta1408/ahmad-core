@@ -1,6 +1,6 @@
 @extends('layouts.menus')
 @section('content')
-    <div class="long-title"><h3>Daftar Donatur</h3></div>
+    <div class="long-title"><h3>Daftar Agniya</h3></div>
     <div id="gridData"></div>
 @endsection
 
@@ -16,9 +16,10 @@ $(function(){
         dataSource: {!! $donatur !!},
         keyExpr: "id",
         showBorders: true,
-        "export": {
-            enabled: true,
-            fileName: "donaturlist",
+        export: {
+          enabled: true,
+          fileName: "donaturlist",
+          allowExportSelectedData: true,
         },
         columnChooser: {
             enabled: true
@@ -29,13 +30,13 @@ $(function(){
         paging: {
             pageSize: 10
         },
-        groupPanel: {
-            visible: true
-        },
+        // groupPanel: {
+        //     visible: true
+        // },
         columns: [
             {
               dataField: "donatur_kode",
-              caption: "Kode Donatur",
+              caption: "Kode Agniya",
               visible:false,
             },{
               dataField: "donatur_nama",

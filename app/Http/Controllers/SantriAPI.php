@@ -201,9 +201,9 @@ class SantriAPI extends Controller
             'santri_nama' => 'required|string',
             'santri_telepon' => 'required|string',
             'santri_alamat' => 'required|string',
-            'santri_kecamatan_id' => 'required|string',
-            'santri_kota_id' => 'required|string',
-            'santri_provinsi_id' => 'required|string',
+            // 'santri_kecamatan_id' => 'required|string',
+            // 'santri_kota_id' => 'required|string',
+            // 'santri_provinsi_id' => 'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -220,14 +220,14 @@ class SantriAPI extends Controller
                   'santri_kerja'=>$request->get('santri_kerja'),
                   'santri_lokasi_photo'=>$request->get('santri_lokasi_photo'),
                   'santri_alamat'=>$request->get('santri_alamat'),
-                  'santri_kode_pos'=>$request->get('santri_kode_pos'),
-                  'santri_kelurahan'=>$request->get('santri_kelurahan'),
-                  'santri_kecamatan'=>$request->get('santri_kecamatan'),
-                  'santri_kota'=>$request->get('santri_kota'),
-                  'santri_provinsi'=>$request->get('santri_provinsi'),
-                  'santri_kecamatan_id'=>$request->get('santri_kecamatan_id'),
-                  'santri_kota_id'=>$request->get('santri_kota_id'),
-                  'santri_provinsi_id'=>$request->get('santri_provinsi_id'),
+                //   'santri_kode_pos'=>$request->get('santri_kode_pos'),
+                //   'santri_kelurahan'=>$request->get('santri_kelurahan'),
+                //   'santri_kecamatan'=>$request->get('santri_kecamatan'),
+                //   'santri_kota'=>$request->get('santri_kota'),
+                //   'santri_provinsi'=>$request->get('santri_provinsi'),
+                //   'santri_kecamatan_id'=>$request->get('santri_kecamatan_id'),
+                //   'santri_kota_id'=>$request->get('santri_kota_id'),
+                //   'santri_provinsi_id'=>$request->get('santri_provinsi_id'),
                   'santri_status' => '4',
                   ]);
         if(!$exec){

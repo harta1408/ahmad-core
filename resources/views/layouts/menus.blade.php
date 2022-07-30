@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, shrink-to-fit=no" />
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>AHMaD Project Dashboard</title>
+    <title>AHSOHA Dashboard</title>
     <!-- <title>{{ config('app.name', ' 00 Shop') }}</title> -->
 
 
@@ -32,25 +32,31 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 
+    
 
     <script src="{{ asset('plugins/jquery/jquery.min.js')}}" type="text/javascript"></script>
     <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js')}}" type="text/javascript"></script>
     <script src="{{ asset('plugins/chart.js/dist/Chart.min.js')}}" type="text/javascript"></script>
     <script src="{{ asset('js/adminlte.js')}}" type="text/javascript"></script>
     <script src="{{ asset('plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js')}}" type="text/javascript"></script>
-
-    <script src="{{ asset('js/sweetalert.min.js') }}"></script>
+    {{-- <script src="{{ asset('js/sweetalert.min.js') }}"></script> --}}
+    <script src="{{ asset('plugins/sweetalert2/js/sweetalert.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/bootstrap.min.js')}}" type="text/javascript"></script>
     <script src="{{ asset('js/datepicker/bootstrap-datepicker.js')}}" type="text/javascript"></script>
     <script src="{{ asset('js/jquery.dataTables.js')}}" type="text/javascript" charset="utf8"></script>
     <script src="{{ asset('js/jszip/dist/jszip.min.js')}}" type="text/javascript"></script>
     <script src="https://unpkg.com/devextreme-quill/dist/dx-quill.min.js"></script>
-    <script src="https://cdn3.devexpress.com/jslib/21.1.3/js/dx.all.js"></script>
+    <script src="{{ asset('plugins/devex/js/jszip.min.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('plugins/devex/js/dx.all.js')}}" type="text/javascript"></script>
+    
  
 
     <script>window.jQuery || document.write(decodeURIComponent('%3Cscript src="js/jquery.min.js"%3E%3C/script%3E'))</script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script>
+
+
 
     <style>
       .long-title h3 {
@@ -166,7 +172,7 @@
         <img src="{{asset('images/logo-white.svg')}}" alt="Agile" class="brand-image img-circle elevation-3"
              style="opacity: .8">
              @guest
-               <span class="brand-text font-weight-light">AHMaD Dashboard</span>
+               <span class="brand-text font-weight-light">AHSOHA Dashboard</span>
              @else
              <span class="brand-text font-weight-light">Dashboard</span>
                {{-- <span class="brand-text font-weight-light">{{ Auth::user()->name}}</span> --}}
@@ -214,7 +220,7 @@
                 <li class="nav-item">
                   <a href="#" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Donatur</p>
+                    <p>Pendiri</p>
                   </a>
                 </li>
                 <li class="nav-item">
@@ -317,7 +323,7 @@
               <a href="#" class="nav-link">
                 <i class="nav-icon fas fa-donate"></i>
                 <p>
-                  Donatur
+                  Pendiri (Agniya)
                   <i class="right fas fa-angle-left"></i>
                 </p>
               </a>
@@ -325,7 +331,7 @@
                 <li class="nav-item">
                   <a href="{{route('donatur.index')}}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>List Donatur</p>
+                    <p>List Pendiri</p>
                   </a>
                 </li>
                 <li class="nav-item">
@@ -508,7 +514,7 @@
                 <li class="nav-item">
                   <a href="{{route('pengingat.donatur.index')}}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Donatur</p>
+                    <p>Pendiri</p>
                   </a>
                 </li>
                 <li class="nav-item">
@@ -849,23 +855,23 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="{{route('produk.index')}}" class="nav-link">
+                    <a href="{{route('users.adm.index')}}" class="nav-link">
                       <i class="far fa-circle nav-icon"></i>
-                    <p>Buat Baru</p>
+                    <p>Daftar Pengguna</p>
                   </a>
                 </li>
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                   <a href="{{route('produk.edit','1')}}" class="nav-link">
                       <i class="far fa-circle nav-icon"></i>
                   <p>Perbaharui</p>
                 </a>
-              </li>
-                <li class="nav-item">
+              </li> --}}
+                {{-- <li class="nav-item">
                   <a href="{{route('kirimproduk.create')}}"  class="nav-link">
                       <i class="far fa-circle nav-icon"></i>
                   <p>Pengiriman</p>
                 </a>
-              </li>  
+              </li>   --}}
               </ul>
             </li>
             <li class="nav-item has-treeview">
@@ -923,10 +929,10 @@
     </div>
     <!-- /.content-wrapper -->
     <footer class="main-footer">
-      <strong>Copyright &copy; 2021 <a href="http://agile.co.id">AHMaD Project</a></strong>
+      <strong>Copyright &copy; 2021 <a href="https://ahsoha.id">Gerakan Ahsoha</a></strong>
       All rights reserved.
       <div class="float-right d-none d-sm-inline-block">
-        {{ Auth::user()->name}} - <b>Version </b>1.00
+        {{ Auth::user()->name}} - <b>Version </b>1.06
       </div>
     </footer>
 
